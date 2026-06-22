@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Enterprise Academy South Africa</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ── Top Bar ──────────────────────────────────────────────── -->
+<header class="top-bar">
+  <a href="#" class="logo">
+    <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="48" fill="#fff" stroke="#eee" stroke-width="1"/>
+      <path d="M50 50 L50 4 A46 46 0 0 1 96 50 Z" fill="#e53935"/>
+      <path d="M50 50 L96 50 A46 46 0 0 1 50 96 Z" fill="#f5c500"/>
+      <path d="M50 50 L50 96 A46 46 0 0 1 4 50 Z" fill="#00a99d"/>
+      <path d="M50 50 L4 50 A46 46 0 0 1 50 4 Z" fill="#4caf50"/>
+      <circle cx="50" cy="50" r="18" fill="#fff"/>
+    </svg>
+    <div class="logo-text">
+      <div class="org">Social Enterprise<br>Academy</div>
+      <div class="tag">One becomes many</div>
+    </div>
+  </a>
+  <div class="top-actions">
+    <a href="#partner" class="btn-donate">DONATE HERE</a>
+    <select class="top-select hub" aria-label="Hub">
+      <option>HUB</option>
+      <option>South Africa</option>
+      <option>Scotland</option>
+      <option>Global</option>
+    </select>
+    <select class="top-select lang" aria-label="Language">
+      <option>ENGLISH</option>
+      <option>AFRIKAANS</option>
+      <option>ZULU</option>
+      <option>XHOSA</option>
+    </select>
+  </div>
+</header>
+
+<!-- ── Navbar ───────────────────────────────────────────────── -->
+<nav class="navbar">
+  <button class="nav-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-inner" id="nav-links">
+    <a href="#home">Home</a>
+    <div class="dd">
+      <a href="#who">About us +</a>
+      <ul class="dd-menu">
+        <li><a href="#who">Who We Are</a></li>
+        <li><a href="#who">Our Mission</a></li>
+        <li><a href="#partner">Partner With Us</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="#programmes">What's on +</a>
+      <ul class="dd-menu">
+        <li><a href="#programmes">Programmes</a></li>
+        <li><a href="#findout">Book a Programme</a></li>
+        <li><a href="#findout">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="#news">Impact stories +</a>
+      <ul class="dd-menu">
+        <li><a href="#testimonial">Testimonials</a></li>
+        <li><a href="#news">Stories</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="#programmes">Young people +</a>
+      <ul class="dd-menu">
+        <li><a href="#programmes">Young People & Unemployed Youth</a></li>
+        <li><a href="#programmes">Schools Programme</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="#news">News +</a>
+      <ul class="dd-menu">
+        <li><a href="#news">Latest News</a></li>
+        <li><a href="#news">Learning Resources</a></li>
+      </ul>
+    </div>
+    <div class="dd nav-search">
+      <a href="#" onclick="toggleSearch(event)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>Search site
+      </a>
+    </div>
+  </div>
+  <div id="search-bar">
+    <input id="search-input" type="search" placeholder="Search the site…" />
+  </div>
+</nav>
+
+<!-- ── HERO (Video 1 / cover screenshot) ────────────────────── -->
+<section class="hero" id="home">
+  <div class="hero-panels">
+    <div style="background-color:#2a7a76; background-image:url('images/hero1.jpg');"></div>
+    <div style="background-color:#00bfb3; background-image:url('images/hero2.jpg');"></div>
+    <div style="background-color:#1a5e5b; background-image:url('images/hero3.jpg');"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>Social Enterprise Academy<br>South Africa</h1>
+    <a href="#partner" class="btn-magenta">PARTNER WITH US</a>
+    <p style="margin-top:1.5rem; font-size:1rem; opacity:.95; line-height:1.6; max-width:600px; margin-left:auto; margin-right:auto;">
+      Learning and development programmes for people and organisations enabling social change in South Africa.
+    </p>
+  </div>
+</section>
+
+<!-- ── SECTION 2: PARTNER WITH US stats (Video 2) ───────────── -->
+<section class="stats-section" id="partner">
+  <h2 class="stats-heading">PARTNER WITH US</h2>
+  <div class="stats-body">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-icon red">
+          <svg width="52" height="52" viewBox="0 0 64 64" fill="white"><circle cx="32" cy="20" r="10"/><ellipse cx="32" cy="46" rx="20" ry="12"/><circle cx="14" cy="24" r="7"/><ellipse cx="10" cy="44" rx="13" ry="9"/><circle cx="50" cy="24" r="7"/><ellipse cx="54" cy="44" rx="13" ry="9"/></svg>
+        </div>
+        <div class="stat-text">
+          <div class="num">6300+</div>
+          <div class="lbl">Social Entrepreneur members</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon magenta">
+          <svg width="52" height="52" viewBox="0 0 64 64" fill="white"><rect x="4" y="8" width="56" height="40" rx="4" fill="none" stroke="white" stroke-width="4"/><line x1="4" y1="20" x2="60" y2="20" stroke="white" stroke-width="3"/><line x1="22" y1="8" x2="22" y2="48" stroke="white" stroke-width="3"/><circle cx="14" cy="34" r="5" fill="white"/><circle cx="42" cy="30" r="5" fill="white"/><circle cx="52" cy="36" r="5" fill="white"/></svg>
+        </div>
+        <div class="stat-text">
+          <div class="num">5000+</div>
+          <div class="lbl">Learners participated in SEA programme</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon teal-dk">
+          <svg width="52" height="52" viewBox="0 0 64 64" fill="white"><rect x="6" y="10" width="52" height="36" rx="4" fill="none" stroke="white" stroke-width="4"/><polygon points="26,20 26,40 44,30" fill="white"/><rect x="16" y="46" width="32" height="5" rx="2"/></svg>
+        </div>
+        <div class="stat-text">
+          <div class="num">426+</div>
+          <div class="lbl">Webinar and masterclass Participants</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon gray">
+          <svg width="52" height="52" viewBox="0 0 64 64" fill="white"><path d="M32 6 L56 18 L56 22 L8 22 L8 18 Z" fill="white"/><rect x="12" y="22" width="8" height="24" fill="white"/><rect x="28" y="22" width="8" height="24" fill="white"/><rect x="44" y="22" width="8" height="24" fill="white"/><rect x="6" y="46" width="52" height="6" rx="2" fill="white"/></svg>
+        </div>
+        <div class="stat-text">
+          <div class="num">199+</div>
+          <div class="lbl">International Student Programme Participants</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 3: Testimonial (Video 3) ─────────────────────── -->
+<section class="testimonial-section" id="testimonial">
+  <blockquote>
+    "This structured learning process helped me to understand my organisation's strengths and weaknesses
+    and how to present them effectively. I learned so much, and it was clear why I had struggled to gain
+    traction before."
+  </blockquote>
+  <p class="attribution">Theresa Muller, learner on the Build Your Social Enterprise Programme.</p>
+</section>
+
+<!-- ── SECTION 4: WHO WE ARE (Video 4) ──────────────────────── -->
+<section class="who-section" id="who">
+  <div class="who-inner">
+    <div class="who-photo">
+      <img src="images/who-we-are.jpg" alt="SEA Workshop" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="who-photo-placeholder" style="display:none">Learn. Collaborate. Grow.</div>
+    </div>
+    <div class="who-text">
+      <h2>WHO WE ARE</h2>
+      <p>
+        We believe social entrepreneurs play an essential role in changing the world. We strengthen
+        their role in local communities across South Africa through transformational learning programmes
+        that will increase their community impact.
+      </p>
+      <a href="#partner" class="btn-magenta">PARTNER WITH US</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 5: Programme Cards (Video 5) ─────────────────── -->
+<section class="programmes-section" id="programmes">
+  <div class="programmes-inner">
+    <div class="prog-grid">
+
+      <div class="prog-card">
+        <div class="prog-img">
+          <img src="images/prog-youth.jpg" alt="Young people" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="prog-img-placeholder" style="background:#c2185b; display:none">Young People</div>
+          <div class="prog-accent magenta"></div>
+        </div>
+        <div class="prog-body">
+          <h3><a href="#">Young people and unemployed youth</a></h3>
+          <p>We empower young people in South Africa who have a desire to see positive change locally and globally, both in and outside of education.</p>
+        </div>
+      </div>
+
+      <div class="prog-card">
+        <div class="prog-img">
+          <img src="images/prog-connect.jpg" alt="Social Enterprise Connect" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="prog-img-placeholder" style="background:#00a99d; display:none">SEC CoP</div>
+          <div class="prog-accent teal"></div>
+        </div>
+        <div class="prog-body">
+          <h3><a href="#">Social entrepreneurs through Social Enterprise Connect CoP</a></h3>
+          <p>Our facilitator-led learning and development programmes offer a dynamic space for you to connect with other changemakers and develop the skills needed to step up and effect social change.</p>
+        </div>
+      </div>
+
+      <div class="prog-card">
+        <div class="prog-img">
+          <img src="images/prog-international.jpg" alt="International Programme" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="prog-img-placeholder" style="background:#e53935; display:none">International</div>
+          <div class="prog-accent red"></div>
+        </div>
+        <div class="prog-body">
+          <h3><a href="#">International Student Internship Programme: Social Innovation</a></h3>
+          <p>We empower young people in South Africa who have a desire to see positive change locally and globally, both in and outside of education.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 6: Support Next Gen (Video 6) ────────────────── -->
+<section class="support-section" id="support">
+  <div class="support-inner">
+    <h2>WANT TO SUPPORT THE NEXT GENERATION OF SOCIAL ENTREPRENEURS?</h2>
+    <div class="filmstrip">
+      <div class="filmstrip-img" style="background-image:url('images/film1.jpg'); background-color:#4a7c59;"></div>
+      <div class="filmstrip-img" style="background-image:url('images/film2.jpg'); background-color:#2a6b66;"></div>
+      <div class="filmstrip-img" style="background-image:url('images/film3.jpg'); background-color:#3a6b4a;"></div>
+    </div>
+    <p class="support-quote">
+      "Never think you can't be the one to change the world. You're just where it starts."
+      Join us to build the social enterprise ecosystem in South Africa. Partner with us so that we can change the world together.
+    </p>
+    <p class="support-subtext">
+      CONTACT US TO BETTER YOUR BEE SCORECARD / GET TAX, SKILLS DEVELOPMENT OR CSI BENEFITS
+    </p>
+    <a href="#findout" class="btn-magenta">PARTNER WITH US</a>
+  </div>
+</section>
+
+<!-- ── SECTION 7: Partnership Benefits (Video 7) ────────────── -->
+<section class="partnership-section" id="benefits">
+  <div class="partnership-inner">
+    <div>
+      <p class="partnership-quote">
+        "There is clearly a massive need to support social entrepreneurs across South Africa.
+        We already have over 6300 social enterprise members and our community of practice is
+        growing with between 50 and 100 new members every week."
+      </p>
+      <a href="#findout" class="btn-teal">PARTNERSHIP BENEFITS</a>
+    </div>
+    <div class="partnership-video">
+      <img src="images/video-thumb.jpg" alt="Social Enterprise Connect Journey with IDC" onerror="this.style.display='none'">
+      <div class="play-overlay" onclick="alert('Video: Social Enterprise Connect\'s Journey with IDC')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="partner-logos">
+    <p>Our Partners</p>
+    <div class="logos-row">
+      <div class="logo-badge">Airbnb</div>
+      <div class="logo-badge">IWISA</div>
+      <div class="logo-badge">OSISA</div>
+      <div class="logo-badge">Allan Gray Orbis Foundation</div>
+      <div class="logo-badge">Investec Foundation</div>
+      <div class="logo-badge">DGMT</div>
+      <div class="logo-badge">Tshikululu</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 8: FIND OUT MORE (Video 8) ───────────────────── -->
+<section class="findout-section" id="findout">
+  <h2>FIND OUT MORE</h2>
+  <div class="findout-grid">
+
+    <div class="findout-card">
+      <img src="images/book.jpg" alt="Book a Programme" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="findout-img-placeholder" style="background:#555; display:none">Book a Programme</div>
+      <div class="findout-label magenta"><a href="#">BOOK A PROGRAMME</a></div>
+    </div>
+
+    <div class="findout-card">
+      <img src="images/contact.jpg" alt="Contact Us" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="findout-img-placeholder" style="background:var(--magenta); display:none">Contact Us</div>
+      <div class="findout-label teal"><a href="#">CONTACT US</a></div>
+    </div>
+
+    <div class="findout-card">
+      <img src="images/programmes.jpg" alt="Programmes We Offer" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="findout-img-placeholder" style="background:#777; display:none">Programmes We Offer</div>
+      <div class="findout-label red"><a href="#">PROGRAMMES WE OFFER</a></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── SECTION 9: Latest News (Video 9) ─────────────────────── -->
+<section class="news-section" id="news">
+  <div class="news-inner">
+    <h2>LATEST NEWS &amp; LEARNING RESOURCES</h2>
+    <p class="news-sub">
+      Check out the latest updates from the team in South Africa or get stuck into a learning
+      resource from across our network!
+    </p>
+    <div class="news-grid">
+
+      <div class="news-card">
+        <div class="news-card-img">
+          <img src="images/news1.jpg" alt="Social Enterprise Connect" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="img-placeholder" style="background:#6a1b9a; display:none">News 1</div>
+          <div class="news-accent magenta"></div>
+        </div>
+        <div class="news-card-body">
+          <h3>Social Enterprise Connect - Meet like-minded people at events</h3>
+          <p>Social Enterprise Connect (SEC) is an exciting new Community of Practice (CoP) for social entrepreneurs in South Africa.</p>
+          <a href="#" class="read-more">Read more →</a>
+        </div>
+      </div>
+
+      <div class="news-card">
+        <div class="news-card-img">
+          <img src="images/news2.jpg" alt="Learner Spotlight" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="img-placeholder" style="background:#00695c; display:none">News 2</div>
+          <div class="news-accent teal"></div>
+        </div>
+        <div class="news-card-body">
+          <h3>Learner Spotlight: Meet creative impact maker Sikelela</h3>
+          <p>Impact Makers and Creators is an ambitious programme working with ideation-and-growth-stage creative social entrepreneurs.</p>
+          <a href="#" class="read-more">Read more →</a>
+        </div>
+      </div>
+
+      <div class="news-card">
+        <div class="news-card-img">
+          <img src="images/news3.jpg" alt="Schools Programme" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="img-placeholder" style="background:#b71c1c; display:none">News 3</div>
+          <div class="news-accent red"></div>
+        </div>
+        <div class="news-card-body">
+          <h3>Social Enterprise Schools Programme Pitching Event</h3>
+          <p>Our Social Enterprise in Education Programme is focused on learners getting the opportunity to pitch the social enterprises they started at their schools.</p>
+          <a href="#" class="read-more">Read more →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Newsletter ────────────────────────────────────────────── -->
+<div class="newsletter">
+  <h2>Stay Connected</h2>
+  <p>Get the latest news, programme updates and impact stories from SEA South Africa.</p>
+  <form class="nl-form" onsubmit="handleSub(event)">
+    <input type="email" placeholder="Enter your email address" required />
+    <button type="submit">SUBSCRIBE</button>
+  </form>
+  <p id="sub-msg" style="display:none; margin-top:1rem; font-size:.85rem;">Thank you for subscribing!</p>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <p class="org">Social Enterprise Academy South Africa</p>
+      <p>Learning and development programmes for people and organisations enabling social change in South Africa.</p>
+      <p style="margin-top:.7rem; font-size:.75rem;">Registered Non-Profit Organisation</p>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="#who">Who We Are</a></li>
+        <li><a href="#who">Our Mission</a></li>
+        <li><a href="#benefits">Partnership Benefits</a></li>
+        <li><a href="#partner">Donate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Programmes</h4>
+      <ul>
+        <li><a href="#programmes">Young People</a></li>
+        <li><a href="#programmes">SEC CoP</a></li>
+        <li><a href="#programmes">International Internship</a></li>
+        <li><a href="#findout">Book a Programme</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">info@seasa.org.za</a></li>
+        <li><a href="#">+27 (0)21 000 0000</a></li>
+        <li><a href="#">Cape Town, South Africa</a></li>
+        <li><a href="#news">Media Enquiries</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Social Enterprise Academy South Africa. All rights reserved.</span>
+    <div class="social-row">
+      <a href="#" title="Facebook">f</a>
+      <a href="#" title="X">𝕏</a>
+      <a href="#" title="LinkedIn">in</a>
+      <a href="#" title="Instagram">ig</a>
+      <a href="#" title="YouTube">▶</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleSearch(e) {
+    e.preventDefault();
+    const bar = document.getElementById('search-bar');
+    bar.style.display = bar.style.display === 'none' ? 'block' : 'none';
+    if (bar.style.display === 'block') document.getElementById('search-input').focus();
+  }
+  function handleSub(e) {
+    e.preventDefault();
+    document.getElementById('sub-msg').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
