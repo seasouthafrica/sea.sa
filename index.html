@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Social Enterprise Academy South Africa</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -190,7 +191,7 @@
 <!-- ── SECTION 5: Programme Cards (Video 5) ─────────────────── -->
 <section class="programmes-section" id="programmes">
   <div class="programmes-inner">
-    <div class="prog-grid">
+    <div class="prog-grid" id="programmes-grid">
 
       <div class="prog-card">
         <div class="prog-img">
@@ -318,7 +319,7 @@
       Check out the latest updates from the team in South Africa or get stuck into a learning
       resource from across our network!
     </p>
-    <div class="news-grid">
+    <div class="news-grid" id="news-grid">
 
       <div class="news-card">
         <div class="news-card-img">
@@ -423,17 +424,139 @@
 </footer>
 
 <script>
+  // ── Supabase init ──────────────────────────────────────────
+  const { createClient } = supabase;
+  const db = createClient(
+    'https://xwbzjpppwuibyocmmmlc.supabase.co',
+    'sb_publishable_8ONhHdLQZ08nGNA2v6tebQ_5cqe4C6u'
+  );
+
+  // ── Search toggle ──────────────────────────────────────────
   function toggleSearch(e) {
     e.preventDefault();
     const bar = document.getElementById('search-bar');
     bar.style.display = bar.style.display === 'none' ? 'block' : 'none';
     if (bar.style.display === 'block') document.getElementById('search-input').focus();
   }
-  function handleSub(e) {
+
+  // ── Newsletter subscribe ───────────────────────────────────
+  async function handleSub(e) {
     e.preventDefault();
-    document.getElementById('sub-msg').style.display = 'block';
-    e.target.reset();
+    const form = e.target;
+    const email = form.querySelector('input[type="email"]').value.trim();
+    const msgEl = document.getElementById('sub-msg');
+
+    msgEl.style.display = 'block';
+    msgEl.style.color = 'white';
+    msgEl.textContent = 'Subscribing…';
+
+    const { error } = await db.from('subscribers').insert({ email });
+
+    if (error) {
+      if (error.code === '23505') {
+        msgEl.textContent = 'You are already subscribed!';
+      } else {
+        console.error('Subscribe error:', error.message);
+        msgEl.textContent = 'Something went wrong. Please try again.';
+        msgEl.style.color = '#ffd0d0';
+      }
+    } else {
+      msgEl.textContent = '✓ Thank you for subscribing!';
+      form.reset();
+    }
   }
+
+  // ── Load News from Supabase ────────────────────────────────
+  async function loadNews() {
+    const { data, error } = await db
+      .from('news')
+      .select('*')
+      .order('published_at', { ascending: false })
+      .limit(3);
+
+    if (error || !data || data.length === 0) return;
+
+    const accents = ['magenta', 'teal', 'red'];
+    const grid = document.getElementById('news-grid');
+    grid.innerHTML = data.map((item, i) => `
+      <div class="news-card">
+        <div class="news-card-img">
+          ${item.image_url
+            ? `<img src="${item.image_url}" alt="${item.title}" onerror="this.style.display='none'">`
+            : `<div class="img-placeholder" style="background:#555; height:200px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700;">${item.title}</div>`
+          }
+          <div class="news-accent ${accents[i % 3]}"></div>
+        </div>
+        <div class="news-card-body">
+          <h3>${item.title}</h3>
+          <p>${item.excerpt || ''}</p>
+          ${item.url ? `<a href="${item.url}" class="read-more" target="_blank">Read more →</a>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── Load Programmes from Supabase ──────────────────────────
+  async function loadProgrammes() {
+    const { data, error } = await db
+      .from('programmes')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .limit(3);
+
+    if (error || !data || data.length === 0) return;
+
+    const accents = ['magenta', 'teal', 'red'];
+    const grid = document.getElementById('programmes-grid');
+    grid.innerHTML = data.map((p, i) => `
+      <div class="prog-card">
+        <div class="prog-img">
+          ${p.image_url
+            ? `<img src="${p.image_url}" alt="${p.title}">`
+            : `<div class="prog-img-placeholder" style="background:var(--${accents[i % 3] === 'magenta' ? 'magenta' : accents[i % 3] === 'teal' ? 'teal' : 'red'}); height:220px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700;">${p.title}</div>`
+          }
+          <div class="prog-accent ${accents[i % 3]}"></div>
+        </div>
+        <div class="prog-body">
+          <h3><a href="${p.url || '#'}">${p.title}</a></h3>
+          <p>${p.description || ''}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── Contact / Partner form ─────────────────────────────────
+  async function handleContact(e) {
+    e.preventDefault();
+    const form = e.target;
+    const msgEl = document.getElementById('contact-msg');
+    const payload = {
+      name:         form.querySelector('[name="name"]').value,
+      organisation: form.querySelector('[name="organisation"]').value,
+      email:        form.querySelector('[name="email"]').value,
+      message:      form.querySelector('[name="message"]').value,
+    };
+
+    msgEl.textContent = 'Sending…';
+    msgEl.style.display = 'block';
+
+    const { error } = await db.from('contact_enquiries').insert(payload);
+
+    if (error) {
+      msgEl.textContent = 'Something went wrong. Please email us directly.';
+      msgEl.style.color = '#c00';
+    } else {
+      msgEl.textContent = '✓ Message sent! We will be in touch shortly.';
+      msgEl.style.color = 'var(--teal)';
+      form.reset();
+    }
+  }
+
+  // ── Boot ───────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    loadNews();
+    loadProgrammes();
+  });
 </script>
 </body>
 </html>
