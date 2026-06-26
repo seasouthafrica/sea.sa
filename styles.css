@@ -632,6 +632,18 @@ ul   { list-style: none; }
 .news-card-body a.read-more:hover { text-decoration: underline; }
 
 /* ── Partners Logo Wall ─────────────────────────────────────── */
+.logos-image-wrap {
+  margin-top: 1.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+}
+.logos-image-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 .logos-wall {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
