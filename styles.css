@@ -631,6 +631,69 @@ ul   { list-style: none; }
 .news-card-body a.read-more { display: inline-block; margin-top: .8rem; font-size: .8rem; font-weight: 700; color: var(--teal); }
 .news-card-body a.read-more:hover { text-decoration: underline; }
 
+/* ── Partners Logo Wall ─────────────────────────────────────── */
+.logos-wall {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+}
+
+.logo-tile {
+  background: white;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 1.2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 90px;
+  transition: box-shadow .2s, transform .2s;
+  gap: .3rem;
+}
+.logo-tile:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,.1);
+  transform: translateY(-2px);
+}
+.logo-tile span {
+  font-weight: 800;
+  font-size: .95rem;
+  line-height: 1.3;
+  display: block;
+}
+.logo-tile small {
+  font-size: .65rem;
+  color: var(--gray);
+  line-height: 1.3;
+}
+
+/* Brand colours */
+.lt-idc     { color: #003087; font-size: 1.4rem !important; }
+.lt-sfb     { color: #ff6b35; font-style: italic; }
+.lt-digi    { color: #333; font-size: 1.1rem !important; }
+.lt-distell { color: #b8860b; letter-spacing: .1em; }
+.lt-pp      { color: #2c2c2c; letter-spacing: .05em; font-size: .8rem !important; }
+.lt-osisa   { color: #00a651; font-size: 1rem !important; }
+.lt-iwisa   { color: #cc0000; font-size: 1.1rem !important; }
+.lt-airbnb  { color: #ff5a5f; font-size: 1.3rem !important; font-style: italic; }
+.lt-gp      { color: #4a235a; letter-spacing: .06em; font-size: .85rem !important; }
+.lt-csa     { color: #0077c8; font-size: .8rem !important; }
+.lt-nhh     { color: #003087; font-size: 1.6rem !important; letter-spacing: .1em; }
+.lt-wnuas   { color: #0050a0; font-size: .75rem !important; }
+.lt-edmeca  { color: #4a7c59; font-size: 1rem !important; }
+.lt-sec     { color: #c2185b; font-size: .78rem !important; }
+.lt-af      { color: #e67e22; font-size: .9rem !important; }
+.lt-flm     { color: #1a5c1a; font-size: .8rem !important; letter-spacing: .04em; }
+.lt-nf      { color: #1a3a6e; font-size: .9rem !important; }
+.lt-sun     { color: #8b1a1a; font-size: .8rem !important; }
+.lt-bc      { color: #0052a5; font-size: .85rem !important; letter-spacing: .04em; }
+.lt-cn      { color: #00897b; font-size: .9rem !important; }
+
+@media (max-width: 960px) { .logos-wall { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px) { .logos-wall { grid-template-columns: repeat(2, 1fr); } }
+
 /* ── Newsletter ─────────────────────────────────────────────── */
 .newsletter {
   background: var(--magenta);
