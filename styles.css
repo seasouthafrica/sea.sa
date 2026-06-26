@@ -37,7 +37,7 @@ ul   { list-style: none; }
 }
 
 .logo { display: flex; align-items: center; gap: .75rem; }
-.logo-icon { width: 60px; height: 60px; flex-shrink: 0; }
+.logo-icon { height: 56px; width: auto; max-width: 220px; object-fit: contain; flex-shrink: 0; }
 .logo-text .org  { font-size: .88rem; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; line-height: 1.2; color: var(--darker); }
 .logo-text .tag  { font-size: .65rem; color: var(--gray); letter-spacing: .06em; margin-top: .1rem; }
 
