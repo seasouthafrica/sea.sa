@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What's On — Social Enterprise Academy South Africa</title>
+  <meta name="description" content="Explore all the exciting programmes and learning experiences available through SEA South Africa.">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Hero ───────────────────────────────────────────────── */
+    .whats-hero {
+      position: relative;
+      min-height: 460px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .whats-hero img.hero-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+    }
+    .whats-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.65) 0%, rgba(0,0,0,.15) 60%, transparent 100%);
+    }
+    .whats-hero-content {
+      position: relative; z-index: 2;
+      color: white; padding: 3rem 2rem;
+      max-width: 760px;
+    }
+    .whats-hero-content .breadcrumb { font-size: .8rem; opacity: .8; margin-bottom: .7rem; }
+    .whats-hero-content .breadcrumb a { color: white; text-decoration: underline; }
+    .whats-hero-content h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900; text-transform: uppercase;
+      letter-spacing: .04em; line-height: 1.1;
+    }
+
+    /* ── Book a Programme block ─────────────────────────────── */
+    .book-section { background: white; }
+    .book-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: center;
+    }
+    .book-img { height: 480px; overflow: hidden; }
+    .book-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .book-text { padding: 3.5rem 3rem; }
+    .book-text h2 {
+      font-size: 1.8rem; font-weight: 900;
+      color: var(--darker); text-transform: uppercase;
+      letter-spacing: .05em; margin-bottom: 1.4rem;
+      line-height: 1.15;
+    }
+    .book-text p {
+      font-size: .97rem; color: var(--gray);
+      line-height: 1.75; margin-bottom: .9rem;
+    }
+    .book-text .btn-magenta { margin-top: 1rem; display: inline-block; }
+
+    /* ── Programmes grid ────────────────────────────────────── */
+    .programmes-intro {
+      background: var(--light);
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .programmes-intro h2 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 900; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--darker);
+      margin-bottom: .6rem;
+    }
+    .programmes-intro p {
+      font-size: 1rem; color: var(--gray);
+      max-width: 600px; margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .prog-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .prog-card-w {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .prog-card-w:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.13); }
+    .prog-card-img {
+      height: 200px; overflow: hidden;
+      position: relative;
+    }
+    .prog-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .prog-card-img .placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 700;
+    }
+    .prog-card-accent {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 5px;
+    }
+    .prog-card-body { padding: 1.4rem; }
+    .prog-card-tag {
+      font-size: .68rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--magenta); margin-bottom: .4rem;
+    }
+    .prog-card-body h3 { font-size: 1rem; font-weight: 800; color: var(--darker); margin-bottom: .5rem; line-height: 1.35; }
+    .prog-card-body p  { font-size: .84rem; color: var(--gray); line-height: 1.6; margin-bottom: .8rem; }
+    .prog-card-body a.book-link {
+      display: inline-block; font-size: .82rem; font-weight: 700;
+      color: white; background: var(--teal);
+      padding: .5rem 1.1rem; border-radius: 4px;
+      transition: background .2s; text-decoration: none;
+    }
+    .prog-card-body a.book-link:hover { background: var(--teal-dk); }
+
+    /* ── Download section ───────────────────────────────────── */
+    .download-section {
+      padding: 3.5rem 2rem;
+      max-width: 900px; margin: 0 auto;
+      text-align: center;
+    }
+    .download-section h2 {
+      font-size: 1.5rem; font-weight: 900;
+      color: var(--darker); text-transform: uppercase;
+      letter-spacing: .05em; margin-bottom: 1.5rem;
+    }
+    .download-card {
+      display: flex; align-items: center; gap: 1.2rem;
+      background: white; border: 2px solid var(--teal);
+      border-radius: 8px; padding: 1.4rem 1.8rem;
+      text-align: left; transition: box-shadow .2s;
+      text-decoration: none; color: var(--darker);
+      max-width: 600px; margin: 0 auto;
+    }
+    .download-card:hover { box-shadow: 0 4px 16px rgba(0,169,157,.2); }
+    .download-icon { font-size: 2.2rem; flex-shrink: 0; }
+    .download-info .dl-title { font-weight: 700; font-size: .95rem; margin-bottom: .2rem; }
+    .download-info .dl-size  { font-size: .78rem; color: var(--teal); font-weight: 600; }
+
+    /* ── CTA ────────────────────────────────────────────────── */
+    .cta-strip {
+      background: var(--teal); color: white;
+      text-align: center; padding: 3.5rem 2rem;
+    }
+    .cta-strip h2 { font-size: 1.6rem; font-weight: 900; margin-bottom: .6rem; text-transform: uppercase; letter-spacing: .05em; }
+    .cta-strip p  { opacity: .9; margin-bottom: 1.8rem; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.65; }
+
+    @media (max-width: 900px) {
+      .book-block   { grid-template-columns: 1fr; }
+      .book-img     { height: 280px; }
+      .book-text    { padding: 2rem; }
+      .prog-cards   { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .prog-cards   { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ──────────────────────────────────────────────── -->
+<header class="top-bar">
+  <a href="index.html" class="logo">
+    <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/public/Creatives/SEA%20Logo.png" alt="SEA logo" class="logo-icon" onerror="this.src='graphics/SEA Logo.png'">
+    <div class="logo-text">
+      <div class="org">Social Enterprise<br>Academy</div>
+      <div class="tag">One becomes many</div>
+    </div>
+  </a>
+  <div class="top-actions">
+    <a href="partner-with-us.html" class="btn-donate">DONATE HERE</a>
+    <select class="top-select hub"><option>HUB</option><option>South Africa</option><option>Scotland</option><option>Global</option></select>
+    <select class="top-select lang"><option>ENGLISH</option><option>AFRIKAANS</option><option>ZULU</option><option>XHOSA</option></select>
+  </div>
+</header>
+
+<!-- ── Navbar ───────────────────────────────────────────────── -->
+<nav class="navbar">
+  <button class="nav-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-inner" id="nav-links">
+    <a href="index.html">Home</a>
+    <div class="dd">
+      <a href="#">About us +</a>
+      <ul class="dd-menu">
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#findout">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="whats-on.html" class="active">What's on +</a>
+      <ul class="dd-menu">
+        <li><a href="#programmes">All Programmes</a></li>
+        <li><a href="#book">Book a Programme</a></li>
+        <li><a href="#download">Download Prospectus</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">Impact stories +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#testimonial">Testimonials</a></li>
+        <li><a href="index.html#news">Stories</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#programmes">Young people +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#programmes">Youth Programmes</a></li>
+        <li><a href="index.html#programmes">Schools</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">News +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#news">Latest News</a></li>
+        <li><a href="index.html#news">Learning Resources</a></li>
+      </ul>
+    </div>
+    <div class="dd nav-search">
+      <a href="index.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>Search site
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<section class="whats-hero">
+  <img class="hero-bg" src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/Food-Lovers-Market-certificates-1.jpg" alt="What's On — SEA South Africa programmes">
+  <div class="whats-hero-overlay"></div>
+  <div class="whats-hero-content">
+    <p class="breadcrumb"><a href="index.html">Home</a> › What's On</p>
+    <h1>What's On</h1>
+  </div>
+</section>
+
+<!-- ── Book a Programme ──────────────────────────────────────── -->
+<section class="book-section" id="book">
+  <div class="book-block">
+    <div class="book-img">
+      <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/cropped-Get-On-Board-5-1-scaled-1-1300x900-1-1292x900.jpg" alt="Book on to a programme">
+    </div>
+    <div class="book-text">
+      <h2>Book on to a Programme</h2>
+      <p>By investing in the latest technology, we are also currently undertaking an exciting update to our platform which will be rolling out by the end of the year. This will offer learners even more opportunities to learn in a way that is personalised to them.</p>
+      <p>To explore all the exciting programmes happening in South Africa, click the button below and discover a range of transformative learning experiences.</p>
+      <p>Join us on this journey of growth and impact!</p>
+      <a href="https://your.socialenterprise.academy/index.php?redirect=0" target="_blank" class="btn-magenta">Book Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Programme Cards ───────────────────────────────────────── -->
+<section class="programmes-intro" id="programmes">
+  <h2>Our Programmes</h2>
+  <p>From leadership development to social entrepreneurship — find a programme that fits your journey and community.</p>
+
+  <div class="prog-cards">
+
+    <div class="prog-card-w">
+      <div class="prog-card-img">
+        <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2024/11/SEA-Team-300-x-300-px-Instagram-Post-4-photoaidcom-2x-ai-zoom-800x800.png" alt="Young People">
+        <div class="prog-card-accent" style="background:var(--magenta);"></div>
+      </div>
+      <div class="prog-card-body">
+        <p class="prog-card-tag">Programme</p>
+        <h3>Young People &amp; Unemployed Youth</h3>
+        <p>We empower young people in South Africa who have a desire to see positive change locally and globally, both in and outside of education.</p>
+        <a href="https://your.socialenterprise.academy/index.php?redirect=0" target="_blank" class="book-link">Book Now</a>
+      </div>
+    </div>
+
+    <div class="prog-card-w">
+      <div class="prog-card-img">
+        <div class="placeholder" style="background:var(--teal);">Social Enterprise Connect</div>
+        <div class="prog-card-accent" style="background:var(--teal);"></div>
+      </div>
+      <div class="prog-card-body">
+        <p class="prog-card-tag">Community of Practice</p>
+        <h3>Social Enterprise Connect CoP</h3>
+        <p>Our facilitator-led learning and development programmes offer a dynamic space to connect with other changemakers and effect social change.</p>
+        <a href="https://your.socialenterprise.academy/index.php?redirect=0" target="_blank" class="book-link">Book Now</a>
+      </div>
+    </div>
+
+    <div class="prog-card-w">
+      <div class="prog-card-img">
+        <div class="placeholder" style="background:var(--red);">International Internship</div>
+        <div class="prog-card-accent" style="background:var(--red);"></div>
+      </div>
+      <div class="prog-card-body">
+        <p class="prog-card-tag">International</p>
+        <h3>International Student Internship: Social Innovation</h3>
+        <p>We empower young people in South Africa who have a desire to see positive change locally and globally.</p>
+        <a href="https://your.socialenterprise.academy/index.php?redirect=0" target="_blank" class="book-link">Book Now</a>
+      </div>
+    </div>
+
+    <div class="prog-card-w">
+      <div class="prog-card-img">
+        <div class="placeholder" style="background:#7b1fa2;">Social Leadership</div>
+        <div class="prog-card-accent" style="background:#7b1fa2;"></div>
+      </div>
+      <div class="prog-card-body">
+        <p class="prog-card-tag">Leadership</p>
+        <h3>Social Leadership Programme</h3>
+        <p>Build the skills and confidence to lead change in your community and organisation through transformational learning.</p>
+        <a href="https://your.socialenterprise.academy/index.php?redirect=0" target="_blank" class="book-link">Book Now</a>
+      </div>
+    </div>
+
+    <div class="prog-card-w">
+      <div class="prog-card-img">
+        <div class="placeholder" style="background:#1565c0;">Build Your SE</div>
+        <div class="prog-card-accent" style="background:#1565c0;"></div>
+      </div>
+      <div class="prog-card-body">
+        <p class="prog-card-tag">Bootcamp</p>
+        <h3>Build Your Social Enterprise Programme</h3>
+        <p>Practical support to launch or grow a social enterprise that makes a real difference in your community.</p>
+        <a href="https://your.socialenterprise.academy/index.php?redirect=0" target="_blank" class="book-link">Book Now</a>
+      </div>
+    </div>
+
+    <div class="prog-card-w">
+      <div class="prog-card-img">
+        <div class="placeholder" style="background:#2e7d32;">Schools</div>
+        <div class="prog-card-accent" style="background:#2e7d32;"></div>
+      </div>
+      <div class="prog-card-body">
+        <p class="prog-card-tag">Schools</p>
+        <h3>Social Enterprise Schools Programme</h3>
+        <p>Bringing social innovation thinking into classrooms across South Africa, equipping learners with real-world entrepreneurial skills.</p>
+        <a href="https://your.socialenterprise.academy/index.php?redirect=0" target="_blank" class="book-link">Book Now</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Download Prospectus ───────────────────────────────────── -->
+<section class="download-section" id="download">
+  <h2>Download Our Programme Prospectus</h2>
+  <a class="download-card" href="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/Baseline-Programme-Prospectus-2021-online-1-1.pdf" target="_blank">
+    <div class="download-icon">📄</div>
+    <div class="download-info">
+      <p class="dl-title">Social Enterprise Academy South Africa Prospectus</p>
+      <p class="dl-size">PDF — 1.38 MB — Click to download</p>
+    </div>
+  </a>
+</section>
+
+<!-- ── CTA Strip ─────────────────────────────────────────────── -->
+<section class="cta-strip">
+  <h2>Ready to Get Started?</h2>
+  <p>Browse all available programmes and book your place on our learning platform today.</p>
+  <a href="https://your.socialenterprise.academy/index.php?redirect=0" target="_blank" class="btn-magenta" style="background:white; color:var(--magenta);">Book a Programme</a>
+</section>
+
+<!-- ── Newsletter ────────────────────────────────────────────── -->
+<div class="newsletter">
+  <h2>Stay Connected</h2>
+  <p>Get the latest programme updates and impact stories from SEA South Africa.</p>
+  <form class="nl-form" onsubmit="handleSub(event)">
+    <input type="email" placeholder="Enter your email address" required />
+    <button type="submit">SUBSCRIBE</button>
+  </form>
+  <p id="sub-msg" style="display:none; margin-top:1rem; font-size:.85rem;">Thank you for subscribing!</p>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid" style="max-width:1200px; margin:0 auto 2rem;">
+    <div class="footer-brand">
+      <p class="org">Social Enterprise Academy South Africa</p>
+      <p>Learning and development programmes for people and organisations enabling social change in South Africa.</p>
+      <p style="margin-top:.7rem; font-size:.75rem;">NPO: 158-170 | PBO: 930052777 | Reg: 2012/175638/08</p>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#partner">Donate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Programmes</h4>
+      <ul>
+        <li><a href="whats-on.html">All Programmes</a></li>
+        <li><a href="whats-on.html#book">Book a Programme</a></li>
+        <li><a href="whats-on.html#download">Download Prospectus</a></li>
+        <li><a href="index.html#findout">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:jamy@socialenterprise.academy">jamy@socialenterprise.academy</a></li>
+        <li><a href="tel:+27671459311">Jamy — 067 145 9311</a></li>
+        <li><a href="#">Stellenbosch, South Africa</a></li>
+        <li><a href="index.html#news">Media Enquiries</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Social Enterprise Academy South Africa. All rights reserved.</span>
+    <div class="social-row">
+      <a href="https://twitter.com/SEA_SouthAfrica" target="_blank">𝕏</a>
+      <a href="https://www.facebook.com/seasouthafrica" target="_blank">f</a>
+      <a href="https://www.instagram.com/sea_international/" target="_blank">ig</a>
+      <a href="https://www.linkedin.com/in/social-enterprise-academy-south-africa-9552b6141" target="_blank">in</a>
+      <a href="https://www.youtube.com/@SocialEnterpriseAcademy" target="_blank">▶</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function handleSub(e) {
+    e.preventDefault();
+    document.getElementById('sub-msg').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
