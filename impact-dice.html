@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DICE Impact Makers &amp; Creators Programme — SEA South Africa</title>
+  <meta name="description" content="Supporting South Africa's growing creative social enterprise sector through the British Council's DICE Impact Makers and Creators programme.">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Hero ───────────────────────────────────────────────── */
+    .story-hero {
+      position: relative;
+      min-height: 460px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .story-hero img.hero-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+    }
+    .story-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.2) 55%, transparent 100%);
+    }
+    .story-hero-content {
+      position: relative; z-index: 2;
+      color: white; padding: 3rem 2rem;
+      max-width: 860px;
+    }
+    .story-hero-content .breadcrumb { font-size: .8rem; opacity: .8; margin-bottom: .7rem; }
+    .story-hero-content .breadcrumb a { color: white; text-decoration: underline; }
+    .story-hero-content h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900; text-transform: uppercase;
+      letter-spacing: .04em; line-height: 1.1;
+      margin-bottom: .6rem;
+    }
+    .story-hero-content p { font-size: 1rem; opacity: .9; }
+
+    /* ── Page layout ────────────────────────────────────────── */
+    .story-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      align-items: start;
+    }
+
+    /* Sidebar */
+    .story-sidebar { position: sticky; top: 170px; }
+    .sidebar-title {
+      font-size: .7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .14em;
+      color: var(--gray); margin-bottom: 1rem;
+      padding-bottom: .5rem; border-bottom: 2px solid var(--teal);
+    }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li + li { margin-top: .1rem; }
+    .sidebar-nav a {
+      display: block; font-size: .84rem;
+      color: var(--dark); padding: .5rem .8rem;
+      border-radius: 4px; transition: background .2s, color .2s;
+      text-decoration: none;
+    }
+    .sidebar-nav a:hover { background: var(--light); color: var(--teal); }
+    .sidebar-nav a.active { background: var(--teal); color: white; font-weight: 700; }
+
+    /* Article */
+    .story-article { min-width: 0; }
+
+    /* Partner logos row */
+    .partner-logos-row {
+      display: flex; gap: 2rem; align-items: center;
+      flex-wrap: wrap; margin-bottom: 2rem;
+      padding: 1.4rem; background: var(--light);
+      border-radius: 8px;
+    }
+    .partner-logos-row img { height: 50px; width: auto; object-fit: contain; }
+    .partner-logos-row .logo-txt {
+      font-weight: 800; font-size: .9rem;
+      padding: .4rem .8rem; border-radius: 4px;
+    }
+
+    /* Section labels */
+    .story-label {
+      font-size: .7rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--magenta); margin-bottom: .4rem;
+    }
+    .story-article h2 {
+      font-size: 1.5rem; font-weight: 900;
+      color: var(--darker); margin-bottom: 1rem;
+      text-transform: uppercase; letter-spacing: .04em;
+    }
+    .story-article p {
+      font-size: .97rem; color: var(--gray);
+      line-height: 1.8; margin-bottom: 1rem;
+    }
+    .story-article strong { color: var(--darker); }
+
+    /* Stats highlight */
+    .stats-highlight {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-chip {
+      background: var(--teal);
+      color: white; text-align: center;
+      padding: 1.4rem 1rem; border-radius: 8px;
+    }
+    .stat-chip .n { font-size: 2rem; font-weight: 900; line-height: 1; }
+    .stat-chip .l { font-size: .8rem; opacity: .88; margin-top: .3rem; }
+
+    /* Quote block */
+    .story-quote {
+      border-left: 5px solid var(--magenta);
+      background: var(--light);
+      padding: 1.5rem 1.8rem;
+      margin: 2rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .story-quote p {
+      font-size: 1.05rem; font-style: italic;
+      color: var(--dark); margin-bottom: .5rem;
+    }
+    .story-quote cite { font-size: .82rem; color: var(--teal); font-weight: 700; font-style: normal; }
+
+    /* Download + contact */
+    .story-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      margin-top: 2.5rem; padding-top: 1.5rem;
+      border-top: 1px solid #eee;
+    }
+    .btn-download {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--teal); color: white;
+      font-weight: 700; font-size: .85rem;
+      padding: .8rem 1.6rem; border-radius: 4px;
+      text-decoration: none; transition: background .2s;
+    }
+    .btn-download:hover { background: var(--teal-dk); }
+
+    /* How to get involved */
+    .get-involved-box {
+      background: var(--teal);
+      color: white; border-radius: 8px;
+      padding: 2rem; margin-top: 3rem;
+    }
+    .get-involved-box h3 {
+      font-size: 1.1rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .06em;
+      margin-bottom: .8rem;
+    }
+    .get-involved-box p { font-size: .95rem; opacity: .93; line-height: 1.65; margin-bottom: .5rem; }
+    .get-involved-box a { color: var(--yellow); font-weight: 700; }
+
+    @media (max-width: 900px) {
+      .story-layout { grid-template-columns: 1fr; }
+      .story-sidebar { position: static; }
+      .stats-highlight { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .stats-highlight { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ──────────────────────────────────────────────── -->
+<header class="top-bar">
+  <a href="index.html" class="logo">
+    <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/public/Creatives/SEA%20Logo.png" alt="SEA logo" class="logo-icon" onerror="this.src='graphics/SEA Logo.png'">
+    <div class="logo-text">
+      <div class="org">Social Enterprise<br>Academy</div>
+      <div class="tag">One becomes many</div>
+    </div>
+  </a>
+  <div class="top-actions">
+    <a href="partner-with-us.html" class="btn-donate">DONATE HERE</a>
+    <select class="top-select hub"><option>HUB</option><option>South Africa</option><option>Scotland</option><option>Global</option></select>
+    <select class="top-select lang"><option>ENGLISH</option><option>AFRIKAANS</option><option>ZULU</option><option>XHOSA</option></select>
+  </div>
+</header>
+
+<!-- ── Navbar ───────────────────────────────────────────────── -->
+<nav class="navbar">
+  <button class="nav-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-inner" id="nav-links">
+    <a href="index.html">Home</a>
+    <div class="dd">
+      <a href="#">About us +</a>
+      <ul class="dd-menu">
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#findout">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="whats-on.html">What's on +</a>
+      <ul class="dd-menu">
+        <li><a href="whats-on.html#programmes">All Programmes</a></li>
+        <li><a href="whats-on.html#book">Book a Programme</a></li>
+        <li><a href="whats-on.html#download">Download Prospectus</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="impact-dice.html" class="active">Impact stories +</a>
+      <ul class="dd-menu">
+        <li><a href="impact-dice.html" class="active">DICE Impact Makers &amp; Creators</a></li>
+        <li><a href="#">Distell</a></li>
+        <li><a href="#">Social Enterprise Connect</a></li>
+        <li><a href="#">Seeds of Change</a></li>
+        <li><a href="#">Meet the Impact Makers</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#programmes">Young people +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#programmes">Youth Programmes</a></li>
+        <li><a href="index.html#programmes">Schools</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">News +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#news">Latest News</a></li>
+        <li><a href="index.html#news">Learning Resources</a></li>
+      </ul>
+    </div>
+    <div class="dd nav-search">
+      <a href="index.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>Search site
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<section class="story-hero">
+  <img class="hero-bg" src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/aavW7IF6JK0HksBH5ajv4t60BHGyozYiUUyhjuhwQnc-1920x1080-1.jpg" alt="DICE Impact Makers and Creators Programme">
+  <div class="story-hero-overlay"></div>
+  <div class="story-hero-content">
+    <p class="breadcrumb"><a href="index.html">Home</a> › <a href="index.html#news">Impact Stories</a> › DICE Programme</p>
+    <h1>DICE Impact Makers &amp; Creators Programme</h1>
+    <p>Supporting South Africa's growing creative social enterprise sector.</p>
+  </div>
+</section>
+
+<!-- ── Main Layout ───────────────────────────────────────────── -->
+<div class="story-layout">
+
+  <!-- Sidebar -->
+  <aside class="story-sidebar">
+    <p class="sidebar-title">In this section</p>
+    <ul class="sidebar-nav">
+      <li><a href="impact-dice.html" class="active">DICE Impact Makers &amp; Creators</a></li>
+      <li><a href="#">Distell</a></li>
+      <li><a href="#">Social Enterprise Connect</a></li>
+      <li><a href="#">Seeds of Change</a></li>
+      <li><a href="#">Meet the Impact Makers &amp; Creators</a></li>
+      <li><a href="#">Older Past Programmes</a></li>
+    </ul>
+  </aside>
+
+  <!-- Article -->
+  <article class="story-article">
+
+    <!-- Partner logos -->
+    <div class="partner-logos-row">
+      <img src="https://old.socialenterprise.academy/za/images/logos/1280px-BritishCouncil.png" alt="British Council">
+      <img src="https://old.socialenterprise.academy/za/images/logos/SEED.gif" alt="Seed Academy">
+      <img src="https://old.socialenterprise.academy/za/images/logos/DICE.PNG" alt="DICE">
+    </div>
+
+    <p class="story-label">Overview</p>
+    <h2>DICE | Impact Makers and Creators</h2>
+
+    <p>Supporting South Africa's growing creative social enterprise sector.</p>
+
+    <p>Creative industries have been welcomed as a growth area for job creation, sustainable livelihoods and inclusion. The <strong>British Council's DICE Impact Makers and Creators programme</strong> aims to strengthen creative and social enterprises in 5 emerging economies: Brazil, Egypt, Indonesia, Pakistan, and South Africa.</p>
+
+    <p>British Council has partnered with <strong>Social Enterprise Academy</strong> and <strong>Seed Academy</strong> as programme delivery partners for a three-month learning programme for social creative entrepreneurs in South Africa.</p>
+
+    <p>Through the Impact Makers and Creators programme, social creative entrepreneurs seeking to create daring and holistic solutions to challenges in their society are supported with tools to enable them to reach wider communities through their work. The programme focuses on building robust business models, building social value creation and considering the impact of their business models.</p>
+
+    <!-- Stats -->
+    <div class="stats-highlight">
+      <div class="stat-chip">
+        <div class="n">120</div>
+        <div class="l">Social &amp; Creative Entrepreneurs</div>
+      </div>
+      <div class="stat-chip">
+        <div class="n">2</div>
+        <div class="l">Cities: Cape Town &amp; Johannesburg</div>
+      </div>
+      <div class="stat-chip">
+        <div class="n">10</div>
+        <div class="l">Finalists pitch to Impact Investors</div>
+      </div>
+    </div>
+
+    <p>Entrepreneurs have access to <strong>in-depth coaching</strong> from successful global social entrepreneurs, high-impact business development support, funding readiness and opportunities for access to market. Ten outstanding participants will pitch their businesses to impact investors at the year-end graduation ceremony.</p>
+
+    <p>The project currently works with <strong>120 ideation and growth-stage social and creative entrepreneurs</strong> in Cape Town and Johannesburg.</p>
+
+    <div class="story-quote">
+      <p>"The structured learning process helped me to understand my organisation's strengths and weaknesses and how to present them effectively. I learned so much, and it was clear why I had struggled to gain traction before."</p>
+      <cite>— DICE Programme Participant</cite>
+    </div>
+
+    <!-- Actions -->
+    <div class="story-actions">
+      <a href="https://drive.google.com/file/d/1w9JtOcEIWBZM3zpXcjr7qaWfvxg5MvLS/view" target="_blank" class="btn-download">
+        📄 Download the Case Study
+      </a>
+      <a href="partner-with-us.html" class="btn-magenta">Partner With Us</a>
+    </div>
+
+    <!-- Get involved -->
+    <div class="get-involved-box">
+      <h3>How to Get Involved</h3>
+      <p>If you'd like more information on how your organisation can get involved in a programme like this, please contact the team:</p>
+      <p><a href="mailto:surika@socialenterprise.academy">surika@socialenterprise.academy</a></p>
+    </div>
+
+  </article>
+</div>
+
+<!-- ── Newsletter ────────────────────────────────────────────── -->
+<div class="newsletter">
+  <h2>Stay Connected</h2>
+  <p>Get the latest impact stories and programme updates from SEA South Africa.</p>
+  <form class="nl-form" onsubmit="handleSub(event)">
+    <input type="email" placeholder="Enter your email address" required />
+    <button type="submit">SUBSCRIBE</button>
+  </form>
+  <p id="sub-msg" style="display:none; margin-top:1rem; font-size:.85rem;">Thank you for subscribing!</p>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid" style="max-width:1200px; margin:0 auto 2rem;">
+    <div class="footer-brand">
+      <p class="org">Social Enterprise Academy South Africa</p>
+      <p>Learning and development programmes for people and organisations enabling social change in South Africa.</p>
+      <p style="margin-top:.7rem; font-size:.75rem;">NPO: 158-170 | PBO: 930052777 | Reg: 2012/175638/08</p>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#partner">Donate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Impact Stories</h4>
+      <ul>
+        <li><a href="impact-dice.html">DICE Impact Makers</a></li>
+        <li><a href="#">Distell</a></li>
+        <li><a href="#">Social Enterprise Connect</a></li>
+        <li><a href="#">Seeds of Change</a></li>
+        <li><a href="#">Meet the Impact Makers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:jamy@socialenterprise.academy">jamy@socialenterprise.academy</a></li>
+        <li><a href="tel:+27671459311">Jamy — 067 145 9311</a></li>
+        <li><a href="#">Stellenbosch, South Africa</a></li>
+        <li><a href="index.html#news">Media Enquiries</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Social Enterprise Academy South Africa. All rights reserved.</span>
+    <div class="social-row">
+      <a href="https://twitter.com/SEA_SouthAfrica" target="_blank">𝕏</a>
+      <a href="https://www.facebook.com/seasouthafrica" target="_blank">f</a>
+      <a href="https://www.instagram.com/sea_international/" target="_blank">ig</a>
+      <a href="https://www.linkedin.com/in/social-enterprise-academy-south-africa-9552b6141" target="_blank">in</a>
+      <a href="https://www.youtube.com/@SocialEnterpriseAcademy" target="_blank">▶</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function handleSub(e) {
+    e.preventDefault();
+    document.getElementById('sub-msg').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
