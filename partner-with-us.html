@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partner With Us — Social Enterprise Academy South Africa</title>
+  <meta name="description" content="Partner with SEA SA to maximise your BEE scorecard, claim tax deductions and drive meaningful social impact across South Africa.">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Hero ───────────────────────────────────────────────── */
+    .partner-hero {
+      position: relative;
+      min-height: 480px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .partner-hero img.hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .partner-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.2) 60%, transparent 100%);
+    }
+    .partner-hero-content {
+      position: relative;
+      z-index: 2;
+      color: white;
+      padding: 3rem 2rem;
+      max-width: 860px;
+    }
+    .partner-hero-content .breadcrumb {
+      font-size: .8rem;
+      opacity: .8;
+      margin-bottom: .8rem;
+    }
+    .partner-hero-content .breadcrumb a { color: white; text-decoration: underline; }
+    .partner-hero-content h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      line-height: 1.1;
+      margin-bottom: .8rem;
+    }
+    .partner-hero-content p {
+      font-size: 1.05rem;
+      opacity: .92;
+      max-width: 620px;
+      line-height: 1.6;
+    }
+
+    /* ── Page layout ────────────────────────────────────────── */
+    .page-body {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3.5rem 2rem;
+    }
+
+    /* ── BEE intro block ────────────────────────────────────── */
+    .bee-intro {
+      background: var(--teal);
+      color: white;
+      border-radius: 10px;
+      padding: 2.5rem 2rem;
+      margin-bottom: 3rem;
+    }
+    .bee-intro h2 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .bee-intro p { font-size: 1rem; line-height: 1.75; opacity: .95; margin-bottom: .7rem; }
+    .bee-intro p:last-child { margin-bottom: 0; }
+    .bee-intro strong { font-weight: 800; }
+
+    /* ── Benefits grid ──────────────────────────────────────── */
+    .benefits-section { margin-bottom: 3rem; }
+    .benefits-section h2 {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--darker);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: .5rem;
+    }
+    .benefits-section > p {
+      font-size: .95rem;
+      color: var(--gray);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .benefit-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .benefit-card {
+      border-radius: 8px;
+      padding: 1.8rem;
+      border-top: 4px solid var(--teal);
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      background: white;
+    }
+    .benefit-card.magenta-top { border-top-color: var(--magenta); }
+    .benefit-card.yellow-top  { border-top-color: var(--yellow); }
+    .benefit-card.red-top     { border-top-color: var(--red); }
+
+    .benefit-card-icon { font-size: 2rem; margin-bottom: .8rem; }
+    .benefit-card h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--darker);
+      margin-bottom: .8rem;
+    }
+    .benefit-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .benefit-card ul li {
+      font-size: .88rem;
+      color: var(--gray);
+      line-height: 1.6;
+      padding-left: 1.2rem;
+      position: relative;
+      margin-bottom: .4rem;
+    }
+    .benefit-card ul li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+      font-weight: 700;
+    }
+    .benefit-card.magenta-top ul li::before { color: var(--magenta); }
+    .benefit-card.yellow-top  ul li::before { color: #b8960a; }
+    .benefit-card.red-top     ul li::before { color: var(--red); }
+
+    /* ── How to get involved ────────────────────────────────── */
+    .get-involved-section {
+      background: var(--light);
+      border-radius: 10px;
+      padding: 2.5rem 2rem;
+      margin-bottom: 3rem;
+    }
+    .get-involved-section h2 {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--darker);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 1rem;
+    }
+    .get-involved-section p { font-size: .95rem; color: var(--gray); line-height: 1.7; margin-bottom: .8rem; }
+    .get-involved-section ul { list-style: disc; padding-left: 1.4rem; margin-bottom: 1rem; }
+    .get-involved-section ul li { font-size: .95rem; color: var(--gray); line-height: 1.7; margin-bottom: .4rem; }
+    .get-involved-section strong { color: var(--darker); }
+
+    /* ── Contact block ──────────────────────────────────────── */
+    .contact-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.08);
+      overflow: hidden;
+    }
+    .contact-block-img { height: 320px; overflow: hidden; }
+    .contact-block-img img { width: 100%; height: 100%; object-fit: cover; }
+    .contact-block-img-placeholder {
+      width: 100%; height: 100%;
+      background: var(--teal);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 700;
+    }
+    .contact-block-text { padding: 2rem 2rem 2rem 0; }
+    .contact-block-text h2 {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--darker);
+      margin-bottom: 1rem;
+    }
+    .contact-block-text p { font-size: .95rem; color: var(--gray); line-height: 1.7; margin-bottom: .6rem; }
+    .contact-block-text a.email-link { color: var(--teal); font-weight: 600; }
+
+    @media (max-width: 760px) {
+      .benefit-cards { grid-template-columns: 1fr; }
+      .contact-block { grid-template-columns: 1fr; }
+      .contact-block-text { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ──────────────────────────────────────────────── -->
+<header class="top-bar">
+  <a href="index.html" class="logo">
+    <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/public/Creatives/SEA%20Logo.png" alt="Social Enterprise Academy logo" class="logo-icon" onerror="this.src='graphics/SEA Logo.png'">
+    <div class="logo-text">
+      <div class="org">Social Enterprise<br>Academy</div>
+      <div class="tag">One becomes many</div>
+    </div>
+  </a>
+  <div class="top-actions">
+    <a href="#contact" class="btn-donate">DONATE HERE</a>
+    <select class="top-select hub" aria-label="Hub">
+      <option>HUB</option>
+      <option>South Africa</option>
+      <option>Scotland</option>
+      <option>Global</option>
+    </select>
+    <select class="top-select lang" aria-label="Language">
+      <option>ENGLISH</option>
+      <option>AFRIKAANS</option>
+      <option>ZULU</option>
+      <option>XHOSA</option>
+    </select>
+  </div>
+</header>
+
+<!-- ── Navbar ───────────────────────────────────────────────── -->
+<nav class="navbar">
+  <button class="nav-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-inner" id="nav-links">
+    <a href="index.html">Home</a>
+    <div class="dd">
+      <a href="#">About us +</a>
+      <ul class="dd-menu">
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="#">Who We Are</a></li>
+        <li><a href="partner-with-us.html" class="active">Partner With Us</a></li>
+        <li><a href="index.html#findout">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#programmes">What's on +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#programmes">Programmes</a></li>
+        <li><a href="index.html#findout">Book a Programme</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">Impact stories +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#testimonial">Testimonials</a></li>
+        <li><a href="index.html#news">Stories</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#programmes">Young people +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#programmes">Youth Programmes</a></li>
+        <li><a href="index.html#programmes">Schools</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">News +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#news">Latest News</a></li>
+        <li><a href="index.html#news">Learning Resources</a></li>
+      </ul>
+    </div>
+    <div class="dd nav-search">
+      <a href="index.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>Search site
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<section class="partner-hero">
+  <img class="hero-bg" src="graphics/partners with us img.webp" alt="Partner With Us — SEA SA community events">
+  <div class="partner-hero-overlay"></div>
+  <div class="partner-hero-content">
+    <p class="breadcrumb"><a href="index.html">Home</a> › About us › Partner With Us</p>
+    <h1>Partner With Us</h1>
+    <p>Your support plays a vital role in helping us empower social entrepreneurs and build fairer, more sustainable communities across the country.</p>
+  </div>
+</section>
+
+<!-- ── Main Body ─────────────────────────────────────────────── -->
+<div class="page-body">
+
+  <!-- BEE Intro -->
+  <div class="bee-intro">
+    <h2>Partner with us to Maximise Your BEE Scorecard and Drive Social Impact</h2>
+    <p><strong>Social Enterprise Academy South Africa (SEA SA)</strong> is a <strong>Level 1 BEE organisation</strong> committed to empowering social entrepreneurs and fostering sustainable business solutions across South Africa and beyond.</p>
+    <p>By partnering with SEA SA, your company can make a tangible social impact while significantly improving your BEE scorecard. As a <strong>Level 1 BEE entity</strong>, companies working with SEA SA can claim <strong>135% of their procurement spend</strong> towards their own BEE scorecard — a powerful advantage for enhancing your <strong>Preferential Procurement</strong> rating.</p>
+    <p>Additionally, SEA SA is registered to issue <strong>Section 18A certificates</strong>, enabling corporate partners to claim <strong>tax deductions</strong> on their contributions. This makes your partnership both socially meaningful and financially beneficial.</p>
+  </div>
+
+  <!-- Benefits -->
+  <div class="benefits-section">
+    <h2>Benefits of Partnering with SEA SA</h2>
+    <p>Partnering with SEA SA is more than just meeting compliance requirements — it's about creating sustainable, inclusive growth.</p>
+    <div class="benefit-cards">
+
+      <div class="benefit-card">
+        <div class="benefit-card-icon">📊</div>
+        <h3>Boost Your BEE Scorecard</h3>
+        <ul>
+          <li><strong>Preferential Procurement:</strong> Claim 135% of your spend</li>
+          <li><strong>Skills Development:</strong> Support the growth and training of local social entrepreneurs</li>
+          <li><strong>Enterprise & Supplier Development:</strong> Invest in sustainable, community-driven businesses</li>
+          <li><strong>Socioeconomic Development:</strong> Contribute to initiatives that empower communities and transform lives</li>
+        </ul>
+      </div>
+
+      <div class="benefit-card magenta-top">
+        <div class="benefit-card-icon">🏛️</div>
+        <h3>Tax Benefits</h3>
+        <ul>
+          <li>We issue <strong>Section 18A certificates</strong> for qualifying donations and sponsorships</li>
+          <li>Tax deductions that directly benefit your business</li>
+          <li>Financially rewarding while creating positive community impact</li>
+        </ul>
+      </div>
+
+      <div class="benefit-card yellow-top">
+        <div class="benefit-card-icon">🌍</div>
+        <h3>Meaningful Social Impact</h3>
+        <ul>
+          <li>Directly support <strong>local entrepreneurs and social enterprises</strong> driving change in their communities</li>
+          <li>Contribute to sustainable development and inclusive economic growth</li>
+          <li>Align your brand with purpose-led transformation</li>
+        </ul>
+      </div>
+
+      <div class="benefit-card red-top">
+        <div class="benefit-card-icon">🤝</div>
+        <h3>CSI Alignment</h3>
+        <ul>
+          <li>Strengthen your Corporate Social Investment (CSI) initiatives</li>
+          <li>Build resilient local supplier networks</li>
+          <li>Customised sponsorship packages aligned to your transformation goals</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- How to get involved -->
+  <div class="get-involved-section">
+    <h2>How You Can Get Involved</h2>
+    <p>We actively work with <strong>BEE consultants</strong> to help businesses:</p>
+    <ul>
+      <li>Improve BEE scorecards</li>
+      <li>Strengthen Corporate Social Investment (CSI) initiatives</li>
+      <li>Build resilient local supplier networks</li>
+    </ul>
+    <p>We offer <strong>customised sponsorship packages</strong> that align with your strategic transformation and social investment goals.</p>
+    <p>Let's explore how we can create a tailored partnership that delivers compliance value and measurable social impact.</p>
+    <a href="#contact" class="btn-magenta" style="margin-top:1rem; display:inline-block;">Get In Touch</a>
+  </div>
+
+  <!-- Contact -->
+  <div class="contact-block" id="contact">
+    <div class="contact-block-img">
+      <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2024/11/SEA-Team-300-x-300-px-Instagram-Post-4-photoaidcom-2x-ai-zoom-1300x900.png"
+           alt="SEA SA Team" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="contact-block-img-placeholder" style="display:none">SEA SA Team</div>
+    </div>
+    <div class="contact-block-text">
+      <h2>Contact Us</h2>
+      <p>Would you like to find out more? We'd love to set up a brief call or meeting to discuss partnership and donation opportunities.</p>
+      <p>Email: <a href="mailto:jamy@socialenterprise.academy" class="email-link">jamy@socialenterprise.academy</a></p>
+      <p>Phone: <a href="tel:+27671459311" class="email-link">Jamy — 067 145 9311</a></p>
+      <p style="margin-top:.4rem; font-size:.82rem; color:var(--gray);">LaunchLab, Hammanshand Rd, Stellenbosch, 7599</p>
+      <a href="mailto:jamy@socialenterprise.academy" class="btn-teal" style="margin-top:1.2rem; display:inline-block;">Send Us a Message</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Newsletter ────────────────────────────────────────────── -->
+<div class="newsletter">
+  <h2>Stay Connected</h2>
+  <p>Get the latest news, programme updates and impact stories from SEA South Africa.</p>
+  <form class="nl-form" onsubmit="handleSub(event)">
+    <input type="email" placeholder="Enter your email address" required />
+    <button type="submit">SUBSCRIBE</button>
+  </form>
+  <p id="sub-msg" style="display:none; margin-top:1rem; font-size:.85rem;">Thank you for subscribing!</p>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid" style="max-width:1200px; margin:0 auto 2rem;">
+    <div class="footer-brand">
+      <p class="org">Social Enterprise Academy South Africa</p>
+      <p>Learning and development programmes for people and organisations enabling social change in South Africa.</p>
+      <p style="margin-top:.7rem; font-size:.75rem;">NPO: 158-170 | PBO: 930052777 | Reg: 2012/175638/08</p>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="index.html#who">Who We Are</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#benefits">Partnership Benefits</a></li>
+        <li><a href="index.html#partner">Donate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Programmes</h4>
+      <ul>
+        <li><a href="index.html#programmes">Young People</a></li>
+        <li><a href="index.html#programmes">SEC CoP</a></li>
+        <li><a href="index.html#programmes">International Internship</a></li>
+        <li><a href="index.html#findout">Book a Programme</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:jamy@socialenterprise.academy">jamy@socialenterprise.academy</a></li>
+        <li><a href="tel:+27671459311">Jamy — 067 145 9311</a></li>
+        <li><a href="#">Stellenbosch, South Africa</a></li>
+        <li><a href="index.html#news">Media Enquiries</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Social Enterprise Academy South Africa. All rights reserved.</span>
+    <div class="social-row">
+      <a href="https://twitter.com/SEA_SouthAfrica" title="Twitter" target="_blank">𝕏</a>
+      <a href="https://www.facebook.com/seasouthafrica" title="Facebook" target="_blank">f</a>
+      <a href="https://www.instagram.com/sea_international/" title="Instagram" target="_blank">ig</a>
+      <a href="https://www.linkedin.com/in/social-enterprise-academy-south-africa-9552b6141" title="LinkedIn" target="_blank">in</a>
+      <a href="https://www.youtube.com/@SocialEnterpriseAcademy" title="YouTube" target="_blank">▶</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function handleSub(e) {
+    e.preventDefault();
+    document.getElementById('sub-msg').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
