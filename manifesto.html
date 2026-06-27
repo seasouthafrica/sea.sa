@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manifesto — Social Enterprise Academy South Africa</title>
+  <meta name="description" content="Most people think that if we want to change the world, only large companies can make big steps. We like to disagree.">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Manifesto-specific styles ───────────────────────── */
+    .page-hero {
+      background: var(--teal);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      color: white;
+    }
+    .page-hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: .8rem;
+    }
+    .breadcrumb {
+      font-size: .82rem;
+      opacity: .8;
+    }
+    .breadcrumb a { color: white; text-decoration: underline; }
+
+    .page-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      align-items: start;
+    }
+
+    /* Sidebar */
+    .page-sidebar {
+      position: sticky;
+      top: 170px;
+    }
+    .sidebar-title {
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--gray);
+      margin-bottom: 1rem;
+      padding-bottom: .5rem;
+      border-bottom: 2px solid var(--teal);
+    }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li + li { margin-top: .1rem; }
+    .sidebar-nav a {
+      display: block;
+      font-size: .85rem;
+      color: var(--dark);
+      padding: .5rem .8rem;
+      border-radius: 4px;
+      transition: background .2s, color .2s;
+      text-decoration: none;
+    }
+    .sidebar-nav a:hover { background: var(--light); color: var(--teal); }
+    .sidebar-nav a.active { background: var(--teal); color: white; font-weight: 700; }
+
+    /* Article */
+    .page-article { min-width: 0; }
+
+    .manifesto-text {
+      background: var(--light);
+      border-left: 5px solid var(--teal);
+      border-radius: 0 8px 8px 0;
+      padding: 2.5rem 2rem;
+      margin-bottom: 3rem;
+    }
+    .manifesto-text h2 {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--teal);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .manifesto-text p {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--dark);
+      margin-bottom: .8rem;
+    }
+    .manifesto-text p:last-child { margin-bottom: 0; }
+    .manifesto-tagline {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--magenta);
+      font-style: italic;
+      margin-top: 1.5rem;
+    }
+
+    /* Media blocks */
+    .media-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      padding: 3.5rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .media-block.reverse { direction: rtl; }
+    .media-block.reverse > * { direction: ltr; }
+
+    .media-block-img {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 420px;
+      background: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .media-block-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    .media-block-section { background: white; }
+    .media-block-section.alt { background: var(--light); }
+
+    .media-block-content h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--teal);
+      margin-bottom: .4rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .media-block-content h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--magenta);
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .media-block-content p {
+      font-size: .95rem;
+      line-height: 1.75;
+      color: var(--gray);
+      margin-bottom: .9rem;
+    }
+    .media-block-content p strong { color: var(--darker); }
+    .media-block-content ul {
+      list-style: disc;
+      padding-left: 1.4rem;
+      margin-bottom: .9rem;
+    }
+    .media-block-content ul li {
+      font-size: .95rem;
+      line-height: 1.7;
+      color: var(--gray);
+      margin-bottom: .4rem;
+    }
+
+    /* Get Involved CTA */
+    .get-involved {
+      background: var(--magenta);
+      color: white;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .get-involved h2 { font-size: 2rem; font-weight: 900; margin-bottom: 1rem; }
+    .get-involved p  { font-size: 1rem; opacity: .9; max-width: 560px; margin: 0 auto 2rem; line-height: 1.65; }
+
+    @media (max-width: 900px) {
+      .page-layout { grid-template-columns: 1fr; }
+      .page-sidebar { position: static; }
+      .media-block { grid-template-columns: 1fr; }
+      .media-block.reverse { direction: ltr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ──────────────────────────────────────────────── -->
+<header class="top-bar">
+  <a href="index.html" class="logo">
+    <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/public/Creatives/SEA%20Logo.png" alt="Social Enterprise Academy logo" class="logo-icon" onerror="this.src='graphics/SEA Logo.png'">
+    <div class="logo-text">
+      <div class="org">Social Enterprise<br>Academy</div>
+      <div class="tag">One becomes many</div>
+    </div>
+  </a>
+  <div class="top-actions">
+    <a href="#get-involved" class="btn-donate">DONATE HERE</a>
+    <select class="top-select hub" aria-label="Hub">
+      <option>HUB</option>
+      <option>South Africa</option>
+      <option>Scotland</option>
+      <option>Global</option>
+    </select>
+    <select class="top-select lang" aria-label="Language">
+      <option>ENGLISH</option>
+      <option>AFRIKAANS</option>
+      <option>ZULU</option>
+      <option>XHOSA</option>
+    </select>
+  </div>
+</header>
+
+<!-- ── Navbar ───────────────────────────────────────────────── -->
+<nav class="navbar">
+  <button class="nav-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-inner" id="nav-links">
+    <a href="index.html">Home</a>
+    <div class="dd">
+      <a href="#">About us +</a>
+      <ul class="dd-menu">
+        <li><a href="manifesto.html" class="active">Manifesto</a></li>
+        <li><a href="#">Who We Are</a></li>
+        <li><a href="#">Our Team</a></li>
+        <li><a href="index.html#partner">Partner With Us</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#programmes">What's on +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#programmes">Programmes</a></li>
+        <li><a href="index.html#findout">Book a Programme</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">Impact stories +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#testimonial">Testimonials</a></li>
+        <li><a href="index.html#news">Stories</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#programmes">Young people +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#programmes">Youth Programmes</a></li>
+        <li><a href="index.html#programmes">Schools</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">News +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#news">Latest News</a></li>
+        <li><a href="index.html#news">Learning Resources</a></li>
+      </ul>
+    </div>
+    <div class="dd nav-search">
+      <a href="index.html" onclick="">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>Search site
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<section class="page-hero">
+  <p class="breadcrumb"><a href="index.html">Home</a> › About us › Manifesto</p>
+  <h1>Manifesto</h1>
+  <p style="opacity:.88; font-size:1rem; max-width:560px; margin:.8rem auto 0; line-height:1.6;">
+    "Never think you can't be the one to change the world. You're just where it starts."
+  </p>
+</section>
+
+<!-- ── Main Layout ───────────────────────────────────────────── -->
+<div class="page-layout">
+
+  <!-- Sidebar -->
+  <aside class="page-sidebar">
+    <p class="sidebar-title">In this section</p>
+    <ul class="sidebar-nav">
+      <li><a href="manifesto.html" class="active">Manifesto</a></li>
+      <li><a href="index.html#who">Who We Are</a></li>
+      <li><a href="index.html#partner">Partner With Us</a></li>
+      <li><a href="index.html#programmes">Our Programmes</a></li>
+      <li><a href="index.html#findout">Contact Us</a></li>
+    </ul>
+  </aside>
+
+  <!-- Article -->
+  <article class="page-article">
+    <div class="manifesto-text">
+      <h2>Manifesto</h2>
+      <p>Most people think that if we want to change the world, only large companies can make big steps.</p>
+      <p>We like to disagree.</p>
+      <p>We are convinced that a better future will be fuelled by the strength of millions of communities.</p>
+      <p>Because a community is the only scale where the power of trust, commitment, and loyalty naturally comes together.</p>
+      <p>It's the world at its best.</p>
+      <p>So to turn this floating blue marble into something good, we should start with empowering the changemakers in communities.</p>
+      <p>The social entrepreneurs.</p>
+      <p>We call them: <strong>agents of change.</strong></p>
+      <p>Because a world in transformation needs transformational leaders.</p>
+      <p>We don't tell them what to do. We don't teach them.</p>
+      <p>We facilitate them to turn themselves into skillful leaders.</p>
+      <p>It's deep learning that creates deep-rooted transformation.</p>
+      <p>And once they find that, their dreams and energy don't just add up, they multiply.</p>
+      <p>Because there is nothing more powerful than a determined social entrepreneur with a warm heart, a clear goal, and buckets full of self-confidence.</p>
+      <p>Because passion and purpose are infectious. It attracts others and the momentum grows.</p>
+      <p>One person will become two. Then two becomes twenty and twenty becomes a thousand.</p>
+      <p>That's the magic happening.</p>
+      <p>So never think you can't be the one to change the world.</p>
+      <p class="manifesto-tagline">You're just where it starts.</p>
+    </div>
+  </article>
+
+</div>
+
+<!-- ── Transform Section ─────────────────────────────────────── -->
+<section class="media-block-section">
+  <div class="media-block">
+    <div class="media-block-img">
+      <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/cropped-Transform-Cluster-3-scaled-1-1292x1345.jpg"
+           alt="Transform" onerror="this.style.display='none'">
+    </div>
+    <div class="media-block-content">
+      <h2>Transform</h2>
+      <h3>One Becomes Many</h3>
+      <p><strong>We want to create fairer communities by facilitating 10 million social entrepreneurs globally by 2030.</strong></p>
+      <p><strong>We believe social entrepreneurs play an essential role in changing the world.</strong> We strengthen their role in local communities through transformational learning that will increase their community impact.</p>
+      <p><strong>Why is this essential now?</strong></p>
+      <p>Today our world is facing unprecedented challenges and is now further behind than ever to achieve the Sustainable Development Goals. As a result of Covid-19 and the ongoing climate crisis:</p>
+      <ul>
+        <li>Inequality has increased for women, low wage workers, SMEs and the informal sector</li>
+        <li>70 million people are now living in poverty globally for the first time in 30 years</li>
+        <li>1.2 billion young people were affected by school closures</li>
+        <li>1 billion climate refugees are estimated to be created by 2050</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── Hope Section ──────────────────────────────────────────── -->
+<section class="media-block-section alt">
+  <div class="media-block reverse">
+    <div class="media-block-img">
+      <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/Hope-Cluster-2-1-1292x1400.jpg"
+           alt="Hope" onerror="this.style.display='none'">
+    </div>
+    <div class="media-block-content">
+      <h2>Hope</h2>
+      <h3>What are we going to do?</h3>
+      <p><strong>We want to facilitate social entrepreneurs around the world to step up and solve the social and environmental issues affecting their communities.</strong></p>
+      <p>We believe in the power of learning and development to transform people of all ages to be agents of change. So far <strong>we have facilitated over 78,000 social entrepreneurs</strong> to help create fairer communities where people have equitable access to opportunities.</p>
+      <p>We want to <strong>increase this number to 10 million social entrepreneurs by 2030</strong> to create an even greater impact and increase the ripples of change taking place in communities around the world.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Get Involved ──────────────────────────────────────────── -->
+<section class="get-involved" id="get-involved">
+  <h2>Get Involved</h2>
+  <p>To find out how you and your organisation can support us to create fairer communities in South Africa and around the world, please get in touch.</p>
+  <a href="index.html#findout" class="btn-magenta" style="background:white; color:var(--magenta);">Contact Us</a>
+</section>
+
+<!-- ── Newsletter ────────────────────────────────────────────── -->
+<div class="newsletter">
+  <h2>Stay Connected</h2>
+  <p>Get the latest news, programme updates and impact stories from SEA South Africa.</p>
+  <form class="nl-form" onsubmit="handleSub(event)">
+    <input type="email" placeholder="Enter your email address" required />
+    <button type="submit">SUBSCRIBE</button>
+  </form>
+  <p id="sub-msg" style="display:none; margin-top:1rem; font-size:.85rem;">Thank you for subscribing!</p>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid" style="max-width:1200px; margin:0 auto 2rem;">
+    <div class="footer-brand">
+      <p class="org">Social Enterprise Academy South Africa</p>
+      <p>Learning and development programmes for people and organisations enabling social change in South Africa.</p>
+      <p style="margin-top:.7rem; font-size:.75rem;">NPO: 158-170 | PBO: 930052777 | Reg: 2012/175638/08</p>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="index.html#who">Who We Are</a></li>
+        <li><a href="index.html#partner">Partner With Us</a></li>
+        <li><a href="index.html#benefits">Partnership Benefits</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Programmes</h4>
+      <ul>
+        <li><a href="index.html#programmes">Young People</a></li>
+        <li><a href="index.html#programmes">SEC CoP</a></li>
+        <li><a href="index.html#programmes">International Internship</a></li>
+        <li><a href="index.html#findout">Book a Programme</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">info@seasa.org.za</a></li>
+        <li><a href="#">+27 (0)21 000 0000</a></li>
+        <li><a href="#">Cape Town, South Africa</a></li>
+        <li><a href="index.html#news">Media Enquiries</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Social Enterprise Academy South Africa. All rights reserved.</span>
+    <div class="social-row">
+      <a href="https://twitter.com/SEA_SouthAfrica" title="Twitter" target="_blank">𝕏</a>
+      <a href="https://www.facebook.com/seasouthafrica" title="Facebook" target="_blank">f</a>
+      <a href="https://www.instagram.com/sea_international/" title="Instagram" target="_blank">ig</a>
+      <a href="https://www.linkedin.com/in/social-enterprise-academy-south-africa-9552b6141" title="LinkedIn" target="_blank">in</a>
+      <a href="https://www.youtube.com/@SocialEnterpriseAcademy" title="YouTube" target="_blank">▶</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function handleSub(e) {
+    e.preventDefault();
+    document.getElementById('sub-msg').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
