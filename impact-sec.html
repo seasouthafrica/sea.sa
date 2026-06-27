@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Enterprise Connect — SEA South Africa</title>
+  <meta name="description" content="Social Enterprise Connect (SEC) is a Community of Practice for social entrepreneurs in South Africa, linking changemakers to learn, collaborate and grow.">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .story-hero {
+      position: relative; min-height: 460px;
+      display: flex; align-items: flex-end; overflow: hidden;
+    }
+    .story-hero img.hero-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover; object-position: center;
+    }
+    .story-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.2) 55%, transparent 100%);
+    }
+    .story-hero-content {
+      position: relative; z-index: 2;
+      color: white; padding: 3rem 2rem; max-width: 860px;
+    }
+    .story-hero-content .breadcrumb { font-size: .8rem; opacity: .8; margin-bottom: .7rem; }
+    .story-hero-content .breadcrumb a { color: white; text-decoration: underline; }
+    .story-hero-content h1 {
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 900;
+      text-transform: uppercase; letter-spacing: .04em; line-height: 1.1; margin-bottom: .5rem;
+    }
+    .story-hero-content p { font-size: 1rem; opacity: .9; }
+
+    .story-layout {
+      display: grid; grid-template-columns: 220px 1fr;
+      gap: 3rem; max-width: 1100px; margin: 0 auto;
+      padding: 3rem 2rem; align-items: start;
+    }
+    .story-sidebar { position: sticky; top: 170px; }
+    .sidebar-title {
+      font-size: .7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--gray); margin-bottom: 1rem;
+      padding-bottom: .5rem; border-bottom: 2px solid var(--teal);
+    }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li + li { margin-top: .1rem; }
+    .sidebar-nav a {
+      display: block; font-size: .84rem; color: var(--dark);
+      padding: .5rem .8rem; border-radius: 4px;
+      transition: background .2s, color .2s; text-decoration: none;
+    }
+    .sidebar-nav a:hover { background: var(--light); color: var(--teal); }
+    .sidebar-nav a.active { background: var(--teal); color: white; font-weight: 700; }
+
+    .story-article { min-width: 0; }
+    .story-label {
+      font-size: .7rem; font-weight: 700; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--magenta); margin-bottom: .4rem;
+    }
+    .story-article h2 {
+      font-size: 1.4rem; font-weight: 900; color: var(--darker);
+      margin-bottom: 1rem; line-height: 1.25;
+    }
+    .story-article p {
+      font-size: .97rem; color: var(--gray); line-height: 1.8; margin-bottom: 1rem;
+    }
+    .story-article strong { color: var(--darker); }
+    .story-article a { color: var(--teal); font-weight: 600; }
+
+    /* SEC badge */
+    .sec-badge {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: var(--teal); color: white; border-radius: 6px;
+      padding: .6rem 1.2rem; font-weight: 700; font-size: .85rem;
+      margin-bottom: 1.5rem; letter-spacing: .04em;
+    }
+
+    /* SEC image */
+    .sec-photo { border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+    .sec-photo img { width: 100%; height: auto; display: block; }
+
+    /* Quote */
+    .story-quote {
+      border-left: 5px solid var(--magenta); background: var(--light);
+      padding: 1.8rem; margin: 2rem 0; border-radius: 0 8px 8px 0;
+      position: relative;
+    }
+    .story-quote::before {
+      content: '"'; font-size: 5rem; color: var(--magenta); opacity: .2;
+      position: absolute; top: -.5rem; left: 1rem;
+      line-height: 1; font-family: Georgia, serif;
+    }
+    .story-quote p {
+      font-size: 1.05rem; font-style: italic; font-weight: 600;
+      color: var(--darker); line-height: 1.7; margin-bottom: .8rem;
+    }
+    .story-quote cite { font-size: .83rem; color: var(--teal); font-weight: 700; font-style: normal; }
+
+    /* Roadshow section */
+    .roadshow-section {
+      background: var(--light); padding: 4rem 2rem;
+    }
+    .roadshow-inner { max-width: 1100px; margin: 0 auto; }
+    .roadshow-inner h2 {
+      font-size: 1.5rem; font-weight: 900; color: var(--darker);
+      text-transform: uppercase; letter-spacing: .05em; margin-bottom: .6rem;
+    }
+    .roadshow-inner p {
+      font-size: .95rem; color: var(--gray); line-height: 1.7; margin-bottom: 2rem;
+    }
+    .roadshow-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    }
+    .roadshow-card {
+      border-radius: 10px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.1);
+      transition: transform .25s, box-shadow .25s;
+      text-decoration: none; display: block; background: white;
+    }
+    .roadshow-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.14); }
+    .roadshow-thumb {
+      position: relative; height: 220px; overflow: hidden;
+    }
+    .roadshow-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .play-btn {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,.3);
+    }
+    .play-btn span {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(255,0,0,.9);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; transition: transform .2s;
+    }
+    .roadshow-card:hover .play-btn span { transform: scale(1.1); }
+    .roadshow-label {
+      padding: 1rem 1.2rem;
+      font-size: 1rem; font-weight: 800; color: var(--darker);
+    }
+
+    /* CTA */
+    .sec-cta {
+      background: var(--teal); color: white; text-align: center; padding: 3rem 2rem;
+    }
+    .sec-cta h2 { font-size: 1.5rem; font-weight: 900; margin-bottom: .8rem; }
+    .sec-cta p { opacity: .9; margin-bottom: 1.5rem; }
+    .sec-cta a.btn-white {
+      display: inline-block; background: white; color: var(--teal);
+      font-weight: 800; font-size: .9rem; padding: .85rem 2rem;
+      border-radius: 4px; transition: opacity .2s; text-decoration: none;
+    }
+    .sec-cta a.btn-white:hover { opacity: .9; }
+
+    @media (max-width: 900px) {
+      .story-layout { grid-template-columns: 1fr; }
+      .story-sidebar { position: static; }
+      .roadshow-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ──────────────────────────────────────────────── -->
+<header class="top-bar">
+  <a href="index.html" class="logo">
+    <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/public/Creatives/SEA%20Logo.png" alt="SEA logo" class="logo-icon" onerror="this.src='graphics/SEA Logo.png'">
+    <div class="logo-text">
+      <div class="org">Social Enterprise<br>Academy</div>
+      <div class="tag">One becomes many</div>
+    </div>
+  </a>
+  <div class="top-actions">
+    <a href="partner-with-us.html" class="btn-donate">DONATE HERE</a>
+    <select class="top-select hub"><option>HUB</option><option>South Africa</option><option>Scotland</option><option>Global</option></select>
+    <select class="top-select lang"><option>ENGLISH</option><option>AFRIKAANS</option><option>ZULU</option><option>XHOSA</option></select>
+  </div>
+</header>
+
+<!-- ── Navbar ───────────────────────────────────────────────── -->
+<nav class="navbar">
+  <button class="nav-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-inner" id="nav-links">
+    <a href="index.html">Home</a>
+    <div class="dd">
+      <a href="#">About us +</a>
+      <ul class="dd-menu">
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#findout">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="whats-on.html">What's on +</a>
+      <ul class="dd-menu">
+        <li><a href="whats-on.html#programmes">All Programmes</a></li>
+        <li><a href="whats-on.html#book">Book a Programme</a></li>
+        <li><a href="whats-on.html#download">Download Prospectus</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="impact-dice.html" class="active">Impact stories +</a>
+      <ul class="dd-menu">
+        <li><a href="impact-dice.html">DICE Impact Makers &amp; Creators</a></li>
+        <li><a href="impact-distell.html">Distell</a></li>
+        <li><a href="impact-sec.html" class="active">Social Enterprise Connect</a></li>
+        <li><a href="#">Seeds of Change</a></li>
+        <li><a href="#">Meet the Impact Makers</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#programmes">Young people +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#programmes">Youth Programmes</a></li>
+        <li><a href="index.html#programmes">Schools</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">News +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#news">Latest News</a></li>
+        <li><a href="index.html#news">Learning Resources</a></li>
+      </ul>
+    </div>
+    <div class="dd nav-search">
+      <a href="index.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>Search site
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<section class="story-hero">
+  <img class="hero-bg" src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/ralia-13-1920x1080.jpg" alt="Social Enterprise Connect">
+  <div class="story-hero-overlay"></div>
+  <div class="story-hero-content">
+    <p class="breadcrumb"><a href="index.html">Home</a> › <a href="impact-dice.html">Impact Stories</a> › Social Enterprise Connect</p>
+    <h1>Social Enterprise Connect</h1>
+    <p>A community of practice for social entrepreneurs in South Africa.</p>
+  </div>
+</section>
+
+<!-- ── Main Layout ───────────────────────────────────────────── -->
+<div class="story-layout">
+
+  <!-- Sidebar -->
+  <aside class="story-sidebar">
+    <p class="sidebar-title">In this section</p>
+    <ul class="sidebar-nav">
+      <li><a href="impact-dice.html">DICE Impact Makers &amp; Creators</a></li>
+      <li><a href="impact-distell.html">Distell</a></li>
+      <li><a href="impact-sec.html" class="active">Social Enterprise Connect</a></li>
+      <li><a href="#">Seeds of Change</a></li>
+      <li><a href="#">Meet the Impact Makers &amp; Creators</a></li>
+      <li><a href="#">Older Past Programmes</a></li>
+    </ul>
+  </aside>
+
+  <!-- Article -->
+  <article class="story-article">
+
+    <div class="sec-badge">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8l4 4-4 4"/></svg>
+      Learn · Collaborate · Grow
+    </div>
+
+    <p class="story-label">Community of Practice</p>
+    <h2>Social Enterprise Connect: A Community of Practice for Social Entrepreneurs</h2>
+
+    <p><a href="https://socialenterpriseconnect.co.za/" target="_blank">Social Enterprise Connect</a> (SEC) is an exciting new Community of Practice (CoP) for social entrepreneurs in South Africa. It seeks to build a strong social enterprise ecosystem, by creating platforms for sharing and learning through peer engagement.</p>
+
+    <p>Social Enterprise Connect consists of <strong>in-person learning and networking events</strong> across South Africa and an online resource platform for impact leaders. Learning events are centred on connecting and partnering with other social enterprises and learning from each other.</p>
+
+    <p>Born out of a partnership between <strong>Social Enterprise Academy Africa</strong> and the <strong>Industrial Development Corporation (IDC)</strong>, this CoP is focused on <em>"Linking Change-makers to Learn, Collaborate and Grow"</em>. It provides a safe space for entrepreneurs to discuss their needs, problems and possible solutions within the social impact space.</p>
+
+    <div class="sec-photo">
+      <img src="https://socialenterprise.academy/wp-content/uploads/2023/07/First-image-1-1024x768.jpg" alt="Social Enterprise Connect event">
+    </div>
+
+    <div class="story-quote">
+      <p>"Social Enterprise Connect lit a fire beneath me that refuses to allow me to sit still. As a result, I have picked up momentum. I'm looking forward to connecting with individuals that will bring fresh perspectives or innovation in benefiting the youth, women and children."</p>
+      <cite>— Ncumisa Mfenqa, Beyond Dreams Mentoring</cite>
+    </div>
+
+  </article>
+</div>
+
+<!-- ── National Roadshow Events ──────────────────────────────── -->
+<section class="roadshow-section">
+  <div class="roadshow-inner">
+    <h2>National Roadshow Events</h2>
+    <p>The Social Enterprise Connect National Roadshows have been travelling to all nine provinces across the country, creating a platform for social impact makers to connect, collaborate, learn, and grow. Watch them in action below:</p>
+    <div class="roadshow-grid">
+
+      <a href="https://www.youtube.com/watch?v=AlAf0UUA9dI" target="_blank" class="roadshow-card">
+        <div class="roadshow-thumb">
+          <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/46_1_1-1292x1400.jpg" alt="Johannesburg Roadshow">
+          <div class="play-btn"><span>▶</span></div>
+        </div>
+        <p class="roadshow-label">📍 Johannesburg</p>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=vjglLHp_ve0" target="_blank" class="roadshow-card">
+        <div class="roadshow-thumb">
+          <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/Copy_of_HAPPY_EARTH_DAY_Presentation_169_1-1292x1080.jpg" alt="Port Elizabeth Roadshow">
+          <div class="play-btn"><span>▶</span></div>
+        </div>
+        <p class="roadshow-label">📍 Port Elizabeth</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ───────────────────────────────────────────────────── -->
+<section class="sec-cta">
+  <h2>Find Out More About Social Enterprise Connect</h2>
+  <p>Join thousands of social entrepreneurs across South Africa on the SEC platform — learn, collaborate and grow.</p>
+  <a href="https://socialenterpriseconnect.co.za/" target="_blank" class="btn-white">Visit socialenterpriseconnect.co.za</a>
+</section>
+
+<!-- ── Newsletter ────────────────────────────────────────────── -->
+<div class="newsletter">
+  <h2>Stay Connected</h2>
+  <p>Get the latest impact stories and programme updates from SEA South Africa.</p>
+  <form class="nl-form" onsubmit="handleSub(event)">
+    <input type="email" placeholder="Enter your email address" required />
+    <button type="submit">SUBSCRIBE</button>
+  </form>
+  <p id="sub-msg" style="display:none; margin-top:1rem; font-size:.85rem;">Thank you for subscribing!</p>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid" style="max-width:1200px; margin:0 auto 2rem;">
+    <div class="footer-brand">
+      <p class="org">Social Enterprise Academy South Africa</p>
+      <p>Learning and development programmes for people and organisations enabling social change in South Africa.</p>
+      <p style="margin-top:.7rem; font-size:.75rem;">NPO: 158-170 | PBO: 930052777 | Reg: 2012/175638/08</p>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#partner">Donate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Impact Stories</h4>
+      <ul>
+        <li><a href="impact-dice.html">DICE Impact Makers</a></li>
+        <li><a href="impact-distell.html">Distell</a></li>
+        <li><a href="impact-sec.html">Social Enterprise Connect</a></li>
+        <li><a href="#">Seeds of Change</a></li>
+        <li><a href="#">Meet the Impact Makers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:jamy@socialenterprise.academy">jamy@socialenterprise.academy</a></li>
+        <li><a href="tel:+27671459311">Jamy — 067 145 9311</a></li>
+        <li><a href="#">Stellenbosch, South Africa</a></li>
+        <li><a href="index.html#news">Media Enquiries</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Social Enterprise Academy South Africa. All rights reserved.</span>
+    <div class="social-row">
+      <a href="https://twitter.com/SEA_SouthAfrica" target="_blank">𝕏</a>
+      <a href="https://www.facebook.com/seasouthafrica" target="_blank">f</a>
+      <a href="https://www.instagram.com/sea_international/" target="_blank">ig</a>
+      <a href="https://www.linkedin.com/in/social-enterprise-academy-south-africa-9552b6141" target="_blank">in</a>
+      <a href="https://www.youtube.com/@SocialEnterpriseAcademy" target="_blank">▶</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function handleSub(e) {
+    e.preventDefault();
+    document.getElementById('sub-msg').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
