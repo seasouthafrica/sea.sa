@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Enterprise Schools — SEA South Africa</title>
+  <meta name="description" content="Our Social Enterprise Schools programme develops employability and entrepreneurial skills in young people while promoting social enterprise as an exciting way of solving community problems.">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Hero ───────────────────────────────────────────────── */
+    .page-hero {
+      position: relative; min-height: 480px;
+      display: flex; align-items: flex-end; overflow: hidden;
+    }
+    .page-hero img.hero-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover; object-position: center;
+    }
+    .page-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.2) 55%, transparent 100%);
+    }
+    .page-hero-content {
+      position: relative; z-index: 2;
+      color: white; padding: 3rem 2rem; max-width: 860px;
+    }
+    .page-hero-content .breadcrumb { font-size: .8rem; opacity: .8; margin-bottom: .7rem; }
+    .page-hero-content .breadcrumb a { color: white; text-decoration: underline; }
+    .page-hero-content h1 {
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 900;
+      text-transform: uppercase; letter-spacing: .04em; line-height: 1.1; margin-bottom: .7rem;
+    }
+    .page-hero-content p { font-size: 1rem; opacity: .92; max-width: 640px; line-height: 1.65; }
+
+    /* ── Layout ─────────────────────────────────────────────── */
+    .page-layout {
+      display: grid; grid-template-columns: 220px 1fr;
+      gap: 3rem; max-width: 1100px; margin: 0 auto;
+      padding: 3rem 2rem; align-items: start;
+    }
+    .page-sidebar { position: sticky; top: 170px; }
+    .sidebar-title {
+      font-size: .7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--gray); margin-bottom: 1rem;
+      padding-bottom: .5rem; border-bottom: 2px solid var(--teal);
+    }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li + li { margin-top: .1rem; }
+    .sidebar-nav a {
+      display: block; font-size: .84rem; color: var(--dark);
+      padding: .5rem .8rem; border-radius: 4px;
+      transition: background .2s, color .2s; text-decoration: none;
+    }
+    .sidebar-nav a:hover { background: var(--light); color: var(--teal); }
+    .sidebar-nav a.active { background: var(--teal); color: white; font-weight: 700; }
+
+    /* ── Article ────────────────────────────────────────────── */
+    .page-article { min-width: 0; }
+    .page-article p {
+      font-size: .97rem; color: var(--gray); line-height: 1.8; margin-bottom: 1rem;
+    }
+    .page-article strong { color: var(--darker); }
+
+    /* ── Media blocks ───────────────────────────────────────── */
+    .media-block {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; align-items: center;
+      padding: 3.5rem 2rem;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .media-block.reverse { direction: rtl; }
+    .media-block.reverse > * { direction: ltr; }
+    .media-block-section { background: white; }
+    .media-block-section.alt { background: var(--light); }
+
+    .media-img {
+      border-radius: 8px; overflow: hidden;
+      position: relative; min-height: 400px;
+    }
+    .media-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .media-img .play-overlay {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,.25); cursor: pointer; transition: background .2s;
+    }
+    .media-img .play-overlay:hover { background: rgba(0,0,0,.4); }
+    .play-btn-yt {
+      width: 68px; height: 68px; border-radius: 50%;
+      background: #ff0000; display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; color: white; transition: transform .2s;
+    }
+    .media-img .play-overlay:hover .play-btn-yt { transform: scale(1.1); }
+
+    .media-text h2 {
+      font-size: 1.5rem; font-weight: 900; color: var(--darker);
+      text-transform: uppercase; letter-spacing: .05em; margin-bottom: 1rem;
+    }
+    .media-text p {
+      font-size: .95rem; color: var(--gray); line-height: 1.75; margin-bottom: .8rem;
+    }
+    .media-text strong { color: var(--darker); }
+    .media-text .bc-logo { height: 36px; width: auto; margin-bottom: 1rem; display: block; }
+
+    /* Stat chips */
+    .stat-chips { display: flex; gap: .8rem; flex-wrap: wrap; margin: 1rem 0; }
+    .stat-chip {
+      background: var(--teal); color: white;
+      border-radius: 50px; padding: .45rem 1rem;
+      font-size: .8rem; font-weight: 700; letter-spacing: .04em;
+    }
+    .stat-chip.mag { background: var(--magenta); }
+    .stat-chip.red { background: var(--red); }
+
+    /* Awards box */
+    .award-card {
+      background: white; border-radius: 10px; padding: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      border-left: 5px solid var(--yellow); margin-top: 1rem;
+    }
+    .award-card h4 {
+      font-size: 1rem; font-weight: 800; color: var(--darker);
+      margin-bottom: .6rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .award-card p { font-size: .9rem; color: var(--gray); line-height: 1.7; margin-bottom: .5rem; }
+
+    /* Contact box */
+    .contact-box {
+      background: var(--teal); color: white;
+      border-radius: 10px; padding: 2rem; margin: 3rem 2rem;
+      max-width: 1100px; margin-left: auto; margin-right: auto;
+    }
+    .contact-box h3 {
+      font-size: 1.1rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .06em; margin-bottom: .8rem;
+    }
+    .contact-box p { font-size: .95rem; opacity: .93; line-height: 1.65; margin-bottom: .5rem; }
+    .contact-box ul { list-style: disc; padding-left: 1.4rem; margin-bottom: .8rem; }
+    .contact-box ul li { font-size: .92rem; opacity: .92; line-height: 1.6; margin-bottom: .3rem; }
+    .contact-box a { color: var(--yellow); font-weight: 700; }
+
+    /* Video modal */
+    .video-modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.85); z-index: 3000;
+      align-items: center; justify-content: center; padding: 2rem;
+    }
+    .video-modal.active { display: flex; }
+    .video-modal-inner {
+      position: relative; width: 100%; max-width: 860px; aspect-ratio: 16/9;
+    }
+    .video-modal-inner iframe { width: 100%; height: 100%; border: none; border-radius: 8px; }
+    .video-modal-close {
+      position: absolute; top: -2.5rem; right: 0;
+      background: none; border: none; color: white;
+      font-size: 2rem; cursor: pointer; line-height: 1;
+    }
+
+    @media (max-width: 900px) {
+      .page-layout { grid-template-columns: 1fr; }
+      .page-sidebar { position: static; }
+      .media-block { grid-template-columns: 1fr; }
+      .media-block.reverse { direction: ltr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ──────────────────────────────────────────────── -->
+<header class="top-bar">
+  <a href="index.html" class="logo">
+    <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/public/Creatives/SEA%20Logo.png" alt="SEA logo" class="logo-icon" onerror="this.src='graphics/SEA Logo.png'">
+    <div class="logo-text">
+      <div class="org">Social Enterprise<br>Academy</div>
+      <div class="tag">One becomes many</div>
+    </div>
+  </a>
+  <div class="top-actions">
+    <a href="partner-with-us.html" class="btn-donate">DONATE HERE</a>
+    <select class="top-select hub"><option>HUB</option><option>South Africa</option><option>Scotland</option><option>Global</option></select>
+    <select class="top-select lang"><option>ENGLISH</option><option>AFRIKAANS</option><option>ZULU</option><option>XHOSA</option></select>
+  </div>
+</header>
+
+<!-- ── Navbar ───────────────────────────────────────────────── -->
+<nav class="navbar">
+  <button class="nav-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-inner" id="nav-links">
+    <a href="index.html">Home</a>
+    <div class="dd">
+      <a href="#">About us +</a>
+      <ul class="dd-menu">
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#findout">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="whats-on.html">What's on +</a>
+      <ul class="dd-menu">
+        <li><a href="whats-on.html#programmes">All Programmes</a></li>
+        <li><a href="whats-on.html#book">Book a Programme</a></li>
+        <li><a href="whats-on.html#download">Download Prospectus</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="impact-dice.html">Impact stories +</a>
+      <ul class="dd-menu">
+        <li><a href="impact-dice.html">DICE Impact Makers &amp; Creators</a></li>
+        <li><a href="impact-distell.html">Distell</a></li>
+        <li><a href="impact-sec.html">Social Enterprise Connect</a></li>
+        <li><a href="impact-seeds.html">Seeds of Change</a></li>
+        <li><a href="impact-makers.html">Meet the Impact Makers</a></li>
+        <li><a href="impact-older.html">Older Past Programmes</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="young-schools.html" class="active">Young people +</a>
+      <ul class="dd-menu">
+        <li><a href="young-schools.html" class="active">Social Enterprise Schools</a></li>
+        <li><a href="#">Imbewu Future Leaders Programme</a></li>
+        <li><a href="#">International Student Internship Programme</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">News +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#news">Latest News</a></li>
+        <li><a href="index.html#news">Learning Resources</a></li>
+      </ul>
+    </div>
+    <div class="dd nav-search">
+      <a href="index.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>Search site
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<section class="page-hero">
+  <img class="hero-bg" src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/Intro-banner-image-1-2-1920x1080-1.jpg" alt="Social Enterprise Schools">
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <p class="breadcrumb"><a href="index.html">Home</a> › <a href="#">Young People</a> › Social Enterprise Schools</p>
+    <h1>Social Enterprise Schools</h1>
+    <p>By giving young people in South Africa a real-life experience of running their own social enterprise, this programme delivers transformational learning which impacts them, their school and their community.</p>
+  </div>
+</section>
+
+<!-- ── Page layout ───────────────────────────────────────────── -->
+<div class="page-layout">
+
+  <!-- Sidebar -->
+  <aside class="page-sidebar">
+    <p class="sidebar-title">In this section</p>
+    <ul class="sidebar-nav">
+      <li><a href="young-schools.html" class="active">Social Enterprise Schools</a></li>
+      <li><a href="#">International Student Internship Programme</a></li>
+      <li><a href="#">Imbewu Future Leaders Programme</a></li>
+    </ul>
+  </aside>
+
+  <!-- Article -->
+  <article class="page-article">
+    <p><strong>Our Social Enterprise Schools programme is designed to develop employability and entrepreneurial skills in young people while promoting awareness of social enterprise as an exciting way of doing business and solving problems in their local community.</strong></p>
+    <p>It gives young people the opportunity to take part in a transformative learning experience while aspiring to affect social change in their communities.</p>
+  </article>
+</div>
+
+<!-- ── Section 1: Celebrating our Pilot ─────────────────────── -->
+<section class="media-block-section">
+  <div class="media-block">
+    <div class="media-img">
+      <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/Young-people-at-Social-Enterprise-Schools-Pitching-Bee-in-Cape-Town-South-Africa-2022-1-1292x1400.jpg" alt="Young people at the Social Enterprise Schools Pitching Bee">
+    </div>
+    <div class="media-text">
+      <img class="bc-logo" src="https://old.socialenterprise.academy/za/images/british-council-logo-300x1212x.png" alt="British Council" onerror="this.style.display='none'">
+      <h2>Celebrating our Pilot</h2>
+      <p>In 2021, Social Enterprise Academy Africa partnered with British Council SA and launched the very first <strong>Social Enterprise Schools</strong> pilot programme in South Africa.</p>
+      <p>Ten primary schools from all across the Western Cape Province participated in a 6-month pilot programme which supported over 700 learners to start social enterprises to help address social and environmental needs within their communities. More than 20 teachers were trained as coaches to help facilitate and support these pupil-led social enterprises.</p>
+      <div class="stat-chips">
+        <span class="stat-chip">10 primary schools</span>
+        <span class="stat-chip mag">700+ learners</span>
+        <span class="stat-chip red">20+ teacher coaches</span>
+        <span class="stat-chip">6-month programme</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Section 2: Awards ─────────────────────────────────────── -->
+<section class="media-block-section alt">
+  <div class="media-block reverse">
+    <div style="min-height:300px; display:flex; align-items:center; justify-content:center;">
+      <div style="font-size:5rem; text-align:center;">🏆</div>
+    </div>
+    <div class="media-text">
+      <h2>Awards</h2>
+      <div class="award-card">
+        <h4>🌱 Best Social Enterprise — Hidayatul Primary School</h4>
+        <p>Hidayatul Primary School was awarded prize money for the best social enterprise for their innovative eco-garden project. The winning team focused their social enterprise on <strong>poverty alleviation</strong>, selling hand-made recycled planters and using the proceeds to set up feeding stations in their community.</p>
+        <p>The planters are kept at the school in their eco-garden, which is tended to by learners of all ages.</p>
+      </div>
+      <p style="margin-top:1.2rem;">The top 3 school teams also received special prizes including several awards to students and teachers for their outstanding achievements during the programme.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Section 3: The Pitching Bee ──────────────────────────── -->
+<section class="media-block-section">
+  <div class="media-block">
+    <div class="media-img">
+      <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/SEA-137-2-1-1292x1400.jpg" alt="The Pitching Bee">
+      <div class="play-overlay" onclick="openVideo('https://www.youtube.com/embed/5NysW_G5p8s?autoplay=1')" role="button" aria-label="Watch the Pitching Bee video">
+        <div class="play-btn-yt">▶</div>
+      </div>
+    </div>
+    <div class="media-text">
+      <h2>The Pitching Bee</h2>
+      <p>The Pitching Bee Event was held at <strong>Golden Grove Primary School in Rondebosch, Cape Town</strong>. This celebration event gave the young learners an opportunity to pitch their top 10 social enterprises to a panel of judges and get feedback to support their future growth and deepen their impact.</p>
+      <p><strong>The Social Enterprise Schools pilot programme in South Africa has helped set up 13 successful pupil-led social enterprises in Cape Town.</strong></p>
+      <div class="stat-chips">
+        <span class="stat-chip">13 social enterprises launched</span>
+        <span class="stat-chip mag">Top 10 pitches to judges</span>
+      </div>
+      <button onclick="openVideo('https://www.youtube.com/embed/5NysW_G5p8s?autoplay=1')" class="btn-red" style="margin-top:1rem; border:none; cursor:pointer; display:inline-block;">▶ Watch the Pitching Bee</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact / Get Involved ────────────────────────────────── -->
+<div class="contact-box">
+  <h3>Please Get in Touch</h3>
+  <p>Contact us at <a href="mailto:surika@socialenterprise.academy">surika@socialenterprise.academy</a> if:</p>
+  <ul>
+    <li>Your school would like to take part in phase 2 of our South African pilot.</li>
+    <li>You would like to support the pilot financially or in-kind.</li>
+  </ul>
+</div>
+
+<!-- ── Video Modal ───────────────────────────────────────────── -->
+<div class="video-modal" id="video-modal" onclick="closeVideo(event)">
+  <div class="video-modal-inner">
+    <button class="video-modal-close" onclick="closeVideoBtn()">&times;</button>
+    <iframe id="video-frame" src="" allowfullscreen allow="autoplay"></iframe>
+  </div>
+</div>
+
+<!-- ── Newsletter ────────────────────────────────────────────── -->
+<div class="newsletter">
+  <h2>Stay Connected</h2>
+  <p>Get the latest news and programme updates from SEA South Africa.</p>
+  <form class="nl-form" onsubmit="handleSub(event)">
+    <input type="email" placeholder="Enter your email address" required />
+    <button type="submit">SUBSCRIBE</button>
+  </form>
+  <p id="sub-msg" style="display:none; margin-top:1rem; font-size:.85rem;">Thank you for subscribing!</p>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid" style="max-width:1200px; margin:0 auto 2rem;">
+    <div class="footer-brand">
+      <p class="org">Social Enterprise Academy South Africa</p>
+      <p>Learning and development programmes for people and organisations enabling social change in South Africa.</p>
+      <p style="margin-top:.7rem; font-size:.75rem;">NPO: 158-170 | PBO: 930052777 | Reg: 2012/175638/08</p>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#partner">Donate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Young People</h4>
+      <ul>
+        <li><a href="young-schools.html">Social Enterprise Schools</a></li>
+        <li><a href="#">Imbewu Future Leaders</a></li>
+        <li><a href="#">International Student Internship</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:jamy@socialenterprise.academy">jamy@socialenterprise.academy</a></li>
+        <li><a href="tel:+27671459311">Jamy — 067 145 9311</a></li>
+        <li><a href="#">Stellenbosch, South Africa</a></li>
+        <li><a href="index.html#news">Media Enquiries</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Social Enterprise Academy South Africa. All rights reserved.</span>
+    <div class="social-row">
+      <a href="https://twitter.com/SEA_SouthAfrica" target="_blank">𝕏</a>
+      <a href="https://www.facebook.com/seasouthafrica" target="_blank">f</a>
+      <a href="https://www.instagram.com/sea_international/" target="_blank">ig</a>
+      <a href="https://www.linkedin.com/in/social-enterprise-academy-south-africa-9552b6141" target="_blank">in</a>
+      <a href="https://www.youtube.com/@SocialEnterpriseAcademy" target="_blank">▶</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function openVideo(src) {
+    document.getElementById('video-frame').src = src;
+    document.getElementById('video-modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeVideo(e) {
+    if (e.target !== document.getElementById('video-modal')) return;
+    closeVideoBtn();
+  }
+  function closeVideoBtn() {
+    document.getElementById('video-modal').classList.remove('active');
+    document.getElementById('video-frame').src = '';
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeVideoBtn(); });
+
+  function handleSub(e) {
+    e.preventDefault();
+    document.getElementById('sub-msg').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
