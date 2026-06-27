@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meet Our Team — Social Enterprise Academy South Africa</title>
+  <meta name="description" content="Meet the passionate team behind Social Enterprise Academy South Africa.">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Hero ───────────────────────────────────────────────── */
+    .page-hero {
+      background: var(--teal);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      color: white;
+    }
+    .page-hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: .6rem;
+    }
+    .breadcrumb { font-size: .82rem; opacity: .8; }
+    .breadcrumb a { color: white; text-decoration: underline; }
+
+    /* ── Team grid ──────────────────────────────────────────── */
+    .team-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .team-intro {
+      text-align: center;
+      max-width: 620px;
+      margin: 0 auto 3rem;
+      font-size: 1rem;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+
+    .team-card {
+      cursor: pointer;
+      text-align: center;
+      transition: transform .25s;
+    }
+    .team-card:hover { transform: translateY(-6px); }
+
+    .team-photo {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid var(--teal);
+      margin-bottom: 1rem;
+      transition: border-color .2s;
+      background: var(--light);
+    }
+    .team-card:hover .team-photo { border-color: var(--magenta); }
+    .team-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .team-photo-placeholder {
+      width: 100%; height: 100%;
+      background: var(--teal);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 2rem; font-weight: 800;
+    }
+
+    .team-name {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--darker);
+      margin-bottom: .25rem;
+    }
+    .team-title {
+      font-size: .8rem;
+      color: var(--teal);
+      font-weight: 600;
+      letter-spacing: .04em;
+    }
+    .team-read-more {
+      display: inline-block;
+      margin-top: .6rem;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--magenta);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    /* ── Modal overlay ──────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: white;
+      border-radius: 12px;
+      max-width: 680px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2.5rem;
+      position: relative;
+      animation: modalIn .25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem; right: 1.2rem;
+      background: none; border: none;
+      font-size: 1.6rem; cursor: pointer;
+      color: var(--gray); line-height: 1;
+    }
+    .modal-close:hover { color: var(--magenta); }
+
+    .modal-inner {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 1.8rem;
+      align-items: start;
+    }
+
+    .modal-photo {
+      border-radius: 50%;
+      overflow: hidden;
+      aspect-ratio: 1;
+      border: 4px solid var(--teal);
+    }
+    .modal-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .modal-photo-placeholder {
+      width: 100%; height: 160px;
+      background: var(--teal);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 2.5rem; font-weight: 800;
+    }
+
+    .modal-content h3 {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--darker);
+      margin-bottom: .2rem;
+    }
+    .modal-content .modal-role {
+      font-size: .85rem;
+      color: var(--teal);
+      font-weight: 700;
+      letter-spacing: .04em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .modal-content p {
+      font-size: .9rem;
+      color: var(--gray);
+      line-height: 1.75;
+      margin-bottom: .7rem;
+    }
+    .modal-content a.email-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      margin-top: .8rem;
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--magenta);
+    }
+
+    @media (max-width: 900px) {
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .modal-inner { grid-template-columns: 1fr; }
+      .modal-photo { width: 120px; margin: 0 auto; }
+    }
+    @media (max-width: 500px) {
+      .team-grid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+      .modal { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ──────────────────────────────────────────────── -->
+<header class="top-bar">
+  <a href="index.html" class="logo">
+    <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/public/Creatives/SEA%20Logo.png" alt="Social Enterprise Academy logo" class="logo-icon" onerror="this.src='graphics/SEA Logo.png'">
+    <div class="logo-text">
+      <div class="org">Social Enterprise<br>Academy</div>
+      <div class="tag">One becomes many</div>
+    </div>
+  </a>
+  <div class="top-actions">
+    <a href="index.html#partner" class="btn-donate">DONATE HERE</a>
+    <select class="top-select hub" aria-label="Hub">
+      <option>HUB</option><option>South Africa</option><option>Scotland</option><option>Global</option>
+    </select>
+    <select class="top-select lang" aria-label="Language">
+      <option>ENGLISH</option><option>AFRIKAANS</option><option>ZULU</option><option>XHOSA</option>
+    </select>
+  </div>
+</header>
+
+<!-- ── Navbar ───────────────────────────────────────────────── -->
+<nav class="navbar">
+  <button class="nav-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-inner" id="nav-links">
+    <a href="index.html">Home</a>
+    <div class="dd">
+      <a href="#">About us +</a>
+      <ul class="dd-menu">
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html" class="active">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#findout">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#programmes">What's on +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#programmes">Programmes</a></li>
+        <li><a href="index.html#findout">Book a Programme</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">Impact stories +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#testimonial">Testimonials</a></li>
+        <li><a href="index.html#news">Stories</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#programmes">Young people +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#programmes">Youth Programmes</a></li>
+        <li><a href="index.html#programmes">Schools</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">News +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#news">Latest News</a></li>
+        <li><a href="index.html#news">Learning Resources</a></li>
+      </ul>
+    </div>
+    <div class="dd nav-search">
+      <a href="index.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>Search site
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<section class="page-hero">
+  <p class="breadcrumb"><a href="index.html">Home</a> › About us › Meet Our Team</p>
+  <h1>Meet Our Team</h1>
+  <p style="opacity:.88; font-size:1rem; max-width:500px; margin:.8rem auto 0; line-height:1.6;">
+    The passionate people behind SEA South Africa's mission to empower social entrepreneurs.
+  </p>
+</section>
+
+<!-- ── Team Grid ─────────────────────────────────────────────── -->
+<section class="team-section">
+  <p class="team-intro">
+    Our small but mighty team brings together expertise in programme management, marketing, learning coordination, and operations — all united by a commitment to social change.
+  </p>
+
+  <div class="team-grid">
+
+    <!-- Surika -->
+    <div class="team-card" onclick="openModal('surika')">
+      <div class="team-photo">
+        <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2024/11/SEA-Team-300-x-300-px-Instagram-Post-2-800x800.png" alt="Surika Behrens" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="team-photo-placeholder" style="display:none">SB</div>
+      </div>
+      <p class="team-name">Surika Behrens</p>
+      <p class="team-title">Hub Manager</p>
+      <span class="team-read-more">Read more +</span>
+    </div>
+
+    <!-- Jamy -->
+    <div class="team-card" onclick="openModal('jamy')">
+      <div class="team-photo">
+        <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2024/11/SEA-Team-300-x-300-px-Instagram-Post-4-photoaidcom-2x-ai-zoom-800x800.png" alt="Jamy Manuel" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="team-photo-placeholder" style="display:none">JM</div>
+      </div>
+      <p class="team-name">Jamy Manuel</p>
+      <p class="team-title">Programme Manager</p>
+      <span class="team-read-more">Read more +</span>
+    </div>
+
+    <!-- Nadja -->
+    <div class="team-card" onclick="openModal('nadja')">
+      <div class="team-photo">
+        <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2026/06/Screenshot-2026-06-03-151939-800x799.png" alt="Nadja Watney" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="team-photo-placeholder" style="display:none">NW</div>
+      </div>
+      <p class="team-name">Nadja Watney</p>
+      <p class="team-title">Learning Coordinator (Intern)</p>
+      <span class="team-read-more">Read more +</span>
+    </div>
+
+    <!-- Sabele -->
+    <div class="team-card" onclick="openModal('sabele')">
+      <div class="team-photo">
+        <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2024/11/SEA-Team-300-x-300-px-Instagram-Post-3-photoaidcom-2x-ai-zoom-800x800.png" alt="Sabele Ntoyanto" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="team-photo-placeholder" style="display:none">SN</div>
+      </div>
+      <p class="team-name">Sabele Ntoyanto</p>
+      <p class="team-title">Marketing Officer</p>
+      <span class="team-read-more">Read more +</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Modals ─────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-box">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div class="modal-inner">
+      <div class="modal-photo" id="modal-photo"></div>
+      <div class="modal-content" id="modal-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Join the team CTA ─────────────────────────────────────── -->
+<section style="background:var(--light); padding:3.5rem 2rem; text-align:center;">
+  <h2 style="font-size:1.6rem; font-weight:900; color:var(--darker); text-transform:uppercase; letter-spacing:.05em; margin-bottom:.8rem;">Join Our Team</h2>
+  <p style="font-size:1rem; color:var(--gray); max-width:520px; margin:0 auto 1.8rem; line-height:1.7;">Passionate about social enterprise? We'd love to hear from you.</p>
+  <a href="mailto:jamy@socialenterprise.academy" class="btn-magenta">Get In Touch</a>
+</section>
+
+<!-- ── Newsletter ────────────────────────────────────────────── -->
+<div class="newsletter">
+  <h2>Stay Connected</h2>
+  <p>Get the latest news, programme updates and impact stories from SEA South Africa.</p>
+  <form class="nl-form" onsubmit="handleSub(event)">
+    <input type="email" placeholder="Enter your email address" required />
+    <button type="submit">SUBSCRIBE</button>
+  </form>
+  <p id="sub-msg" style="display:none; margin-top:1rem; font-size:.85rem;">Thank you for subscribing!</p>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid" style="max-width:1200px; margin:0 auto 2rem;">
+    <div class="footer-brand">
+      <p class="org">Social Enterprise Academy South Africa</p>
+      <p>Learning and development programmes for people and organisations enabling social change in South Africa.</p>
+      <p style="margin-top:.7rem; font-size:.75rem;">NPO: 158-170 | PBO: 930052777 | Reg: 2012/175638/08</p>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#partner">Donate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Programmes</h4>
+      <ul>
+        <li><a href="index.html#programmes">Young People</a></li>
+        <li><a href="index.html#programmes">SEC CoP</a></li>
+        <li><a href="index.html#programmes">International Internship</a></li>
+        <li><a href="index.html#findout">Book a Programme</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:jamy@socialenterprise.academy">jamy@socialenterprise.academy</a></li>
+        <li><a href="tel:+27671459311">Jamy — 067 145 9311</a></li>
+        <li><a href="#">Stellenbosch, South Africa</a></li>
+        <li><a href="index.html#news">Media Enquiries</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Social Enterprise Academy South Africa. All rights reserved.</span>
+    <div class="social-row">
+      <a href="https://twitter.com/SEA_SouthAfrica" target="_blank">𝕏</a>
+      <a href="https://www.facebook.com/seasouthafrica" target="_blank">f</a>
+      <a href="https://www.instagram.com/sea_international/" target="_blank">ig</a>
+      <a href="https://www.linkedin.com/in/social-enterprise-academy-south-africa-9552b6141" target="_blank">in</a>
+      <a href="https://www.youtube.com/@SocialEnterpriseAcademy" target="_blank">▶</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const profiles = {
+    surika: {
+      name: 'Surika Behrens',
+      title: 'Hub Manager',
+      email: 'surika@socialenterprise.academy',
+      img: 'https://socialenterprise.academy/za/wp-content/uploads/sites/7/2024/11/SEA-Team-300-x-300-px-Instagram-Post-2-800x800.png',
+      initials: 'SB',
+      bio: `<p>Surika is passionate about mobilising and motivating those around her towards reaching goals for the greater good.</p>
+            <p>She started her career as a journalist and has since gained over 10 years experience in project management in the non- and for-profit sector. Her projects include starting an education centre for impoverished children in the inner-city of Pretoria and rolling out ECD reading programmes at disadvantaged schools.</p>
+            <p>Since she moved to Cape Town in 2015 she worked as a Business and Operational Associate at the global startup accelerator TechStars and as Corporate Matchmaking Manager at the South-African Innovation Summit. Surika enjoys assisting organisations in the upliftment sector with business development and project management.</p>
+            <p>She joined the Academy in March 2017.</p>`
+    },
+    jamy: {
+      name: 'Jamy Manuel',
+      title: 'Programme Manager',
+      email: 'jamy@socialenterprise.academy',
+      img: 'https://socialenterprise.academy/za/wp-content/uploads/sites/7/2024/11/SEA-Team-300-x-300-px-Instagram-Post-4-photoaidcom-2x-ai-zoom-800x800.png',
+      initials: 'JM',
+      bio: `<p>Jamy is a customer-focused professional with a proven track record in project delivery and organisational efficiency. Dedicated to enhancing company profitability through exceptional customer service and streamlined project management.</p>
+            <p>Her background is marked by significant contributions to project delivery and operational efficiency. She has adeptly supported teams and monitored progress, ensuring seamless execution of projects. Her skill set includes managing deadlines, maintaining meticulous attention to detail, and fostering a supportive work environment.</p>
+            <p>Beyond her professional achievements, Jamy is deeply passionate about Corporate Social Investment. She has been an active contributor to initiatives designed to make a positive impact on communities and society as a whole.</p>`
+    },
+    nadja: {
+      name: 'Nadja Watney',
+      title: 'Learning Coordinator (Intern)',
+      email: '',
+      img: 'https://socialenterprise.academy/za/wp-content/uploads/sites/7/2026/06/Screenshot-2026-06-03-151939-800x799.png',
+      initials: 'NW',
+      bio: `<p>Nadjah is a hardworking, motivated, and spontaneous fourth-year student at Stellenbosch University, currently pursuing a BCom degree in International Business. Through her studies, she is gaining valuable exposure to the global marketplace, equipping her with the knowledge and mindset needed to contribute meaningfully to the international knowledge economy.</p>
+            <p>She enjoys engaging with people and takes her responsibilities seriously, consistently demonstrating discipline, commitment, and a strong work ethic. Nadjah is driven by high personal standards in both her academic and sporting pursuits.</p>
+            <p>She is currently serving as our Learning Coordinator (Intern) to gain practical work experience to further develop her skills and prepare for future professional endeavours.</p>`
+    },
+    sabele: {
+      name: 'Sabele Ntoyanto',
+      title: 'Marketing Officer',
+      email: 'sabele@socialenterprise.academy',
+      img: 'https://socialenterprise.academy/za/wp-content/uploads/sites/7/2024/11/SEA-Team-300-x-300-px-Instagram-Post-3-photoaidcom-2x-ai-zoom-800x800.png',
+      initials: 'SN',
+      bio: `<p>A large part of his role involves developing and implementing the Academy's visual brand.</p>
+            <p>With a background in Graphic Design, Sabele has worked with some of the country's leading brands and has helped them develop and create successful marketing strategies.</p>
+            <p>His work focuses on overseeing recruitment campaigns, participant engagement, and programme coordination. He develops marketing strategies, creates content and learning resources, and collaborates with partners to ensure impactful programme delivery. Sabele is passionate about empowering youth, entrepreneurs, and social enterprises with practical skills that drive income generation, innovation, and sustainable change.</p>`
+    }
+  };
+
+  function openModal(id) {
+    const p = profiles[id];
+    document.getElementById('modal-photo').innerHTML = `
+      <img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="width:100%;height:100%;object-fit:cover;display:block;">
+      <div class="team-photo-placeholder" style="display:none;height:160px;">${p.initials}</div>
+    `;
+    document.getElementById('modal-content').innerHTML = `
+      <h3>${p.name}</h3>
+      <p class="modal-role">${p.title}</p>
+      ${p.bio}
+      ${p.email ? `<a href="mailto:${p.email}" class="email-link">✉ ${p.email}</a>` : ''}
+    `;
+    document.getElementById('modal-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(e) {
+    if (e && e.target !== document.getElementById('modal-overlay') && !e.target.classList.contains('modal-close')) return;
+    document.getElementById('modal-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal({}); });
+
+  function handleSub(e) {
+    e.preventDefault();
+    document.getElementById('sub-msg').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
