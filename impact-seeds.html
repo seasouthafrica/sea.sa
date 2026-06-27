@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seeds of Change — SEA South Africa</title>
+  <meta name="description" content="In 2021, Food Lover's Market partnered with Social Enterprise Academy to introduce social enterprises into their supply chain to support poverty alleviation and food insecurity in South Africa.">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .story-hero {
+      position: relative; min-height: 460px;
+      display: flex; align-items: flex-end; overflow: hidden;
+    }
+    .story-hero img.hero-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover; object-position: center;
+    }
+    .story-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.2) 55%, transparent 100%);
+    }
+    .story-hero-content {
+      position: relative; z-index: 2;
+      color: white; padding: 3rem 2rem; max-width: 860px;
+    }
+    .story-hero-content .breadcrumb { font-size: .8rem; opacity: .8; margin-bottom: .7rem; }
+    .story-hero-content .breadcrumb a { color: white; text-decoration: underline; }
+    .story-hero-content h1 {
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 900;
+      text-transform: uppercase; letter-spacing: .04em; line-height: 1.1; margin-bottom: .5rem;
+    }
+    .story-hero-content p { font-size: .97rem; opacity: .9; max-width: 620px; line-height: 1.6; }
+
+    .story-layout {
+      display: grid; grid-template-columns: 220px 1fr;
+      gap: 3rem; max-width: 1100px; margin: 0 auto;
+      padding: 3rem 2rem; align-items: start;
+    }
+    .story-sidebar { position: sticky; top: 170px; }
+    .sidebar-title {
+      font-size: .7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--gray); margin-bottom: 1rem;
+      padding-bottom: .5rem; border-bottom: 2px solid var(--teal);
+    }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li + li { margin-top: .1rem; }
+    .sidebar-nav a {
+      display: block; font-size: .84rem; color: var(--dark);
+      padding: .5rem .8rem; border-radius: 4px;
+      transition: background .2s, color .2s; text-decoration: none;
+    }
+    .sidebar-nav a:hover { background: var(--light); color: var(--teal); }
+    .sidebar-nav a.active { background: var(--teal); color: white; font-weight: 700; }
+
+    .story-article { min-width: 0; }
+    .story-label {
+      font-size: .7rem; font-weight: 700; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--magenta); margin-bottom: .4rem;
+    }
+    .story-article h2 {
+      font-size: 1.4rem; font-weight: 900; color: var(--darker);
+      margin-bottom: 1rem; line-height: 1.25;
+    }
+    .story-article h3 {
+      font-size: 1.1rem; font-weight: 800; color: var(--teal);
+      text-transform: uppercase; letter-spacing: .04em;
+      margin: 2rem 0 .8rem;
+    }
+    .story-article p {
+      font-size: .97rem; color: var(--gray); line-height: 1.8; margin-bottom: 1rem;
+    }
+    .story-article strong { color: var(--darker); }
+    .story-article a { color: var(--teal); font-weight: 600; }
+
+    /* Partner badge */
+    .partner-badge {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--light); border-radius: 8px; padding: 1rem 1.4rem;
+      margin-bottom: 2rem; font-weight: 700; font-size: .9rem; color: var(--darker);
+    }
+    .partner-badge span { font-size: 1.6rem; }
+
+    /* Impact stat chips */
+    .impact-chips {
+      display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0;
+    }
+    .chip {
+      background: var(--teal); color: white;
+      border-radius: 50px; padding: .5rem 1.2rem;
+      font-size: .82rem; font-weight: 700; letter-spacing: .04em;
+    }
+    .chip.red { background: var(--red); }
+    .chip.mag { background: var(--magenta); }
+
+    /* Story images */
+    .story-img { border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+    .story-img img { width: 100%; height: auto; display: block; }
+
+    /* Quote */
+    .story-quote {
+      border-left: 5px solid var(--magenta); background: var(--light);
+      padding: 1.8rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0;
+      position: relative;
+    }
+    .story-quote::before {
+      content: '"'; font-size: 5rem; color: var(--magenta); opacity: .2;
+      position: absolute; top: -.5rem; left: 1rem;
+      line-height: 1; font-family: Georgia, serif;
+    }
+    .story-quote p {
+      font-size: 1rem; font-style: italic; font-weight: 600;
+      color: var(--darker); line-height: 1.7; margin-bottom: .8rem;
+    }
+    .story-quote cite { font-size: .83rem; color: var(--teal); font-weight: 700; font-style: normal; }
+
+    /* Winner spotlight */
+    .winner-card {
+      background: white; border-radius: 10px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.08);
+      padding: 2rem; margin: 2rem 0;
+      border-top: 5px solid var(--teal);
+    }
+    .winner-card h4 {
+      font-size: 1rem; font-weight: 800;
+      color: var(--magenta); text-transform: uppercase;
+      letter-spacing: .06em; margin-bottom: .3rem;
+    }
+    .winner-card h5 {
+      font-size: 1.2rem; font-weight: 900; color: var(--darker);
+      margin-bottom: .8rem;
+    }
+    .winner-card p { font-size: .9rem; color: var(--gray); line-height: 1.75; margin-bottom: .7rem; }
+
+    /* CTA */
+    .seeds-cta {
+      background: #1a5c1a; color: white; text-align: center; padding: 3.5rem 2rem;
+    }
+    .seeds-cta h2 { font-size: 1.5rem; font-weight: 900; margin-bottom: .7rem; }
+    .seeds-cta p { opacity: .9; margin-bottom: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.65; }
+    .seeds-cta a.btn-green {
+      display: inline-block; background: var(--yellow); color: var(--darker);
+      font-weight: 800; font-size: .9rem; padding: .85rem 2rem;
+      border-radius: 4px; text-decoration: none; transition: filter .2s;
+    }
+    .seeds-cta a.btn-green:hover { filter: brightness(.92); }
+
+    @media (max-width: 900px) {
+      .story-layout { grid-template-columns: 1fr; }
+      .story-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ──────────────────────────────────────────────── -->
+<header class="top-bar">
+  <a href="index.html" class="logo">
+    <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/public/Creatives/SEA%20Logo.png" alt="SEA logo" class="logo-icon" onerror="this.src='graphics/SEA Logo.png'">
+    <div class="logo-text">
+      <div class="org">Social Enterprise<br>Academy</div>
+      <div class="tag">One becomes many</div>
+    </div>
+  </a>
+  <div class="top-actions">
+    <a href="partner-with-us.html" class="btn-donate">DONATE HERE</a>
+    <select class="top-select hub"><option>HUB</option><option>South Africa</option><option>Scotland</option><option>Global</option></select>
+    <select class="top-select lang"><option>ENGLISH</option><option>AFRIKAANS</option><option>ZULU</option><option>XHOSA</option></select>
+  </div>
+</header>
+
+<!-- ── Navbar ───────────────────────────────────────────────── -->
+<nav class="navbar">
+  <button class="nav-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-inner" id="nav-links">
+    <a href="index.html">Home</a>
+    <div class="dd">
+      <a href="#">About us +</a>
+      <ul class="dd-menu">
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#findout">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="whats-on.html">What's on +</a>
+      <ul class="dd-menu">
+        <li><a href="whats-on.html#programmes">All Programmes</a></li>
+        <li><a href="whats-on.html#book">Book a Programme</a></li>
+        <li><a href="whats-on.html#download">Download Prospectus</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="impact-dice.html" class="active">Impact stories +</a>
+      <ul class="dd-menu">
+        <li><a href="impact-dice.html">DICE Impact Makers &amp; Creators</a></li>
+        <li><a href="impact-distell.html">Distell</a></li>
+        <li><a href="impact-sec.html">Social Enterprise Connect</a></li>
+        <li><a href="impact-seeds.html" class="active">Seeds of Change</a></li>
+        <li><a href="#">Meet the Impact Makers</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#programmes">Young people +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#programmes">Youth Programmes</a></li>
+        <li><a href="index.html#programmes">Schools</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">News +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#news">Latest News</a></li>
+        <li><a href="index.html#news">Learning Resources</a></li>
+      </ul>
+    </div>
+    <div class="dd nav-search">
+      <a href="index.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>Search site
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<section class="story-hero">
+  <img class="hero-bg" src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/Food-Lovers-Market-certificates-1.jpg" alt="Seeds of Change — Food Lover's Market">
+  <div class="story-hero-overlay"></div>
+  <div class="story-hero-content">
+    <p class="breadcrumb"><a href="index.html">Home</a> › <a href="impact-dice.html">Impact Stories</a> › Seeds of Change</p>
+    <h1>Seeds of Change</h1>
+    <p>In 2021, Food Lover's Market partnered with Social Enterprise Academy to introduce social enterprises into their supply chain to support poverty alleviation and food insecurity in South Africa.</p>
+  </div>
+</section>
+
+<!-- ── Main Layout ───────────────────────────────────────────── -->
+<div class="story-layout">
+
+  <!-- Sidebar -->
+  <aside class="story-sidebar">
+    <p class="sidebar-title">In this section</p>
+    <ul class="sidebar-nav">
+      <li><a href="impact-dice.html">DICE Impact Makers &amp; Creators</a></li>
+      <li><a href="impact-distell.html">Distell</a></li>
+      <li><a href="impact-sec.html">Social Enterprise Connect</a></li>
+      <li><a href="impact-seeds.html" class="active">Seeds of Change</a></li>
+      <li><a href="#">Meet the Impact Makers &amp; Creators</a></li>
+      <li><a href="#">Older Past Programmes</a></li>
+    </ul>
+  </aside>
+
+  <!-- Article -->
+  <article class="story-article">
+
+    <div class="partner-badge">
+      <span>🛒</span>
+      <div>
+        <div style="font-size:.72rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--gray); margin-bottom:.2rem;">Partnership</div>
+        Food Lover's Market × Social Enterprise Academy
+      </div>
+    </div>
+
+    <p class="story-label">Supplier Development Programme</p>
+    <h2>Seeds of Change Supplier Development Programme</h2>
+
+    <p>In 2021, Food Lover's Market partnered with Social Enterprise Academy to introduce social enterprises into their supply chain to support poverty alleviation and food insecurity in South Africa. Food Lovers Market launched a national invitation to social enterprises to participate in the <a href="https://foodloversmarket.co.za/seeds-of-change-supplier-development/" target="_blank">Food Lover's Market Seeds of Change Supplier Development Partnership</a> opportunity.</p>
+
+    <p>Now in its second year running, this supplier development programme has not only allowed social entrepreneurs to engage as potential suppliers, but also offers them the opportunity to <strong>become registered suppliers</strong> for the retailer.</p>
+
+    <div class="story-quote">
+      <p>"Often, small businesses do not have access to the supplier networks and marketing tools to grow their business. Seeds of Change aims to provide the opportunity and the means for small suppliers to get the tools and training they need to be successful and operate their business as a sustainable supplier to the retail market — while making meaningful, sustainable and long-lasting social and environmental impact in our country."</p>
+      <cite>— Michael Coppin, Director and Co-Founder of Food Lover's Market</cite>
+    </div>
+
+    <!-- Success story 1 -->
+    <div class="winner-card">
+      <h4>2021 Success Story</h4>
+      <h5>Boikano Sikwane — Chuck Chilli</h5>
+      <p>After successfully completing the programme in 2021, Boikano Sikwane now supplies over <strong>15,000 bottles</strong> of their Chuck Chilli condiment to the retailer and now employs <strong>16 previously unemployed youth</strong> from Diepsloot and Olivenhoutbosch townships.</p>
+      <p>This programme has really helped her scale her business and its social impact.</p>
+      <div class="impact-chips">
+        <span class="chip">15,000+ bottles supplied</span>
+        <span class="chip red">16 youth employed</span>
+        <span class="chip mag">Diepsloot & Olivenhoutbosch</span>
+      </div>
+    </div>
+
+    <h3>Community Empowerment Through Fresh Produce</h3>
+
+    <p>In 2022, the <strong>four-day boot camp</strong> gave the top 10 applicants a macro view of the global and South African retail landscape, including trends, challenges and opportunities within the sector. During this time they had face-to-face workshops offering guidance, mentorship and necessary skills to market their business.</p>
+
+    <p>On the fifth day, the top 10 businesses pitched to the Food Lover's Market panel, consisting of Mike Coppin (Director/Co-Founder), Andrew Millson (Group HR and Sustainability Executive), and Stephen van Vuure.</p>
+
+    <div class="story-img">
+      <img src="https://old.socialenterprise.academy/za/images/Copy_of_HAPPY_EARTH_DAY_Presentation_169_4.jpg" alt="Seeds of Change 2022 Bootcamp">
+    </div>
+
+    <!-- Winner 2022 -->
+    <div class="winner-card">
+      <h4>🏆 2022 Winner</h4>
+      <h5>Setšong African Tea Crafters</h5>
+      <p>The winners of 2022 were <strong>Setšong African Tea Crafters</strong>, which offers eight types of tea, and has created a platform for job creation within rural communities, focusing on the empowerment of youth and women, as well as the promotion of African Indigenous knowledge systems and practices.</p>
+      <div class="impact-chips">
+        <span class="chip">20 permanent jobs</span>
+        <span class="chip red">15 casual jobs</span>
+        <span class="chip mag">8 types of tea</span>
+      </div>
+    </div>
+
+    <div class="story-quote">
+      <p>"We have created 20 permanent jobs and 15 casual jobs. We have also upskilled rural cooperatives to supply the processed herbal ingredients to the company for further value addition. Setšong is focused on the conservation of biological resources and plants."</p>
+      <cite>— Retang Phaahla, Chief Executive of Setšong African Tea Crafters</cite>
+    </div>
+
+    <div class="story-img">
+      <img src="https://old.socialenterprise.academy/za/images/IMG-20220513-WA0075.jpg" alt="Setšong African Tea Crafters">
+    </div>
+
+    <div class="story-quote">
+      <p>"Being a supplier of FLM offers a welcomed boost to our social enterprise as it offers us growth and sustainability while making it all the more possible to increase value, through accessibility, for our customers."</p>
+      <cite>— Seeds of Change 2022 Participant</cite>
+    </div>
+
+  </article>
+</div>
+
+<!-- ── CTA ───────────────────────────────────────────────────── -->
+<section class="seeds-cta">
+  <h2>Find Out More About Seeds of Change</h2>
+  <p>Learn how Food Lover's Market and SEA are empowering South African social enterprises through supplier development.</p>
+  <a href="https://foodloversmarket.co.za/seeds-of-change-local-suppliers/" target="_blank" class="btn-green">Visit Seeds of Change</a>
+</section>
+
+<!-- ── Newsletter ────────────────────────────────────────────── -->
+<div class="newsletter">
+  <h2>Stay Connected</h2>
+  <p>Get the latest impact stories and programme updates from SEA South Africa.</p>
+  <form class="nl-form" onsubmit="handleSub(event)">
+    <input type="email" placeholder="Enter your email address" required />
+    <button type="submit">SUBSCRIBE</button>
+  </form>
+  <p id="sub-msg" style="display:none; margin-top:1rem; font-size:.85rem;">Thank you for subscribing!</p>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid" style="max-width:1200px; margin:0 auto 2rem;">
+    <div class="footer-brand">
+      <p class="org">Social Enterprise Academy South Africa</p>
+      <p>Learning and development programmes for people and organisations enabling social change in South Africa.</p>
+      <p style="margin-top:.7rem; font-size:.75rem;">NPO: 158-170 | PBO: 930052777 | Reg: 2012/175638/08</p>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#partner">Donate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Impact Stories</h4>
+      <ul>
+        <li><a href="impact-dice.html">DICE Impact Makers</a></li>
+        <li><a href="impact-distell.html">Distell</a></li>
+        <li><a href="impact-sec.html">Social Enterprise Connect</a></li>
+        <li><a href="impact-seeds.html">Seeds of Change</a></li>
+        <li><a href="#">Meet the Impact Makers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:jamy@socialenterprise.academy">jamy@socialenterprise.academy</a></li>
+        <li><a href="tel:+27671459311">Jamy — 067 145 9311</a></li>
+        <li><a href="#">Stellenbosch, South Africa</a></li>
+        <li><a href="index.html#news">Media Enquiries</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Social Enterprise Academy South Africa. All rights reserved.</span>
+    <div class="social-row">
+      <a href="https://twitter.com/SEA_SouthAfrica" target="_blank">𝕏</a>
+      <a href="https://www.facebook.com/seasouthafrica" target="_blank">f</a>
+      <a href="https://www.instagram.com/sea_international/" target="_blank">ig</a>
+      <a href="https://www.linkedin.com/in/social-enterprise-academy-south-africa-9552b6141" target="_blank">in</a>
+      <a href="https://www.youtube.com/@SocialEnterpriseAcademy" target="_blank">▶</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function handleSub(e) {
+    e.preventDefault();
+    document.getElementById('sub-msg').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
