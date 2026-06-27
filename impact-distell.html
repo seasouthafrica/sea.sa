@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Distell — Social Enterprise Academy South Africa</title>
+  <meta name="description" content="Distell's Non-Profit Sustainability Programme — building capacity and resilience amongst social change organisations through the Social Enterprise Academy.">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .story-hero {
+      position: relative; min-height: 460px;
+      display: flex; align-items: flex-end; overflow: hidden;
+    }
+    .story-hero img.hero-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover; object-position: center;
+    }
+    .story-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.2) 55%, transparent 100%);
+    }
+    .story-hero-content {
+      position: relative; z-index: 2;
+      color: white; padding: 3rem 2rem; max-width: 860px;
+    }
+    .story-hero-content .breadcrumb { font-size: .8rem; opacity: .8; margin-bottom: .7rem; }
+    .story-hero-content .breadcrumb a { color: white; text-decoration: underline; }
+    .story-hero-content h1 {
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 900;
+      text-transform: uppercase; letter-spacing: .04em; line-height: 1.1;
+    }
+
+    .story-layout {
+      display: grid; grid-template-columns: 220px 1fr;
+      gap: 3rem; max-width: 1100px; margin: 0 auto;
+      padding: 3rem 2rem; align-items: start;
+    }
+    .story-sidebar { position: sticky; top: 170px; }
+    .sidebar-title {
+      font-size: .7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .14em;
+      color: var(--gray); margin-bottom: 1rem;
+      padding-bottom: .5rem; border-bottom: 2px solid var(--teal);
+    }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li + li { margin-top: .1rem; }
+    .sidebar-nav a {
+      display: block; font-size: .84rem; color: var(--dark);
+      padding: .5rem .8rem; border-radius: 4px;
+      transition: background .2s, color .2s; text-decoration: none;
+    }
+    .sidebar-nav a:hover { background: var(--light); color: var(--teal); }
+    .sidebar-nav a.active { background: var(--teal); color: white; font-weight: 700; }
+
+    .story-article { min-width: 0; }
+    .story-label {
+      font-size: .7rem; font-weight: 700; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--magenta); margin-bottom: .4rem;
+    }
+    .story-article h2 {
+      font-size: 1.5rem; font-weight: 900; color: var(--darker);
+      margin-bottom: 1rem; text-transform: uppercase; letter-spacing: .04em;
+    }
+    .story-article h4 {
+      font-size: 1rem; font-weight: 800; color: var(--teal);
+      text-transform: uppercase; letter-spacing: .06em;
+      margin: 1.5rem 0 .6rem;
+    }
+    .story-article p {
+      font-size: .97rem; color: var(--gray); line-height: 1.8; margin-bottom: 1rem;
+    }
+    .story-article strong { color: var(--darker); }
+
+    .distell-intro {
+      background: var(--light); border-left: 5px solid var(--teal);
+      border-radius: 0 8px 8px 0; padding: 1.5rem 1.8rem; margin-bottom: 2rem;
+    }
+    .distell-intro p { font-size: 1rem; font-weight: 700; color: var(--teal); margin: 0; }
+
+    .programme-steps {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem; margin: 2rem 0;
+    }
+    .step-card {
+      background: white; border-top: 4px solid var(--magenta);
+      border-radius: 0 0 8px 8px; padding: 1.2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+    }
+    .step-card:nth-child(2) { border-top-color: var(--teal); }
+    .step-card:nth-child(3) { border-top-color: var(--yellow); }
+    .step-icon { font-size: 1.6rem; margin-bottom: .5rem; }
+    .step-card h5 { font-size: .88rem; font-weight: 800; color: var(--darker); margin-bottom: .4rem; }
+    .step-card p  { font-size: .8rem; color: var(--gray); line-height: 1.6; margin: 0; }
+
+    .story-quote {
+      border-left: 5px solid var(--magenta);
+      background: var(--light); padding: 1.8rem;
+      margin: 2rem 0; border-radius: 0 8px 8px 0;
+      position: relative;
+    }
+    .story-quote::before {
+      content: '"'; font-size: 5rem; color: var(--magenta);
+      opacity: .2; position: absolute; top: -.5rem; left: 1rem;
+      line-height: 1; font-family: Georgia, serif;
+    }
+    .story-quote p {
+      font-size: 1.1rem; font-style: italic; font-weight: 600;
+      color: var(--darker); line-height: 1.7; margin-bottom: .8rem;
+    }
+    .story-quote cite { font-size: .83rem; color: var(--teal); font-weight: 700; font-style: normal; }
+
+    .story-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      margin-top: 2.5rem; padding-top: 1.5rem;
+      border-top: 1px solid #eee;
+    }
+    .btn-download {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--teal); color: white; font-weight: 700; font-size: .85rem;
+      padding: .8rem 1.6rem; border-radius: 4px;
+      text-decoration: none; transition: background .2s;
+    }
+    .btn-download:hover { background: var(--teal-dk); }
+
+    .get-involved-box {
+      background: var(--teal); color: white; border-radius: 8px;
+      padding: 2rem; margin-top: 3rem;
+    }
+    .get-involved-box h3 {
+      font-size: 1.1rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .06em; margin-bottom: .8rem;
+    }
+    .get-involved-box p { font-size: .95rem; opacity: .93; line-height: 1.65; margin-bottom: .5rem; }
+    .get-involved-box a { color: var(--yellow); font-weight: 700; }
+
+    @media (max-width: 900px) {
+      .story-layout { grid-template-columns: 1fr; }
+      .story-sidebar { position: static; }
+      .programme-steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ──────────────────────────────────────────────── -->
+<header class="top-bar">
+  <a href="index.html" class="logo">
+    <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/public/Creatives/SEA%20Logo.png" alt="SEA logo" class="logo-icon" onerror="this.src='graphics/SEA Logo.png'">
+    <div class="logo-text">
+      <div class="org">Social Enterprise<br>Academy</div>
+      <div class="tag">One becomes many</div>
+    </div>
+  </a>
+  <div class="top-actions">
+    <a href="partner-with-us.html" class="btn-donate">DONATE HERE</a>
+    <select class="top-select hub"><option>HUB</option><option>South Africa</option><option>Scotland</option><option>Global</option></select>
+    <select class="top-select lang"><option>ENGLISH</option><option>AFRIKAANS</option><option>ZULU</option><option>XHOSA</option></select>
+  </div>
+</header>
+
+<!-- ── Navbar ───────────────────────────────────────────────── -->
+<nav class="navbar">
+  <button class="nav-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-inner" id="nav-links">
+    <a href="index.html">Home</a>
+    <div class="dd">
+      <a href="#">About us +</a>
+      <ul class="dd-menu">
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#findout">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="whats-on.html">What's on +</a>
+      <ul class="dd-menu">
+        <li><a href="whats-on.html#programmes">All Programmes</a></li>
+        <li><a href="whats-on.html#book">Book a Programme</a></li>
+        <li><a href="whats-on.html#download">Download Prospectus</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="impact-dice.html" class="active">Impact stories +</a>
+      <ul class="dd-menu">
+        <li><a href="impact-dice.html">DICE Impact Makers &amp; Creators</a></li>
+        <li><a href="impact-distell.html" class="active">Distell</a></li>
+        <li><a href="#">Social Enterprise Connect</a></li>
+        <li><a href="#">Seeds of Change</a></li>
+        <li><a href="#">Meet the Impact Makers</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#programmes">Young people +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#programmes">Youth Programmes</a></li>
+        <li><a href="index.html#programmes">Schools</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">News +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#news">Latest News</a></li>
+        <li><a href="index.html#news">Learning Resources</a></li>
+      </ul>
+    </div>
+    <div class="dd nav-search">
+      <a href="index.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>Search site
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<section class="story-hero">
+  <img class="hero-bg" src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/Core-Materials-CTA-1-scaled-1-1920x1080.jpg" alt="Distell Non-Profit Sustainability Programme">
+  <div class="story-hero-overlay"></div>
+  <div class="story-hero-content">
+    <p class="breadcrumb"><a href="index.html">Home</a> › <a href="impact-dice.html">Impact Stories</a> › Distell</p>
+    <h1>Distell</h1>
+    <p>Non-Profit Sustainability Programme</p>
+  </div>
+</section>
+
+<!-- ── Main Layout ───────────────────────────────────────────── -->
+<div class="story-layout">
+
+  <!-- Sidebar -->
+  <aside class="story-sidebar">
+    <p class="sidebar-title">In this section</p>
+    <ul class="sidebar-nav">
+      <li><a href="impact-dice.html">DICE Impact Makers &amp; Creators</a></li>
+      <li><a href="impact-distell.html" class="active">Distell</a></li>
+      <li><a href="#">Social Enterprise Connect</a></li>
+      <li><a href="#">Seeds of Change</a></li>
+      <li><a href="#">Meet the Impact Makers &amp; Creators</a></li>
+      <li><a href="#">Older Past Programmes</a></li>
+    </ul>
+  </aside>
+
+  <!-- Article -->
+  <article class="story-article">
+
+    <div class="distell-intro">
+      <p>Distell | Non-Profit Sustainability Programme</p>
+    </div>
+
+    <p class="story-label">Overview</p>
+    <h2>Building Capacity &amp; Resilience in the Non-Profit Sector</h2>
+
+    <p>Africa's leading producer of award-winning alcoholic brands, <strong>Distell</strong>, recognised that there was a need to build capacity and resilience amongst the social change organisations they supported — many of whom were beginning their journey towards a social enterprise model.</p>
+
+    <p>Distell's CSI department took up the challenge to maximise the impact of their Non-Profit beneficiaries by investing in a <strong>Non-Profit Sustainability Programme</strong>.</p>
+
+    <p>They partnered with <strong>Social Enterprise Academy</strong> to offer learning programmes and mentorship in the areas of leadership, measuring social impact, and social enterprise — enabling twelve non-profits to become more financially sustainable whilst increasing their social impact.</p>
+
+    <h4>What the Programme Delivered</h4>
+
+    <div class="programme-steps">
+      <div class="step-card">
+        <div class="step-icon">🏛️</div>
+        <h5>Leadership Development</h5>
+        <p>Building the skills and confidence of non-profit leaders to guide their organisations towards greater impact.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">📊</div>
+        <h5>Measuring Social Impact</h5>
+        <p>Equipping organisations with tools to measure, communicate and improve their community impact.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🌱</div>
+        <h5>Social Enterprise Models</h5>
+        <p>Supporting the transition towards financially sustainable social enterprise business models.</p>
+      </div>
+    </div>
+
+    <p>Read some of the case studies from members of the non-profit organisations that participated in the <strong>Distell Non-Profit Sustainability Programme</strong>.</p>
+
+    <!-- Key quote -->
+    <div class="story-quote">
+      <p>The days are over when CSI departments can throw money into a black hole to tick a box. If we can help NPOs to be more sustainable they will have more impact.</p>
+      <cite>— Nicole Solomons, Sustainable Socio-Economic Development at Distell</cite>
+    </div>
+
+    <!-- Actions -->
+    <div class="story-actions">
+      <a href="https://socialenterprise.academy/wp-content/uploads/sites/7/2023/08/Distell-Case-Studies-13-Dec-18-2.pdf" target="_blank" class="btn-download">
+        📄 Download the Case Study
+      </a>
+      <a href="partner-with-us.html" class="btn-magenta">Partner With Us</a>
+    </div>
+
+    <!-- Get involved -->
+    <div class="get-involved-box">
+      <h3>Run a Programme Like This</h3>
+      <p>If you'd like more information on how your organisation can invest in a programme like the Distell Non-Profit Sustainability Programme, please get in touch:</p>
+      <p><a href="mailto:jamy@socialenterprise.academy">jamy@socialenterprise.academy</a></p>
+      <p><a href="tel:+27671459311">Jamy — 067 145 9311</a></p>
+    </div>
+
+  </article>
+</div>
+
+<!-- ── Newsletter ────────────────────────────────────────────── -->
+<div class="newsletter">
+  <h2>Stay Connected</h2>
+  <p>Get the latest impact stories and programme updates from SEA South Africa.</p>
+  <form class="nl-form" onsubmit="handleSub(event)">
+    <input type="email" placeholder="Enter your email address" required />
+    <button type="submit">SUBSCRIBE</button>
+  </form>
+  <p id="sub-msg" style="display:none; margin-top:1rem; font-size:.85rem;">Thank you for subscribing!</p>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid" style="max-width:1200px; margin:0 auto 2rem;">
+    <div class="footer-brand">
+      <p class="org">Social Enterprise Academy South Africa</p>
+      <p>Learning and development programmes for people and organisations enabling social change in South Africa.</p>
+      <p style="margin-top:.7rem; font-size:.75rem;">NPO: 158-170 | PBO: 930052777 | Reg: 2012/175638/08</p>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#partner">Donate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Impact Stories</h4>
+      <ul>
+        <li><a href="impact-dice.html">DICE Impact Makers</a></li>
+        <li><a href="impact-distell.html">Distell</a></li>
+        <li><a href="#">Social Enterprise Connect</a></li>
+        <li><a href="#">Seeds of Change</a></li>
+        <li><a href="#">Meet the Impact Makers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:jamy@socialenterprise.academy">jamy@socialenterprise.academy</a></li>
+        <li><a href="tel:+27671459311">Jamy — 067 145 9311</a></li>
+        <li><a href="#">Stellenbosch, South Africa</a></li>
+        <li><a href="index.html#news">Media Enquiries</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Social Enterprise Academy South Africa. All rights reserved.</span>
+    <div class="social-row">
+      <a href="https://twitter.com/SEA_SouthAfrica" target="_blank">𝕏</a>
+      <a href="https://www.facebook.com/seasouthafrica" target="_blank">f</a>
+      <a href="https://www.instagram.com/sea_international/" target="_blank">ig</a>
+      <a href="https://www.linkedin.com/in/social-enterprise-academy-south-africa-9552b6141" target="_blank">in</a>
+      <a href="https://www.youtube.com/@SocialEnterpriseAcademy" target="_blank">▶</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function handleSub(e) {
+    e.preventDefault();
+    document.getElementById('sub-msg').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
