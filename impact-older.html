@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Older Past Programmes — SEA South Africa</title>
+  <meta name="description" content="Programmes delivered in the past by Social Enterprise Academy South Africa — Street Football World and Remgro SOS Journey to Social Enterprise.">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .story-hero {
+      position: relative; min-height: 460px;
+      display: flex; align-items: flex-end; overflow: hidden;
+    }
+    .story-hero img.hero-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover; object-position: center;
+    }
+    .story-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.2) 55%, transparent 100%);
+    }
+    .story-hero-content {
+      position: relative; z-index: 2;
+      color: white; padding: 3rem 2rem; max-width: 860px;
+    }
+    .story-hero-content .breadcrumb { font-size: .8rem; opacity: .8; margin-bottom: .7rem; }
+    .story-hero-content .breadcrumb a { color: white; text-decoration: underline; }
+    .story-hero-content h1 {
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 900;
+      text-transform: uppercase; letter-spacing: .04em; line-height: 1.1; margin-bottom: .5rem;
+    }
+    .story-hero-content p { font-size: .97rem; opacity: .9; }
+
+    .story-layout {
+      display: grid; grid-template-columns: 220px 1fr;
+      gap: 3rem; max-width: 1100px; margin: 0 auto;
+      padding: 3rem 2rem; align-items: start;
+    }
+    .story-sidebar { position: sticky; top: 170px; }
+    .sidebar-title {
+      font-size: .7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--gray); margin-bottom: 1rem;
+      padding-bottom: .5rem; border-bottom: 2px solid var(--teal);
+    }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li + li { margin-top: .1rem; }
+    .sidebar-nav a {
+      display: block; font-size: .84rem; color: var(--dark);
+      padding: .5rem .8rem; border-radius: 4px;
+      transition: background .2s, color .2s; text-decoration: none;
+    }
+    .sidebar-nav a:hover { background: var(--light); color: var(--teal); }
+    .sidebar-nav a.active { background: var(--teal); color: white; font-weight: 700; }
+
+    .story-article { min-width: 0; }
+    .story-label {
+      font-size: .7rem; font-weight: 700; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--magenta); margin-bottom: .4rem;
+    }
+    .story-article h2 {
+      font-size: 1.4rem; font-weight: 900; color: var(--darker);
+      margin-bottom: .8rem; line-height: 1.25;
+    }
+    .story-article h3 {
+      font-size: 1rem; font-weight: 800; color: var(--teal);
+      text-transform: uppercase; letter-spacing: .05em; margin: 1.5rem 0 .6rem;
+    }
+    .story-article h4 {
+      font-size: .95rem; font-weight: 800; color: var(--darker); margin: 1.2rem 0 .5rem;
+    }
+    .story-article p {
+      font-size: .97rem; color: var(--gray); line-height: 1.8; margin-bottom: .8rem;
+    }
+    .story-article strong { color: var(--darker); }
+    .story-article a { color: var(--teal); font-weight: 600; }
+    .story-article em { color: var(--gray); }
+
+    /* Year badge */
+    .year-badge {
+      display: inline-block; background: var(--magenta); color: white;
+      font-size: .72rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; padding: .3rem .8rem; border-radius: 50px;
+      margin-bottom: .8rem;
+    }
+
+    /* Programme divider */
+    .prog-divider {
+      border: none; border-top: 2px solid #eee;
+      margin: 3rem 0;
+    }
+
+    /* Participant quotes */
+    .impact-quotes { margin: 1.5rem 0; }
+    .impact-quote {
+      border-left: 4px solid var(--teal); padding: .8rem 1.2rem;
+      margin-bottom: .8rem; background: var(--light); border-radius: 0 6px 6px 0;
+      font-style: italic; font-size: .93rem; color: var(--dark); line-height: 1.7;
+    }
+
+    /* Infographic image */
+    .story-img { border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+    .story-img img { width: 100%; height: auto; display: block; }
+
+    /* Programme table */
+    .prog-table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+    .prog-table {
+      width: 100%; border-collapse: collapse; font-size: .88rem;
+    }
+    .prog-table th {
+      background: var(--teal); color: white; font-weight: 800;
+      padding: .9rem 1rem; text-align: left; letter-spacing: .04em;
+      font-size: .82rem; text-transform: uppercase;
+    }
+    .prog-table th:nth-child(2) { background: var(--magenta); }
+    .prog-table th:nth-child(3) { background: #2e7d32; }
+    .prog-table td {
+      padding: .8rem 1rem; vertical-align: top;
+      border-bottom: 1px solid #eee; color: var(--gray); line-height: 1.6;
+    }
+    .prog-table td ul { list-style: disc; padding-left: 1.2rem; margin: 0; }
+    .prog-table td ul li { margin-bottom: .3rem; font-size: .85rem; }
+    .prog-table tr:last-child td { border-bottom: none; }
+    .prog-table tr:nth-child(even) td { background: var(--light); }
+
+    @media (max-width: 900px) {
+      .story-layout { grid-template-columns: 1fr; }
+      .story-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ──────────────────────────────────────────────── -->
+<header class="top-bar">
+  <a href="index.html" class="logo">
+    <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/public/Creatives/SEA%20Logo.png" alt="SEA logo" class="logo-icon" onerror="this.src='graphics/SEA Logo.png'">
+    <div class="logo-text">
+      <div class="org">Social Enterprise<br>Academy</div>
+      <div class="tag">One becomes many</div>
+    </div>
+  </a>
+  <div class="top-actions">
+    <a href="partner-with-us.html" class="btn-donate">DONATE HERE</a>
+    <select class="top-select hub"><option>HUB</option><option>South Africa</option><option>Scotland</option><option>Global</option></select>
+    <select class="top-select lang"><option>ENGLISH</option><option>AFRIKAANS</option><option>ZULU</option><option>XHOSA</option></select>
+  </div>
+</header>
+
+<!-- ── Navbar ───────────────────────────────────────────────── -->
+<nav class="navbar">
+  <button class="nav-toggle" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-inner" id="nav-links">
+    <a href="index.html">Home</a>
+    <div class="dd">
+      <a href="#">About us +</a>
+      <ul class="dd-menu">
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#findout">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="whats-on.html">What's on +</a>
+      <ul class="dd-menu">
+        <li><a href="whats-on.html#programmes">All Programmes</a></li>
+        <li><a href="whats-on.html#book">Book a Programme</a></li>
+        <li><a href="whats-on.html#download">Download Prospectus</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="impact-dice.html" class="active">Impact stories +</a>
+      <ul class="dd-menu">
+        <li><a href="impact-dice.html">DICE Impact Makers &amp; Creators</a></li>
+        <li><a href="impact-distell.html">Distell</a></li>
+        <li><a href="impact-sec.html">Social Enterprise Connect</a></li>
+        <li><a href="impact-seeds.html">Seeds of Change</a></li>
+        <li><a href="impact-makers.html">Meet the Impact Makers</a></li>
+        <li><a href="impact-older.html" class="active">Older Past Programmes</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#programmes">Young people +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#programmes">Youth Programmes</a></li>
+        <li><a href="index.html#programmes">Schools</a></li>
+      </ul>
+    </div>
+    <div class="dd">
+      <a href="index.html#news">News +</a>
+      <ul class="dd-menu">
+        <li><a href="index.html#news">Latest News</a></li>
+        <li><a href="index.html#news">Learning Resources</a></li>
+      </ul>
+    </div>
+    <div class="dd nav-search">
+      <a href="index.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>Search site
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────── -->
+<section class="story-hero">
+  <img class="hero-bg" src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/07/Real-Change-Starts-Here-Cluster-Cropped-scaled-1-1920x1080.jpg" alt="Older Past Programmes">
+  <div class="story-hero-overlay"></div>
+  <div class="story-hero-content">
+    <p class="breadcrumb"><a href="index.html">Home</a> › <a href="impact-dice.html">Impact Stories</a> › Older Past Programmes</p>
+    <h1>Older Past Programmes</h1>
+    <p>Programmes delivered in the past by Social Enterprise Academy South Africa.</p>
+  </div>
+</section>
+
+<!-- ── Main Layout ───────────────────────────────────────────── -->
+<div class="story-layout">
+
+  <!-- Sidebar -->
+  <aside class="story-sidebar">
+    <p class="sidebar-title">In this section</p>
+    <ul class="sidebar-nav">
+      <li><a href="impact-dice.html">DICE Impact Makers &amp; Creators</a></li>
+      <li><a href="impact-distell.html">Distell</a></li>
+      <li><a href="impact-sec.html">Social Enterprise Connect</a></li>
+      <li><a href="impact-seeds.html">Seeds of Change</a></li>
+      <li><a href="impact-makers.html">Meet the Impact Makers &amp; Creators</a></li>
+      <li><a href="impact-older.html" class="active">Older Past Programmes</a></li>
+    </ul>
+  </aside>
+
+  <!-- Article -->
+  <article class="story-article">
+
+    <!-- Programme 1: Street Football World -->
+    <span class="year-badge">November 2017</span>
+    <p class="story-label">Programme 1 of 2</p>
+    <h2>Street Football World | Journey to Social Enterprise</h2>
+
+    <p><strong>Overview</strong></p>
+    <p><strong>In November 2017, the Social Enterprise Academy facilitated the Journey to Social Enterprise programme in Johannesburg in partnership with Street Football World.</strong></p>
+    <p>As part of the <a href="http://www.fifa.com/sustainability/football-for-hope.html" target="_blank">FIFA: Football for Hope Adidas Exchange Programme</a>, this 3-day capacity-building programme brought together learners from across Africa, who represent <strong>NGOs using football as a tool for development in their communities.</strong></p>
+    <p>Having been introduced to the social enterprise model in 2016, learners had the chance to come together with peers from similar organisations and share the opportunities and challenges that come with transitioning from a traditional NGO model to a social enterprise.</p>
+    <p><strong>Read more about the programme in <a href="http://www.streetfootballworld.org/F4GMagazineIssue5/" target="_blank">Street Football World's</a> Football4Good magazine (February 2018).</strong></p>
+
+    <h3>Programme Impact</h3>
+    <div class="impact-quotes">
+      <div class="impact-quote">"The programme has helped me as an individual, to learn how to convince the management on <strong>how to start a social enterprise, as I feel that is what my organisation needs.</strong>"</div>
+      <div class="impact-quote">"I am looking forward to presenting my knowledge to my organisation on how we can <strong>be more self-sustainable rather than being donor dependent.</strong>"</div>
+      <div class="impact-quote">"It will greatly shift the way we operate, from the traditional NPO-model to a social enterprise model, it will help us attain some financial autonomy and also <strong>help us generate income, expand our reach and more beneficiaries.</strong>"</div>
+    </div>
+
+    <div class="story-img">
+      <img src="https://old.socialenterprise.academy/za/images/Blog_Images/south-africa-prgramme-infographc.png" alt="South Africa Programme Infographic">
+    </div>
+
+    <hr class="prog-divider">
+
+    <!-- Programme 2: Remgro SOS -->
+    <span class="year-badge">Remgro Partnership</span>
+    <p class="story-label">Programme 2 of 2</p>
+    <h2>Remgro: Strengthen Our Society (SOS) | Journey to Social Enterprise Programme</h2>
+
+    <p><strong>Overview</strong></p>
+    <p>Strengthen our Society (SOS) is part of Remgro's Corporate Social Investment portfolio. It supports a number of NPOs to enhance their structural capacity and realise their full potential.</p>
+    <p><em>Journey to Social Enterprise</em> was commissioned to enable NPOs to move beyond traditional funding and strengthen their future viability through alternative revenue streams.</p>
+    <p>Remgro are keen to see the selected SOS organisations "reach the next level". By increasing income and financial sustainability, the aim is to enable NPOs to achieve higher levels of social impact.</p>
+
+    <h4>The Programme</h4>
+    <p>The 6-day programme was divided into 3 modules and also included mentoring and business support services from a range of partners:</p>
+
+    <div class="prog-table-wrap">
+      <table class="prog-table">
+        <thead>
+          <tr>
+            <th>1. Understanding Social Enterprise</th>
+            <th>2. Marketing Your Social Enterprise</th>
+            <th>3. Business Planning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <ul>
+                <li>Social enterprise concepts</li>
+                <li>Legal and organisational structures</li>
+                <li>Balancing social and economic missions</li>
+                <li>Revenue models and income generation</li>
+                <li>Visit a social enterprise</li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li>Defining your customers</li>
+                <li>Market research</li>
+                <li>Defining your Unique Selling Point</li>
+                <li>Understanding and creating customer value</li>
+                <li>Promotional strategies and creating a marketing plan</li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li>Understanding your external context</li>
+                <li>Creating social value</li>
+                <li>Developing a business plan</li>
+                <li>Stakeholder analysis and engagement</li>
+                <li>Pitching your business plan</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background:var(--light); border-radius:8px; padding:1.5rem; margin-top:2rem;">
+      <p style="margin:0; font-size:.9rem; color:var(--gray);">
+        <strong style="color:var(--teal);">Interested in a similar programme?</strong><br>
+        Contact us to find out how SEA South Africa can support your organisation's journey to social enterprise and financial sustainability.
+      </p>
+      <a href="mailto:jamy@socialenterprise.academy" class="btn-teal" style="display:inline-block; margin-top:1rem; font-size:.85rem;">Get in touch</a>
+    </div>
+
+  </article>
+</div>
+
+<!-- ── Newsletter ────────────────────────────────────────────── -->
+<div class="newsletter">
+  <h2>Stay Connected</h2>
+  <p>Get the latest impact stories and programme updates from SEA South Africa.</p>
+  <form class="nl-form" onsubmit="handleSub(event)">
+    <input type="email" placeholder="Enter your email address" required />
+    <button type="submit">SUBSCRIBE</button>
+  </form>
+  <p id="sub-msg" style="display:none; margin-top:1rem; font-size:.85rem;">Thank you for subscribing!</p>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid" style="max-width:1200px; margin:0 auto 2rem;">
+    <div class="footer-brand">
+      <p class="org">Social Enterprise Academy South Africa</p>
+      <p>Learning and development programmes for people and organisations enabling social change in South Africa.</p>
+      <p style="margin-top:.7rem; font-size:.75rem;">NPO: 158-170 | PBO: 930052777 | Reg: 2012/175638/08</p>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="manifesto.html">Manifesto</a></li>
+        <li><a href="meet-our-team.html">Meet Our Team</a></li>
+        <li><a href="partner-with-us.html">Partner With Us</a></li>
+        <li><a href="index.html#partner">Donate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Impact Stories</h4>
+      <ul>
+        <li><a href="impact-dice.html">DICE Impact Makers</a></li>
+        <li><a href="impact-distell.html">Distell</a></li>
+        <li><a href="impact-sec.html">Social Enterprise Connect</a></li>
+        <li><a href="impact-seeds.html">Seeds of Change</a></li>
+        <li><a href="impact-makers.html">Meet the Impact Makers</a></li>
+        <li><a href="impact-older.html">Older Past Programmes</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:jamy@socialenterprise.academy">jamy@socialenterprise.academy</a></li>
+        <li><a href="tel:+27671459311">Jamy — 067 145 9311</a></li>
+        <li><a href="#">Stellenbosch, South Africa</a></li>
+        <li><a href="index.html#news">Media Enquiries</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Social Enterprise Academy South Africa. All rights reserved.</span>
+    <div class="social-row">
+      <a href="https://twitter.com/SEA_SouthAfrica" target="_blank">𝕏</a>
+      <a href="https://www.facebook.com/seasouthafrica" target="_blank">f</a>
+      <a href="https://www.instagram.com/sea_international/" target="_blank">ig</a>
+      <a href="https://www.linkedin.com/in/social-enterprise-academy-south-africa-9552b6141" target="_blank">in</a>
+      <a href="https://www.youtube.com/@SocialEnterpriseAcademy" target="_blank">▶</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function handleSub(e) {
+    e.preventDefault();
+    document.getElementById('sub-msg').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
