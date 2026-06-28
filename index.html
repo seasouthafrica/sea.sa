@@ -6,6 +6,48 @@
   <title>Social Enterprise Academy South Africa</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'af,zu,xh,en',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+    function translatePage(lang) {
+      if (lang === 'en') {
+        // Reset to English — remove the cookie and reload
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + location.hostname;
+        location.reload();
+        return;
+      }
+      var combo = document.querySelector('.goog-te-combo');
+      if (combo) {
+        combo.value = lang;
+        combo.dispatchEvent(new Event('change'));
+      } else {
+        // Fallback: set cookie directly and reload
+        document.cookie = 'googtrans=/en/' + lang + '; path=/';
+        location.reload();
+      }
+    }
+    // Restore dropdown on page load to match active translation
+    window.addEventListener('load', function () {
+      var match = document.cookie.match(/googtrans=\/en\/([a-z]+)/);
+      if (match) {
+        var sel = document.getElementById('lang-select');
+        if (sel) sel.value = match[1];
+      }
+    });
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <style>
+    /* Hide Google Translate top bar */
+    .goog-te-banner-frame, .skiptranslate { display: none !important; }
+    body { top: 0 !important; }
+    .goog-te-gadget { display: none !important; }
+  </style>
 </head>
 <body>
 
@@ -22,12 +64,13 @@
       <option>Scotland</option>
       <option>Global</option>
     </select>
-    <select class="top-select lang" aria-label="Language">
-      <option>ENGLISH</option>
-      <option>AFRIKAANS</option>
-      <option>ZULU</option>
-      <option>XHOSA</option>
+    <select class="top-select lang" aria-label="Language" id="lang-select" onchange="translatePage(this.value)">
+      <option value="en">ENGLISH</option>
+      <option value="af">AFRIKAANS</option>
+      <option value="zu">ZULU</option>
+      <option value="xh">XHOSA</option>
     </select>
+    <div id="google_translate_element" style="display:none;"></div>
   </div>
 </header>
 
