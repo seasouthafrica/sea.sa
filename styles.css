@@ -168,7 +168,7 @@ ul   { list-style: none; }
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,169,157,.32);
+  background: transparent;
 }
 
 .hero-content {
