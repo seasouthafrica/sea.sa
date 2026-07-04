@@ -9,30 +9,44 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    let active = true;
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => listener.subscription.unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (!user) {
-      setProfile(null);
-      return;
+    async function loadProfile(sessionUser) {
+      if (!sessionUser) {
+        if (active) setProfile(null);
+        return;
+      }
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', sessionUser.id)
+        .single();
+      if (active) setProfile(data ?? null);
     }
-    supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single()
-      .then(({ data }) => setProfile(data));
-  }, [user]);
+
+    // Initial load: resolve BOTH the session and the profile before we
+    // mark loading complete, so route guards (e.g. admin-only) never run
+    // against a half-loaded auth state on refresh/deep-link.
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (!active) return;
+      const u = session?.user ?? null;
+      setUser(u);
+      await loadProfile(u);
+      if (active) setLoading(false);
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!active) return;
+      const u = session?.user ?? null;
+      setUser(u);
+      await loadProfile(u);
+    });
+
+    return () => {
+      active = false;
+      listener.subscription.unsubscribe();
+    };
+  }, []);
 
   const isAdmin = profile?.role === 'admin' || profile?.role === 'super_admin';
 
