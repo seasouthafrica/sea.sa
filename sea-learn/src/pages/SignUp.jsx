@@ -30,7 +30,7 @@ export default function SignUp() {
     setError('');
     setLoading(true);
 
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
       options: {
@@ -47,11 +47,28 @@ export default function SignUp() {
       },
     });
 
-    setLoading(false);
     if (signUpError) {
+      setLoading(false);
       setError(signUpError.message);
       return;
     }
+
+    // Email is treated as a username — no confirmation step. If signup didn't
+    // return a session (project-level setting), sign in immediately so the
+    // learner lands straight in their dashboard.
+    if (!data.session) {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: form.email,
+        password: form.password,
+      });
+      if (signInError) {
+        setLoading(false);
+        setError(signInError.message);
+        return;
+      }
+    }
+
+    setLoading(false);
     navigate('/dashboard');
   };
 

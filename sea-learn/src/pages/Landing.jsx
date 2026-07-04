@@ -27,6 +27,25 @@ export default function Landing() {
           Start Uplift
         </Link>
       </main>
+
+      <footer className="border-t mt-16 py-8 text-center">
+        <p className="text-sm text-gray-400 mb-3">
+          © {new Date().getFullYear()} Social Enterprise Academy South Africa
+        </p>
+        <Link
+          to="/login?admin=1"
+          title="Admin access"
+          aria-label="Admin login"
+          className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-sea-teal"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          Admin
+        </Link>
+      </footer>
     </div>
   );
 }
