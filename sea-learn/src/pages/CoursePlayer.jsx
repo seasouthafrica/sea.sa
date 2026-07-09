@@ -12,6 +12,7 @@ export default function CoursePlayer() {
   const [activeLesson, setActiveLesson] = useState(null);
 
   useEffect(() => {
+    let cancelled = false;
     async function load() {
       const { data: course } = await supabase
         .from('courses')
@@ -22,15 +23,24 @@ export default function CoursePlayer() {
 
       const { data: modules } = await supabase
         .from('modules')
-        .select('id, title, order_index, lessons(*)')
+        .select('id, title, order_index, lessons(id, title, type, content_url, order_index)')
         .eq('course_id', course.id)
         .order('order_index');
 
-      const flatLessons = (modules ?? []).flatMap((m) => m.lessons ?? []);
+      if (cancelled) return;
+
+      const flatLessons = (modules ?? []).flatMap((m) =>
+        (m.lessons ?? [])
+          .slice()
+          .sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0))
+      );
       setLessons(flatLessons);
       setActiveLesson(flatLessons[0] ?? null);
     }
     load();
+    return () => {
+      cancelled = true;
+    };
   }, [courseSlug]);
 
   return (

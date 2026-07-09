@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis } from 'recharts';
 import { supabase } from '../../lib/supabaseClient';
@@ -19,13 +19,30 @@ export default function AdminOverview() {
   const [enrollments, setEnrollments] = useState([]);
 
   useEffect(() => {
-    supabase.from('profiles').select('*').eq('role', 'learner').then(({ data }) => setProfiles(data ?? []));
-    supabase.from('enrollments').select('*').then(({ data }) => setEnrollments(data ?? []));
+    let cancelled = false;
+    Promise.all([
+      supabase
+        .from('profiles')
+        .select('id, gender, age_range, employment_status, education_level')
+        .eq('role', 'learner'),
+      supabase.from('enrollments').select('id, completed_at'),
+    ]).then(([profilesResult, enrollmentsResult]) => {
+      if (cancelled) return;
+      setProfiles(profilesResult.data ?? []);
+      setEnrollments(enrollmentsResult.data ?? []);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const totalLearners = profiles.length;
   const completed = enrollments.filter((e) => e.completed_at).length;
   const completionRate = enrollments.length ? Math.round((completed / enrollments.length) * 100) : 0;
+  const genderData = useMemo(() => groupCount(profiles, 'gender'), [profiles]);
+  const ageData = useMemo(() => groupCount(profiles, 'age_range'), [profiles]);
+  const employmentData = useMemo(() => groupCount(profiles, 'employment_status'), [profiles]);
+  const educationData = useMemo(() => groupCount(profiles, 'education_level'), [profiles]);
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10">
@@ -43,15 +60,15 @@ export default function AdminOverview() {
       <div className="grid grid-cols-2 gap-8">
         <ChartCard title="Gender">
           <PieChart width={300} height={250}>
-            <Pie data={groupCount(profiles, 'gender')} dataKey="value" nameKey="name" outerRadius={90} label>
-              {profiles.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+            <Pie data={genderData} dataKey="value" nameKey="name" outerRadius={90} label>
+              {genderData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
             </Pie>
             <Tooltip />
           </PieChart>
         </ChartCard>
 
         <ChartCard title="Age range">
-          <BarChart width={300} height={250} data={groupCount(profiles, 'age_range')}>
+          <BarChart width={300} height={250} data={ageData}>
             <XAxis dataKey="name" fontSize={10} />
             <YAxis allowDecimals={false} />
             <Tooltip />
@@ -60,7 +77,7 @@ export default function AdminOverview() {
         </ChartCard>
 
         <ChartCard title="Employment status">
-          <BarChart width={300} height={250} data={groupCount(profiles, 'employment_status')}>
+          <BarChart width={300} height={250} data={employmentData}>
             <XAxis dataKey="name" fontSize={10} />
             <YAxis allowDecimals={false} />
             <Tooltip />
@@ -69,7 +86,7 @@ export default function AdminOverview() {
         </ChartCard>
 
         <ChartCard title="Education level">
-          <BarChart width={300} height={250} data={groupCount(profiles, 'education_level')}>
+          <BarChart width={300} height={250} data={educationData}>
             <XAxis dataKey="name" fontSize={10} />
             <YAxis allowDecimals={false} />
             <Tooltip />

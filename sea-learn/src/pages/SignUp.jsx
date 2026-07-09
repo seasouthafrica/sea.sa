@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
+import { useAuth } from '../lib/useAuth';
 
 const AGE_RANGES = ['under_18', '18_24', '25_34', '35_44', '45_54', '55_plus', 'prefer_not_to_say'];
 const EDUCATION_LEVELS = [
@@ -15,6 +16,7 @@ const label = (v) => v.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase(
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const { refreshAuth } = useAuth();
   const [form, setForm] = useState({
     first_name: '', last_name: '', age_range: '', location: '',
     education_level: '', employment_status: '', disability_status: '',
@@ -68,8 +70,9 @@ export default function SignUp() {
       }
     }
 
+    await refreshAuth();
     setLoading(false);
-    navigate('/dashboard');
+    navigate('/uplift/week-1', { replace: true });
   };
 
   const selectField = (fieldName, options, placeholder) => (

@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "SEA Website",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "3300", "."],
+      "port": 3300
+    },
+    {
+      "name": "SEA Learn",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "sea-learn", "--", "--port", "5173"],
+      "port": 5173
+    }
+  ]
+}

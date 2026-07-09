@@ -8,11 +8,26 @@ export default function AdminLearnerDetail() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    supabase.from('profiles').select('*').eq('id', userId).single()
-      .then(({ data }) => setProfile(data));
-    supabase.from('activity_events').select('*, lessons(title)')
+    let cancelled = false;
+    supabase
+      .from('profiles')
+      .select('id, first_name, last_name, location, age_range, gender, education_level, employment_status, disability_status, created_at')
+      .eq('id', userId)
+      .single()
+      .then(({ data }) => {
+        if (!cancelled) setProfile(data);
+      });
+    supabase
+      .from('activity_events')
+      .select('id, event_type, progress_value, occurred_at, lessons(title)')
       .eq('user_id', userId).order('occurred_at', { ascending: false })
-      .then(({ data }) => setEvents(data ?? []));
+      .limit(200)
+      .then(({ data }) => {
+        if (!cancelled) setEvents(data ?? []);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [userId]);
 
   if (!profile) return <div className="p-8">Loading…</div>;

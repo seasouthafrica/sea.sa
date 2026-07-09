@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 
@@ -23,16 +23,27 @@ export default function AdminLearners() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
+    let cancelled = false;
     supabase
       .from('profiles')
-      .select('*')
+      .select('id, first_name, last_name, location, age_range, created_at')
       .eq('role', 'learner')
-      .then(({ data }) => setLearners(data ?? []));
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        if (!cancelled) setLearners(data ?? []);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  const filtered = learners.filter((l) =>
-    `${l.first_name} ${l.last_name}`.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return learners;
+    return learners.filter((l) =>
+      `${l.first_name} ${l.last_name}`.toLowerCase().includes(query)
+    );
+  }, [learners, search]);
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10">

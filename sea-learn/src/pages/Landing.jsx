@@ -24,7 +24,7 @@ export default function Landing() {
           to="/signup"
           className="inline-block bg-sea-magenta text-white px-6 py-3 rounded-lg font-semibold"
         >
-          Start Uplift
+          Start Week 1
         </Link>
       </main>
 
