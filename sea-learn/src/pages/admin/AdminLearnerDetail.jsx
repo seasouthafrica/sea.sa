@@ -25,7 +25,7 @@ export default function AdminLearnerDetail() {
     let cancelled = false;
     supabase
       .from('profiles')
-      .select('id, first_name, last_name, location, age_range, gender, education_level, employment_status, disability_status, created_at')
+      .select('id, first_name, last_name, location, age_range, gender, education_level, employment_status, disability_status, paid, paid_at, created_at')
       .eq('id', userId)
       .single()
       .then(({ data }) => { if (!cancelled) setProfile(data); });
@@ -66,11 +66,24 @@ export default function AdminLearnerDetail() {
         <div>
           <h1 className="text-3xl font-bold">{profile.first_name} {profile.last_name}</h1>
           <p className="text-gray-500">{profile.location}</p>
+          <div className="mt-2 flex items-center gap-2">
+            <span className={`rounded-full px-3 py-1 text-xs font-bold ${profile.paid ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-600'}`}>
+              {profile.paid ? '✓ Paid' : 'Free'}
+            </span>
+            {profile.paid_at && (
+              <span className="text-xs text-gray-400">
+                Paid on {new Date(profile.paid_at).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' })}
+              </span>
+            )}
+          </div>
         </div>
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center">
-          <p className="text-xs font-semibold text-emerald-600">Overall Progress</p>
-          <p className="text-2xl font-bold text-emerald-700">{progressPct}%</p>
-          <p className="text-xs text-emerald-500">{totalActivities}/{maxActivities} activities</p>
+        <div className="flex flex-col items-end gap-2">
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center">
+            <p className="text-xs font-semibold text-emerald-600">Overall Progress</p>
+            <p className="text-2xl font-bold text-emerald-700">{progressPct}%</p>
+            <p className="text-xs text-emerald-500">{totalActivities}/{maxActivities} activities</p>
+          </div>
+          <PaidToggle userId={userId} paid={profile.paid} onUpdate={(paid, paidAt) => setProfile((p) => ({ ...p, paid, paid_at: paidAt }))} />
         </div>
       </div>
 
@@ -259,6 +272,36 @@ function SimDataDetail({ chapterId, data }) {
     );
   }
   return null;
+}
+
+function PaidToggle({ userId, paid, onUpdate }) {
+  const [loading, setLoading] = useState(false);
+
+  const toggle = async () => {
+    setLoading(true);
+    const nowPaid = !paid;
+    const paidAt = nowPaid ? new Date().toISOString() : null;
+    const { error } = await supabase
+      .from('profiles')
+      .update({ paid: nowPaid, paid_at: paidAt })
+      .eq('id', userId);
+    setLoading(false);
+    if (!error) onUpdate(nowPaid, paidAt);
+  };
+
+  return (
+    <button
+      onClick={toggle}
+      disabled={loading}
+      className={`rounded-lg px-4 py-2 text-sm font-bold transition disabled:opacity-50 ${
+        paid
+          ? 'border-2 border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
+          : 'border-2 border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+      }`}
+    >
+      {loading ? 'Updating…' : paid ? 'Revoke Paid Access' : 'Mark as Paid (R99)'}
+    </button>
+  );
 }
 
 function Field({ label, value }) {

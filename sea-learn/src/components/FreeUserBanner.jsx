@@ -18,7 +18,7 @@ export default function FreeUserBanner({ profile }) {
   useEffect(() => {
     if (!profile) return;
     if (profile.role === 'admin' || profile.role === 'super_admin') return;
-    if (profile.role === 'paid') return;
+    if (profile.paid) return;
 
     const dismissed = sessionStorage.getItem(DISMISS_KEY);
     if (dismissed) return;
