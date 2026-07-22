@@ -9,6 +9,7 @@ import LogoMaker from '../components/LogoMaker';
 import FacebookAdSimulator from '../components/FacebookAdSimulator';
 import WebsitePromptSimulator from '../components/WebsitePromptSimulator';
 import PromptSimulator from '../components/PromptSimulator';
+import FreeUserBanner from '../components/FreeUserBanner';
 
 function getYouTubeEmbedUrl(url) {
   if (!url) return null;
@@ -92,7 +93,7 @@ function saveProgressToSupabase(userId, chapterId, type, data) {
 export default function UpliftCourse() {
   const { chapterId } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
 
   const chapterNum = parseInt(chapterId || '1', 10);
   const chapter = upliftChapters.find((c) => c.id === chapterNum) || upliftChapters[0];
@@ -320,6 +321,7 @@ export default function UpliftCourse() {
           )}
         </div>
       </main>
+      <FreeUserBanner profile={profile} />
     </div>
   );
 }

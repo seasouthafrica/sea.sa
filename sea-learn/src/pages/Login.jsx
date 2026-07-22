@@ -1,12 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/useAuth';
+import { withTimeout } from '../lib/withTimeout';
+
+const LOGIN_TIMEOUT_MS = 12_000;
+
+function getLoginErrorMessage(loginError) {
+  const message = loginError?.message || '';
+
+  if (/invalid api key/i.test(message)) {
+    return 'SEA Learn is not connected to Supabase correctly. Please ask the site administrator to update the Supabase API key.';
+  }
+
+  if (/timed out/i.test(message)) {
+    return message;
+  }
+
+  return message || 'Unable to log in. Please check your connection and try again.';
+}
 
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { refreshAuth } = useAuth();
+  const { user, isAdmin, loading: authLoading, profileLoading, refreshAuth } = useAuth();
   const [searchParams] = useSearchParams();
   const adminMode = searchParams.get('admin') === '1';
   const [email, setEmail] = useState('');
@@ -14,36 +31,64 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (authLoading || profileLoading) return;
+    if (!user) return;
+    if (adminMode && !isAdmin) return;
+    const intendedPath = location.state?.from?.pathname;
+    if (isAdmin) {
+      navigate(intendedPath?.startsWith('/admin') ? intendedPath : '/admin', { replace: true });
+    } else {
+      navigate(intendedPath && !intendedPath.startsWith('/admin') ? intendedPath : '/uplift/chapter/1', { replace: true });
+    }
+  }, [user, isAdmin, authLoading, profileLoading, adminMode, navigate, location.state]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    const { error: loginError } = await supabase.auth.signInWithPassword({ email, password });
-    if (loginError) {
+    try {
+      const { data, error: loginError } = await withTimeout(
+        supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password,
+        }),
+        LOGIN_TIMEOUT_MS,
+        'Login timed out. Please check your connection and try again.',
+      );
+      if (loginError) {
+        setError(getLoginErrorMessage(loginError));
+        return;
+      }
+
+      const { profile: prof } = await refreshAuth(data.user);
+      const intendedPath = location.state?.from?.pathname;
+
+      if (prof?.role === 'admin' || prof?.role === 'super_admin') {
+        navigate(intendedPath?.startsWith('/admin') ? intendedPath : '/admin', { replace: true });
+      } else {
+        navigate(intendedPath && !intendedPath.startsWith('/admin') ? intendedPath : '/uplift/chapter/1', { replace: true });
+      }
+    } catch (loginError) {
+      setError(getLoginErrorMessage(loginError));
+    } finally {
       setLoading(false);
-      setError(loginError.message);
-      return;
     }
-
-    // Route admins straight to the admin dashboard, everyone else to their learner dashboard.
-    const { profile: prof } = await refreshAuth();
-    const intendedPath = location.state?.from?.pathname;
-
-    if (prof?.role === 'admin' || prof?.role === 'super_admin') {
-      navigate(intendedPath?.startsWith('/admin') ? intendedPath : '/admin', { replace: true });
-    } else {
-      navigate(intendedPath && !intendedPath.startsWith('/admin') ? intendedPath : '/uplift/week-1', { replace: true });
-    }
-
-    setLoading(false);
   };
+
+  if (authLoading) return <div className="p-8">Loading…</div>;
 
   return (
     <div className="max-w-sm mx-auto px-6 py-16">
       <h1 className="text-2xl font-bold mb-6">
         {adminMode ? 'Admin log in' : 'Log in to SEA Learn'}
       </h1>
+      {adminMode && user && !isAdmin && !profileLoading && (
+        <p className="mb-4 rounded-lg bg-amber-50 border border-amber-200 p-3 text-sm text-amber-800">
+          You are logged in but your account does not have admin access. Please log in with an admin account.
+        </p>
+      )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <input required type="email" placeholder="Email" value={email}
           onChange={(e) => setEmail(e.target.value)} className="w-full border rounded-lg px-3 py-2" />

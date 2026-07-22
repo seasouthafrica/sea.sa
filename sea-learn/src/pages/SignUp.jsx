@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/useAuth';
@@ -10,13 +10,13 @@ const EDUCATION_LEVELS = [
 ];
 const EMPLOYMENT = ['unemployed', 'employed', 'self_employed', 'student', 'prefer_not_to_say'];
 const DISABILITY = ['yes', 'no', 'prefer_not_to_say'];
-const GENDER = ['female', 'male', 'non_binary', 'other', 'prefer_not_to_say'];
+const GENDER = ['male', 'female'];
 
 const label = (v) => v.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const { refreshAuth } = useAuth();
+  const { user, loading: authLoading, refreshAuth } = useAuth();
   const [form, setForm] = useState({
     first_name: '', last_name: '', age_range: '', location: '',
     education_level: '', employment_status: '', disability_status: '',
@@ -24,6 +24,10 @@ export default function SignUp() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!authLoading && user) navigate('/uplift/chapter/1', { replace: true });
+  }, [user, authLoading, navigate]);
 
   const update = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
@@ -59,7 +63,7 @@ export default function SignUp() {
     // return a session (project-level setting), sign in immediately so the
     // learner lands straight in their dashboard.
     if (!data.session) {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
         email: form.email,
         password: form.password,
       });
@@ -68,11 +72,12 @@ export default function SignUp() {
         setError(signInError.message);
         return;
       }
+      await refreshAuth(signInData.user);
+    } else {
+      await refreshAuth(data.user);
     }
-
-    await refreshAuth();
     setLoading(false);
-    navigate('/uplift/week-1', { replace: true });
+    navigate('/uplift/chapter/1', { replace: true });
   };
 
   const selectField = (fieldName, options, placeholder) => (
@@ -88,6 +93,8 @@ export default function SignUp() {
       ))}
     </select>
   );
+
+  if (authLoading) return <div className="p-8">Loading…</div>;
 
   return (
     <div className="max-w-lg mx-auto px-6 py-12">
