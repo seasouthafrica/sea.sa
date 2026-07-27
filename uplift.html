@@ -61,50 +61,52 @@
 
   /* ---------- NAV ---------- */
   header{
-    background:var(--magenta);
+    background:var(--paper);
     position:sticky;top:0;z-index:50;
+    box-shadow:0 4px 18px rgba(24,41,32,.1);
   }
   .nav{
     display:flex;align-items:center;justify-content:space-between;
-    padding:18px 28px;max-width:var(--wrap);margin:0 auto;
+    padding:10px 28px;max-width:var(--wrap);margin:0 auto;
   }
   .logo{
-    color:var(--paper);font-family:"Poppins",sans-serif;font-weight:800;
-    font-size:17px;letter-spacing:0.02em;display:flex;align-items:center;gap:10px;
+    display:flex;align-items:center;flex:0 1 270px;
   }
-  .logo .mark{
-    width:30px;height:30px;border-radius:8px;
-    background:conic-gradient(from 220deg, var(--gold), var(--teal) 55%, var(--gold));
-    flex:0 0 auto;
-  }
+  .logo img{width:100%;max-width:270px;height:64px;object-fit:contain;object-position:left center;}
   nav.links{display:flex;gap:34px;align-items:center;}
   nav.links a{
-    color:var(--paper);font-weight:700;font-size:14.5px;
+    color:var(--green);font-weight:700;font-size:14.5px;
     padding-bottom:4px;border-bottom:2px solid transparent;
   }
-  nav.links a:hover{border-color:var(--gold);}
+  nav.links a:hover{color:var(--magenta);border-color:var(--gold);}
   .nav-cta{
-    background:var(--gold);color:var(--green);padding:10px 20px;border-radius:999px;
+    background:var(--magenta);color:var(--paper);padding:10px 20px;border-radius:999px;
     font-weight:800;font-size:14px;
   }
-  .burger{display:none;background:none;border:0;color:#fff;font-size:26px;cursor:pointer;}
+  .nav-cta:hover{background:var(--magenta-deep);}
+  .burger{display:none;background:none;border:0;color:var(--green);font-size:26px;cursor:pointer;}
 
   @media (max-width:860px){
     nav.links{display:none;}
     .burger{display:block;}
+    .logo{flex-basis:200px;}
+    .logo img{height:52px;max-width:200px;}
   }
 
   /* ---------- HERO ---------- */
   .hero{
-    position:relative;background:var(--green);color:var(--paper);
+    position:relative;
+    background:linear-gradient(135deg,var(--green) 0%,var(--teal-deep) 52%,var(--magenta-deep) 100%);
+    color:var(--paper);
     overflow:hidden;
     padding:96px 0 120px;
   }
   .hero::before{
     content:"";position:absolute;inset:0;
     background:
-      radial-gradient(700px 500px at 82% 15%, rgba(23,158,161,.55), transparent 60%),
-      radial-gradient(600px 500px at 100% 90%, rgba(194,24,91,.45), transparent 60%);
+      radial-gradient(700px 500px at 82% 15%,rgba(23,158,161,.7),transparent 60%),
+      radial-gradient(600px 500px at 100% 90%,rgba(194,24,91,.58),transparent 60%),
+      linear-gradient(115deg,rgba(254,206,10,.12),transparent 38%);
     pointer-events:none;
   }
   .hero-grid{
@@ -313,7 +315,9 @@
 
 <header>
   <div class="nav">
-    <div class="logo"><span class="mark"></span> DIGITAL INCOME ACCELERATOR</div>
+    <a class="logo" href="index.html" aria-label="Social Enterprise Academy home">
+      <img src="graphics/SEA Logo.png" alt="Social Enterprise Academy — One becomes many">
+    </a>
     <nav class="links">
       <a href="#about">About</a>
       <a href="#learn">Programme</a>
