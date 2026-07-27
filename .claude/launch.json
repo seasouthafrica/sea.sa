@@ -10,8 +10,8 @@
     {
       "name": "SEA Learn",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--prefix", "sea-learn", "--", "--port", "5173"],
-      "port": 5173
+      "runtimeArgs": ["run", "dev", "--prefix", "sea-learn", "--", "--port", "3700"],
+      "port": 3700
     }
   ]
 }

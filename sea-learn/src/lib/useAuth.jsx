@@ -32,7 +32,7 @@ export function AuthProvider({ children }) {
     const request = withTimeout(
       supabase
         .from('profiles')
-        .select('id, first_name, role, paid')
+        .select('id, first_name, last_name, role, paid')
         .eq('id', sessionUser.id)
         .maybeSingle()
         .then(({ data, error }) => {

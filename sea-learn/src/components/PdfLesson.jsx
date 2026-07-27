@@ -9,11 +9,16 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 // Renders a PDF (or a slide deck exported as PDF) in-app, page by page,
 // and logs which page the learner reached — used for both 'pdf' and 'slides' lesson types.
-export default function PdfLesson({ lesson, userId }) {
+export default function PdfLesson({ lesson, userId, onComplete }) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const viewedPagesRef = useRef(new Set());
   const completedLoggedRef = useRef(false);
+  const onCompleteRef = useRef(onComplete);
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   useEffect(() => {
     viewedPagesRef.current = new Set();
@@ -40,6 +45,8 @@ export default function PdfLesson({ lesson, userId }) {
         lesson_id: lesson.id,
         event_type: 'completed',
         progress_value: 100,
+      }).then(({ error }) => {
+        if (!error) onCompleteRef.current?.(lesson.id);
       });
     }
   }, [pageNumber, numPages, lesson.id, userId]);

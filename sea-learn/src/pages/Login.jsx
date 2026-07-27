@@ -39,7 +39,7 @@ export default function Login() {
     if (isAdmin) {
       navigate(intendedPath?.startsWith('/admin') ? intendedPath : '/admin', { replace: true });
     } else {
-      navigate(intendedPath && !intendedPath.startsWith('/admin') ? intendedPath : '/uplift/chapter/1', { replace: true });
+      navigate(intendedPath && !intendedPath.startsWith('/admin') ? intendedPath : '/uplift/session/1', { replace: true });
     }
   }, [user, isAdmin, authLoading, profileLoading, adminMode, navigate, location.state]);
 
@@ -68,7 +68,7 @@ export default function Login() {
       if (prof?.role === 'admin' || prof?.role === 'super_admin') {
         navigate(intendedPath?.startsWith('/admin') ? intendedPath : '/admin', { replace: true });
       } else {
-        navigate(intendedPath && !intendedPath.startsWith('/admin') ? intendedPath : '/uplift/chapter/1', { replace: true });
+        navigate(intendedPath && !intendedPath.startsWith('/admin') ? intendedPath : '/uplift/session/1', { replace: true });
       }
     } catch (loginError) {
       setError(getLoginErrorMessage(loginError));

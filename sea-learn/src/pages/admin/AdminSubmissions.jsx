@@ -9,10 +9,10 @@ function getYouTubeEmbedUrl(url) {
 }
 
 const SIM_LABELS = { 21: 'Prompt Engineering', 31: 'Logo Maker', 41: 'Facebook Ad Simulator', 51: 'Code Playground' };
-const CHAPTER_LABELS = { 1: 'Chapter 1', 2: 'Chapter 2', 3: 'Chapter 3', 4: 'Chapter 4', 5: 'Chapter 5' };
+const CHAPTER_LABELS = { 1: 'Session 1', 2: 'Session 2', 3: 'Session 3', 4: 'Session 4', 5: 'Session 5' };
 
 function getLabel(chapterId) {
-  return SIM_LABELS[chapterId] || CHAPTER_LABELS[chapterId] || `Chapter ${chapterId}`;
+  return SIM_LABELS[chapterId] || CHAPTER_LABELS[chapterId] || `Session ${chapterId}`;
 }
 
 function isSimulator(chapterId) {

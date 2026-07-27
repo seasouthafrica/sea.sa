@@ -68,6 +68,8 @@ export default function SimulatorSaveBar({ userId, simId, label, snapshotData, o
 
     if (error) {
       saveLocal(userId, simId, { completed: true, savedAt: now, label, data: snapshotData });
+    } else {
+      window.dispatchEvent(new CustomEvent('sea:activity-submitted', { detail: { activityId: simId } }));
     }
 
     setStatus('completed');

@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 
 const SIM_LABELS = { 21: 'Prompt Engineering', 31: 'Logo Maker', 41: 'Facebook Ad Simulator', 51: 'Code Playground' };
-const CHAPTER_LABELS = { 1: 'Introduction to Entrepreneurship', 2: 'Market Research', 3: 'Branding & Identity', 4: 'Digital Advertising', 5: 'Web Development with AI' };
+const SESSION_LABELS = { 1: 'Introduction to Entrepreneurship', 2: 'Market Research', 3: 'Branding & Identity', 4: 'Digital Advertising', 5: 'Web Development with AI' };
 
 function isSimulator(id) { return id in SIM_LABELS; }
 
@@ -52,7 +52,7 @@ export default function AdminLearnerDetail() {
   const simSubmissions = submissions.filter((s) => isSimulator(s.chapter_id));
   const assignmentSubmissions = submissions.filter((s) => !isSimulator(s.chapter_id));
   const totalActivities = submissions.filter((s) => s.status === 'submitted').length;
-  const maxActivities = 9; // 5 chapter assignments + 4 simulators
+  const maxActivities = 9; // 5 session assignments + 4 simulators
   const progressPct = Math.round((totalActivities / maxActivities) * 100);
 
   return (
@@ -127,8 +127,8 @@ export default function AdminLearnerDetail() {
         </div>
       )}
 
-      {/* Chapter Assignments */}
-      <h2 className="mb-3 text-lg font-bold text-slate-900">Chapter Assignments</h2>
+      {/* Session Assignments */}
+      <h2 className="mb-3 text-lg font-bold text-slate-900">Session Assignments</h2>
       {assignmentSubmissions.length === 0 ? (
         <p className="mb-8 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">No assignments submitted yet.</p>
       ) : (
@@ -138,7 +138,7 @@ export default function AdminLearnerDetail() {
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-bold text-blue-700">
-                    {CHAPTER_LABELS[s.chapter_id] || `Chapter ${s.chapter_id}`}
+                    {SESSION_LABELS[s.chapter_id] || `Session ${s.chapter_id}`}
                   </span>
                   <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${s.status === 'submitted' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-600'}`}>
                     {s.status === 'submitted' ? '✓ Submitted' : s.status}
@@ -173,7 +173,7 @@ export default function AdminLearnerDetail() {
         </div>
       )}
 
-      {/* Chapter Completion Overview */}
+      {/* Session Completion Overview */}
       <h2 className="mb-3 text-lg font-bold text-slate-900">Progress Summary</h2>
       <div className="mb-8 rounded-xl border border-slate-200 bg-white overflow-hidden">
         <table className="w-full text-sm">
@@ -191,7 +191,7 @@ export default function AdminLearnerDetail() {
               const done = sub?.status === 'submitted';
               return (
                 <tr key={id} className={done ? 'bg-emerald-50/50' : ''}>
-                  <td className="px-4 py-2.5 font-medium text-slate-800">{SIM_LABELS[id] || CHAPTER_LABELS[id] || `Ch ${id}`}</td>
+                  <td className="px-4 py-2.5 font-medium text-slate-800">{SIM_LABELS[id] || SESSION_LABELS[id] || `Ch ${id}`}</td>
                   <td className="px-4 py-2.5">
                     <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${isSimulator(id) ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
                       {isSimulator(id) ? 'Simulator' : 'Assignment'}

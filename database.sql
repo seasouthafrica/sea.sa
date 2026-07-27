@@ -98,8 +98,8 @@ insert into news (title, excerpt, image_url, url, published_at) values
   now() - interval '7 days'
 ),
 (
-  'Social Enterprise Schools Programme Pitching Event',
-  'Our Social Enterprise in Education Programme gives learners the opportunity to pitch the social enterprises they started at their schools.',
+  'Cape Town Cohort: GERM School Holiday Programme',
+  'On 6 July, Grade 4 to Grade 9 learners gathered at Growthpoint in Claremont for a creative learning space led by Kwazi Zulu, with support from Carmelleea Pillay. Through reflection, teamwork and practical activities, these young changemakers explored how social entrepreneurship can respond to community challenges while creating revenue and jobs. They developed and presented ideas for safe drinking water in uMlazi, a community bakery and an anti-bullying device. Young people do not only imagine the future — they can help build it.',
   null,
   '#',
   now() - interval '14 days'

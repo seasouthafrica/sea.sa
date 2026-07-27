@@ -173,13 +173,28 @@ create policy "courses_select_published_or_admin" on public.courses
 create policy "courses_write_admin_only" on public.courses
   for all using (public.is_admin()) with check (public.is_admin());
 
-create policy "modules_select_all" on public.modules
-  for select using (true);
+create policy "modules_select_published_or_admin" on public.modules
+  for select using (
+    public.is_admin() or (
+      auth.uid() is not null and exists (
+        select 1 from public.courses
+        where courses.id = modules.course_id and courses.published = true
+      )
+    )
+  );
 create policy "modules_write_admin_only" on public.modules
   for all using (public.is_admin()) with check (public.is_admin());
 
-create policy "lessons_select_all" on public.lessons
-  for select using (true);
+create policy "lessons_select_published_or_admin" on public.lessons
+  for select using (
+    public.is_admin() or (
+      auth.uid() is not null and exists (
+        select 1 from public.modules
+        join public.courses on courses.id = modules.course_id
+        where modules.id = lessons.module_id and courses.published = true
+      )
+    )
+  );
 create policy "lessons_write_admin_only" on public.lessons
   for all using (public.is_admin()) with check (public.is_admin());
 

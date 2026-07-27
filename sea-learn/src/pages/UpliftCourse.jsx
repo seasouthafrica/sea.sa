@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/useAuth';
-import { upliftChapters } from '../data/courseChapters';
+import { upliftSessions } from '../data/courseChapters';
 import AssignmentSubmission from '../components/AssignmentSubmission';
 import CodePlayground from '../components/CodePlayground';
 import LogoMaker from '../components/LogoMaker';
@@ -10,6 +10,7 @@ import FacebookAdSimulator from '../components/FacebookAdSimulator';
 import WebsitePromptSimulator from '../components/WebsitePromptSimulator';
 import PromptSimulator from '../components/PromptSimulator';
 import FreeUserBanner from '../components/FreeUserBanner';
+import Certificate from '../components/Certificate';
 
 function getYouTubeEmbedUrl(url) {
   if (!url) return null;
@@ -59,6 +60,15 @@ function ResourceList({ resources }) {
 
 const PROGRESS_KEY = 'uplift-chapter-progress';
 const QUIZ_KEY = 'uplift-quiz-scores';
+const SK_ACADEMY_LEARNERS_LICENCE_URL = 'https://skonlineacademy.thinkific.com/users/sign_in';
+const SIM_TO_SESSION = { 21: 2, 31: 3, 41: 4, 51: 5 };
+const REQUIRED_QUIZ_KEYS = [
+  'Market Research Knowledge Check',
+  'Branding Knowledge Check',
+  'Digital Advertising Knowledge Check',
+  'Knowledge Check — The Anatomy of a Website',
+  'Final Quiz — Web Development Fundamentals',
+];
 
 function hashStr(str) {
   let hash = 0;
@@ -92,17 +102,20 @@ function saveProgressToSupabase(userId, chapterId, type, data) {
 
 export default function UpliftCourse() {
   const { chapterId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const { user, profile } = useAuth();
+  const isFinalTask = location.pathname.endsWith('/final-task');
 
   const chapterNum = parseInt(chapterId || '1', 10);
-  const chapter = upliftChapters.find((c) => c.id === chapterNum) || upliftChapters[0];
+  const chapter = upliftSessions.find((c) => c.id === chapterNum) || upliftSessions[0];
 
   const [completedChapters, setCompletedChapters] = useState({});
   const [completedSims, setCompletedSims] = useState({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [submissions, setSubmissions] = useState({});
   const [quizScores, setQuizScores] = useState({});
+  const [submittedQuizKeys, setSubmittedQuizKeys] = useState(new Set());
 
   useEffect(() => {
     if (!user) return;
@@ -123,11 +136,10 @@ export default function UpliftCourse() {
         const chProgress = {};
         const qScores = {};
         const simsDone = {};
-        const SIM_TO_CHAPTER = { 21: 2, 31: 3, 41: 4, 51: 5 };
         data.forEach((s) => {
           map[s.chapter_id] = s;
-          if (s.chapter_id in SIM_TO_CHAPTER && s.status === 'submitted') {
-            simsDone[SIM_TO_CHAPTER[s.chapter_id]] = true;
+          if (s.chapter_id in SIM_TO_SESSION && s.status === 'submitted') {
+            simsDone[SIM_TO_SESSION[s.chapter_id]] = true;
           }
           if (s.explanation) {
             try {
@@ -143,6 +155,7 @@ export default function UpliftCourse() {
         });
         setSubmissions(map);
         setCompletedSims(simsDone);
+        setSubmittedQuizKeys(new Set(Object.keys(qScores)));
         const mergedProgress = { ...loadLocal(PROGRESS_KEY, user.id), ...chProgress };
         setCompletedChapters(mergedProgress);
         saveLocal(PROGRESS_KEY, user.id, mergedProgress);
@@ -153,6 +166,17 @@ export default function UpliftCourse() {
     return () => { cancelled = true; };
   }, [user]);
 
+  useEffect(() => {
+    const handleActivitySubmitted = (event) => {
+      const sessionId = SIM_TO_SESSION[event.detail?.activityId];
+      if (sessionId) {
+        setCompletedSims((current) => ({ ...current, [sessionId]: true }));
+      }
+    };
+    window.addEventListener('sea:activity-submitted', handleActivitySubmitted);
+    return () => window.removeEventListener('sea:activity-submitted', handleActivitySubmitted);
+  }, []);
+
   const markComplete = useCallback(() => {
     if (!user) return;
     const next = { ...completedChapters, [chapter.id]: true };
@@ -161,29 +185,45 @@ export default function UpliftCourse() {
     saveProgressToSupabase(user.id, chapter.id, 'chapter', { completed: true });
   }, [user, chapter.id, completedChapters]);
 
-  const saveQuizScore = useCallback((quizKey, score, total) => {
+  const saveQuizScore = useCallback(async (quizKey, score, total) => {
     if (!user) return;
     const pct = Math.round((score / total) * 100);
     const next = { ...quizScores, [quizKey]: { score, total, pct } };
     setQuizScores(next);
     saveLocal(QUIZ_KEY, user.id, next);
     const simId = (Math.abs(hashStr(quizKey)) % 9000) + 1000;
-    supabase.from('assignment_submissions').upsert({
+    const { error } = await supabase.from('assignment_submissions').upsert({
       user_id: user.id,
       chapter_id: simId,
       status: 'submitted',
       explanation: JSON.stringify({ type: 'quiz', quizKey, score, total, pct }),
       submitted_at: new Date().toISOString(),
     }, { onConflict: 'user_id,chapter_id' });
+    if (!error) {
+      setSubmittedQuizKeys((current) => new Set([...current, quizKey]));
+    }
   }, [user, quizScores]);
 
   const overallProgress = useMemo(() => {
-    const done = upliftChapters.filter((c) => completedChapters[c.id]).length;
-    return Math.round((done / upliftChapters.length) * 100);
+    const done = upliftSessions.filter((c) => completedChapters[c.id]).length;
+    return Math.round((done / upliftSessions.length) * 100);
   }, [completedChapters]);
 
+  const sessionsComplete = upliftSessions.every((session) => completedChapters[session.id]);
+  const requiredAssignmentIds = upliftSessions.filter((session) => session.hasAssignment).map((session) => session.id);
+  const assignmentsSubmitted = requiredAssignmentIds.every((id) => submissions[id]?.status === 'submitted');
+  const simulatorsSubmitted = Object.values(SIM_TO_SESSION).every((sessionId) => completedSims[sessionId]);
+  const quizzesSubmitted = REQUIRED_QUIZ_KEYS.every((key) => submittedQuizKeys.has(key));
+  const finalTaskUnlocked = sessionsComplete && assignmentsSubmitted && simulatorsSubmitted && quizzesSubmitted;
+
   const goTo = (id) => {
-    navigate(`/uplift/chapter/${id}`);
+    navigate(`/uplift/session/${id}`);
+    setSidebarOpen(false);
+    window.scrollTo(0, 0);
+  };
+
+  const goToFinalTask = () => {
+    navigate('/uplift/final-task');
     setSidebarOpen(false);
     window.scrollTo(0, 0);
   };
@@ -194,7 +234,7 @@ export default function UpliftCourse() {
       <div className="flex items-center justify-between border-b bg-white p-4 lg:hidden">
         <h1 className="text-lg font-bold text-slate-900">Uplift Digital Accelerator</h1>
         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="rounded-lg bg-gray-100 px-3 py-2 text-sm font-semibold">
-          {sidebarOpen ? 'Close' : 'Chapters'}
+          {sidebarOpen ? 'Close' : 'Sessions'}
         </button>
       </div>
 
@@ -209,12 +249,12 @@ export default function UpliftCourse() {
         <p className="mb-5 text-sm font-semibold text-gray-600">{overallProgress}% complete</p>
 
         <nav className="space-y-1.5">
-          {upliftChapters.map((c) => (
+          {upliftSessions.map((c) => (
             <button
               key={c.id}
               onClick={() => goTo(c.id)}
               className={`w-full rounded-xl px-4 py-3 text-left text-sm transition ${
-                c.id === chapter.id
+                !isFinalTask && c.id === chapter.id
                   ? 'bg-sea-teal text-white shadow-md'
                   : 'hover:bg-gray-50'
               }`}
@@ -226,20 +266,53 @@ export default function UpliftCourse() {
                   </svg>
                 )}
                 <span>
-                  <span className="block font-semibold">Chapter {c.id}</span>
-                  <span className={`block text-xs ${c.id === chapter.id ? 'text-white/80' : 'text-gray-500'}`}>{c.title}</span>
+                  <span className="block font-semibold">Session {c.id}</span>
+                  <span className={`block text-xs ${!isFinalTask && c.id === chapter.id ? 'text-white/80' : 'text-gray-500'}`}>{c.title}</span>
                 </span>
               </span>
             </button>
           ))}
+          <button
+            type="button"
+            onClick={goToFinalTask}
+            disabled={!finalTaskUnlocked}
+            className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition ${
+              isFinalTask
+                ? 'border-amber-400 bg-amber-400 text-slate-950 shadow-md'
+                : finalTaskUnlocked
+                  ? 'border-amber-300 bg-amber-50 hover:bg-amber-100'
+                  : 'cursor-not-allowed border-gray-200 bg-gray-50 text-gray-400'
+            }`}
+          >
+            <span className="flex items-start gap-2">
+              <span aria-hidden="true" className="mt-0.5">{finalTaskUnlocked ? '★' : '🔒'}</span>
+              <span>
+                <span className="block font-semibold">Final Task</span>
+                <span className={`block text-xs ${isFinalTask ? 'text-slate-800' : finalTaskUnlocked ? 'text-amber-800' : 'text-gray-400'}`}>
+                  Learner&apos;s Licence Course
+                </span>
+              </span>
+            </span>
+          </button>
         </nav>
       </aside>
 
       {/* Main content */}
       <main className="flex-1">
         <div className="mx-auto max-w-4xl px-5 py-8 sm:px-8 lg:py-12">
+          {isFinalTask ? (
+            <FinalTask
+              unlocked={finalTaskUnlocked}
+              sessionsComplete={sessionsComplete}
+              assignmentsSubmitted={assignmentsSubmitted}
+              simulatorsSubmitted={simulatorsSubmitted}
+              quizzesSubmitted={quizzesSubmitted}
+              profile={profile}
+            />
+          ) : (
+          <>
           <p className="mb-2 inline-flex rounded-full bg-sea-teal/10 px-4 py-1.5 text-sm font-bold uppercase tracking-wide text-sea-teal">
-            Chapter {chapter.id}
+            Session {chapter.id}
           </p>
           <h2 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
             {chapter.title}
@@ -264,7 +337,7 @@ export default function UpliftCourse() {
           {/* Summary & Recap */}
           {chapter.summary && (
             <div className="mt-12 rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
-              <h3 className="mb-3 text-lg font-bold text-emerald-900">Chapter Summary</h3>
+              <h3 className="mb-3 text-lg font-bold text-emerald-900">Session Summary</h3>
               <div className="space-y-2 text-sm text-emerald-800">
                 {chapter.summary.map((s, i) => <p key={i}>{s}</p>)}
               </div>
@@ -285,14 +358,14 @@ export default function UpliftCourse() {
                 disabled={chapter.hasAssignment && !submissions[chapter.id] && !completedSims[chapter.id]}
                 className="rounded-xl bg-sea-teal px-6 py-3 font-bold text-white shadow-md transition hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Mark Chapter as Complete
+                Mark Session as Complete
               </button>
             ) : (
               <span className="inline-flex items-center gap-2 rounded-xl bg-emerald-100 px-5 py-3 font-bold text-emerald-800">
                 <svg viewBox="0 0 20 20" className="h-5 w-5" fill="none">
                   <path d="M5 10.5 8.2 14 15 6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                Chapter Completed
+                Session Completed
               </span>
             )}
 
@@ -305,24 +378,106 @@ export default function UpliftCourse() {
                   ← Previous
                 </button>
               )}
-              {chapter.id < upliftChapters.length && (
+              {chapter.id < upliftSessions.length && (
                 <button
                   onClick={() => goTo(chapter.id + 1)}
                   className="rounded-xl bg-slate-900 px-5 py-3 font-semibold text-white transition hover:bg-slate-700"
                 >
-                  Continue to Chapter {chapter.id + 1} →
+                  Continue to Session {chapter.id + 1} →
                 </button>
               )}
             </div>
           </div>
 
           {chapter.hasAssignment && !submissions[chapter.id] && !completedSims[chapter.id] && (
-            <p className="mt-3 text-sm text-amber-700">Submit the assignment or complete the simulator above to mark this chapter as complete.</p>
+            <p className="mt-3 text-sm text-amber-700">Submit the assignment or complete the simulator above to mark this session as complete.</p>
+          )}
+          </>
           )}
         </div>
       </main>
       <FreeUserBanner profile={profile} />
     </div>
+  );
+}
+
+function FinalTask({ unlocked, sessionsComplete, assignmentsSubmitted, simulatorsSubmitted, quizzesSubmitted, profile }) {
+  const requirements = [
+    { label: 'Complete 100% of the course sessions', complete: sessionsComplete },
+    { label: 'Submit every practical assignment', complete: assignmentsSubmitted },
+    { label: 'Submit every interactive simulator activity', complete: simulatorsSubmitted },
+    { label: 'Submit every knowledge check and quiz', complete: quizzesSubmitted },
+  ];
+
+  return (
+    <section>
+      <p className="mb-2 inline-flex rounded-full bg-amber-100 px-4 py-1.5 text-sm font-bold uppercase tracking-wide text-amber-800">
+        Final Task
+      </p>
+      <h2 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
+        Learner&apos;s Licence Course
+      </h2>
+      <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
+        Your final task is the SK Academy Learner&apos;s Licence course, which has helped more than 30,000 students prepare for and pass their learner&apos;s licence.
+      </p>
+
+      <div className={`mt-8 rounded-3xl border-2 p-6 sm:p-8 ${unlocked ? 'border-amber-300 bg-gradient-to-br from-amber-50 to-white' : 'border-slate-200 bg-slate-50'}`}>
+        <div className="flex items-start gap-4">
+          <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl ${unlocked ? 'bg-amber-400 text-slate-950' : 'bg-slate-200 text-slate-500'}`} aria-hidden="true">
+            {unlocked ? '★' : '🔒'}
+          </span>
+          <div>
+            <h3 className="text-xl font-bold text-slate-900">
+              {unlocked ? 'Final task unlocked' : 'Complete the course to unlock this task'}
+            </h3>
+            <p className="mt-1 text-sm leading-6 text-slate-600">
+              {unlocked
+                ? 'You have completed every session and properly submitted every required activity.'
+                : 'The SK Academy course link unlocks only after every requirement below is complete.'}
+            </p>
+          </div>
+        </div>
+
+        <ul className="mt-6 space-y-3">
+          {requirements.map((requirement) => (
+            <li key={requirement.label} className="flex items-center gap-3 rounded-xl border border-white bg-white p-4 text-sm shadow-sm">
+              <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full font-bold ${requirement.complete ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-400'}`}>
+                {requirement.complete ? '✓' : '—'}
+              </span>
+              <span className={requirement.complete ? 'font-semibold text-emerald-800' : 'text-slate-600'}>{requirement.label}</span>
+            </li>
+          ))}
+        </ul>
+
+        {unlocked && (
+          <a
+            href={SK_ACADEMY_LEARNERS_LICENCE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-7 inline-flex items-center rounded-xl bg-sea-teal px-6 py-3 font-bold text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg"
+          >
+            Start the Learner&apos;s Licence Course
+            <span className="ml-2" aria-hidden="true">↗</span>
+          </a>
+        )}
+      </div>
+
+      {unlocked && (
+        <div className="mt-10 rounded-3xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 to-white p-6 sm:p-8">
+          <div className="mb-6 text-center">
+            <span className="text-4xl">🎓</span>
+            <h3 className="mt-2 text-2xl font-black text-slate-900">Your Certificate</h3>
+            <p className="mt-1 text-sm text-slate-600">
+              Congratulations{profile?.first_name ? `, ${profile.first_name}` : ''}! Download your certificate of completion below.
+            </p>
+          </div>
+          <Certificate
+            name={profile ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() : 'Learner'}
+            date={new Date().toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' })}
+          />
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -794,6 +949,103 @@ function Chapter4({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </div>
       ))}
 
+      {/* WhatsApp Ad Step-by-Step Guide */}
+      <div className="rounded-2xl border-2 border-green-200 bg-gradient-to-br from-green-50 to-white p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#25D366] text-white text-xl">💬</span>
+          <div>
+            <h3 className="text-xl font-bold text-slate-900">How to Create a WhatsApp Ad — Step by Step</h3>
+            <p className="text-sm text-slate-600">Follow along with the video above to set up your first WhatsApp ad.</p>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <div className="rounded-xl border border-green-200 bg-white p-4">
+            <div className="flex items-start gap-3">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-sm font-bold text-white">1</span>
+              <div>
+                <h4 className="font-bold text-slate-900">Download WhatsApp Business</h4>
+                <p className="mt-1 text-sm text-slate-600">Go to the <strong>Google Play Store</strong> (Android) or <strong>App Store</strong> (iPhone) and search for <strong>&quot;WhatsApp Business&quot;</strong>. Download and install the app — it has a green icon with a &quot;B&quot; inside. This is different from the regular WhatsApp app.</p>
+                <div className="mt-2 flex gap-2">
+                  <a href="https://play.google.com/store/apps/details?id=com.whatsapp.w4b" target="_blank" rel="noopener noreferrer" className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-700 transition">Google Play ↗</a>
+                  <a href="https://apps.apple.com/app/whatsapp-business/id1386412985" target="_blank" rel="noopener noreferrer" className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-700 transition">App Store ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-green-200 bg-white p-4">
+            <div className="flex items-start gap-3">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-sm font-bold text-white">2</span>
+              <div>
+                <h4 className="font-bold text-slate-900">Set Up Your Business Profile</h4>
+                <p className="mt-1 text-sm text-slate-600">Register with your business phone number. Then go to <strong>Settings → Business Tools → Business Profile</strong> and fill in your business name, category, description, address, business hours, email, and website. A complete profile builds trust with customers.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-green-200 bg-white p-4">
+            <div className="flex items-start gap-3">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-sm font-bold text-white">3</span>
+              <div>
+                <h4 className="font-bold text-slate-900">Open the Advertise Feature</h4>
+                <p className="mt-1 text-sm text-slate-600">From the WhatsApp Business home screen, tap the <strong>&quot;Advertise&quot;</strong> button (it may appear as a megaphone icon or in the three-dot menu at the top right). You can also find it under <strong>Settings → Business Tools → Advertise on Facebook</strong>.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-green-200 bg-white p-4">
+            <div className="flex items-start gap-3">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-sm font-bold text-white">4</span>
+              <div>
+                <h4 className="font-bold text-slate-900">Create Your Ad</h4>
+                <p className="mt-1 text-sm text-slate-600">Choose a photo or image for your ad. Write a short, compelling message that tells customers what you offer and why they should contact you. Keep it clear and direct — for example: <em>&quot;Fresh meal kits delivered to your door in Soweto. Order now!&quot;</em></p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-green-200 bg-white p-4">
+            <div className="flex items-start gap-3">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-sm font-bold text-white">5</span>
+              <div>
+                <h4 className="font-bold text-slate-900">Choose Your Audience</h4>
+                <p className="mt-1 text-sm text-slate-600">Select who should see your ad. You can choose <strong>Automatic</strong> (WhatsApp picks for you) or <strong>Custom</strong> to set specific targeting by location, age, gender, and interests. Start with your local area if you serve customers in person.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-green-200 bg-white p-4">
+            <div className="flex items-start gap-3">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-sm font-bold text-white">6</span>
+              <div>
+                <h4 className="font-bold text-slate-900">Set Your Budget &amp; Duration</h4>
+                <p className="mt-1 text-sm text-slate-600">Choose how much you want to spend per day and how many days the ad should run. You can start as low as <strong>R20/day</strong>. WhatsApp will show you an estimated reach based on your budget. Start small — you can always increase later based on results.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-green-200 bg-white p-4">
+            <div className="flex items-start gap-3">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-sm font-bold text-white">7</span>
+              <div>
+                <h4 className="font-bold text-slate-900">Add Payment &amp; Publish</h4>
+                <p className="mt-1 text-sm text-slate-600">Add a payment method (debit/credit card). Review your ad preview — this is how it will appear on Facebook and Instagram with a <strong>&quot;Send WhatsApp Message&quot;</strong> button. When you are happy, tap <strong>Create Ad</strong>. Your ad will be reviewed and go live within a few hours.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+            <div className="flex items-start gap-3">
+              <span className="text-xl">💡</span>
+              <div>
+                <h4 className="font-bold text-amber-900">How It Works for Customers</h4>
+                <p className="mt-1 text-sm text-amber-800">When someone sees your ad on Facebook or Instagram, they tap the <strong>&quot;Send WhatsApp Message&quot;</strong> button and land directly in a WhatsApp chat with your business. This is called a <strong>click-to-WhatsApp ad</strong> — one of the highest-converting ad types for small businesses in South Africa.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Key Metrics */}
       <div>
         <h3 className="mb-2 text-xl font-bold text-slate-900">📊 Key Advertising Metrics</h3>
@@ -863,7 +1115,7 @@ function Chapter5({ chapter, userId, submission, onSubmissionChange, onQuizScore
       {/* Learning Objectives */}
       <div className="rounded-2xl bg-slate-950 p-6 text-white">
         <h3 className="text-xl font-bold">Learning Objectives</h3>
-        <p className="mt-2 text-sm text-cyan-100">By completing this chapter you will be able to:</p>
+        <p className="mt-2 text-sm text-cyan-100">By completing this session you will be able to:</p>
         <ul className="mt-4 space-y-2.5">
           {chapter.learningOutcomes.map((o, i) => (
             <li key={i} className="flex items-start gap-3 text-sm">

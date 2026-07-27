@@ -1,4 +1,4 @@
-export const upliftChapters = [
+export const upliftSessions = [
   {
     id: 1,
     slug: 'programme-introduction',
@@ -22,7 +22,7 @@ export const upliftChapters = [
       'Find clients who need digital marketing services.',
     ],
     summary: [
-      'In this introductory chapter you were introduced to the Uplift Digital Accelerator Programme, its partnership structure and the role of Social Enterprise Academy South Africa.',
+      'In this introductory session you were introduced to the Uplift Digital Accelerator Programme, its partnership structure and the role of Social Enterprise Academy South Africa.',
       'You reviewed the full list of skills you will develop across the course, from market research and branding to digital advertising and client acquisition.',
     ],
     hasAssignment: false,
@@ -273,7 +273,7 @@ export const upliftChapters = [
     id: 5,
     slug: 'web-development-ai',
     title: 'Web Development with AI',
-    introText: 'In this chapter you will learn how websites are built using three core languages — HTML, CSS, and JavaScript — and how AI tools can accelerate the process. We use a human body metaphor to make these concepts intuitive: HTML is the skeleton (structure), CSS is the skin and face (appearance), and JavaScript is the vital organs (functionality).',
+    introText: 'In this session you will learn how websites are built using three core languages — HTML, CSS, and JavaScript — and how AI tools can accelerate the process. We use a human body metaphor to make these concepts intuitive: HTML is the skeleton (structure), CSS is the skin and face (appearance), and JavaScript is the vital organs (functionality).',
     mainVideo: 'https://youtu.be/MmZX8TOk1p0',
     learningOutcomes: [
       'Understand the three core web languages: HTML, CSS, and JavaScript.',

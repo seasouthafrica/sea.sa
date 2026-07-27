@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/useAuth';
-import { upliftChapters } from '../data/courseChapters';
+import { upliftSessions } from '../data/courseChapters';
 import { getCourseProgress } from '../lib/courseProgress';
 
 const PROGRESS_KEY = 'uplift-chapter-progress';
@@ -21,8 +21,8 @@ export default function LearnerDashboard() {
   const [error, setError] = useState('');
   const [chapterProgress, setChapterProgress] = useState({});
 
-  const completedChapters = upliftChapters.filter((c) => chapterProgress[c.id]).length;
-  const upliftPercent = Math.round((completedChapters / upliftChapters.length) * 100);
+  const completedChapters = upliftSessions.filter((c) => chapterProgress[c.id]).length;
+  const upliftPercent = Math.round((completedChapters / upliftSessions.length) * 100);
 
   useEffect(() => {
     if (!user) return;
@@ -96,9 +96,9 @@ export default function LearnerDashboard() {
           <p className="mt-1 text-sm text-gray-500">By Social Enterprise Academy and Africa Forward</p>
 
           <div className="mt-4 grid grid-cols-4 gap-2">
-            {upliftChapters.map((c) => (
+            {upliftSessions.map((c) => (
               <div key={c.id} className={`rounded-lg p-2 text-center text-xs ${chapterProgress[c.id] ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-500'}`}>
-                <span className="block font-semibold">Ch {c.id}</span>
+                <span className="block font-semibold">Session {c.id}</span>
                 <span className="block truncate">{chapterProgress[c.id] ? '✓' : '—'}</span>
               </div>
             ))}

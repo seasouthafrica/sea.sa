@@ -9,21 +9,27 @@ function getYouTubeId(url) {
 
 // Logs an activity_events row. Called on start, at progress milestones, and on completion.
 async function logEvent(userId, lessonId, eventType, progressValue = null) {
-  await supabase.from('activity_events').insert({
+  const { error } = await supabase.from('activity_events').insert({
     user_id: userId,
     lesson_id: lessonId,
     event_type: eventType,
     progress_value: progressValue,
   });
+  return !error;
 }
 
-export default function VideoLesson({ lesson, userId }) {
+export default function VideoLesson({ lesson, userId, onComplete }) {
   const videoId = getYouTubeId(lesson.content_url);
   const playerRef = useRef(null);
   const intervalRef = useRef(null);
   const milestonesLogged = useRef(new Set());
   const startedLogged = useRef(false);
   const isPlayingRef = useRef(false);
+  const onCompleteRef = useRef(onComplete);
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   useEffect(() => {
     milestonesLogged.current = new Set();
@@ -56,7 +62,9 @@ export default function VideoLesson({ lesson, userId }) {
             }
             if (event.data === window.YT.PlayerState.ENDED) {
               isPlayingRef.current = false;
-              logEvent(userId, lesson.id, 'completed', 100);
+              logEvent(userId, lesson.id, 'completed', 100).then((saved) => {
+                if (saved) onCompleteRef.current?.(lesson.id);
+              });
             }
           },
         },

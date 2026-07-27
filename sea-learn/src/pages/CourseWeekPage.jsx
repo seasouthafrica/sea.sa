@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import Flipbook from '../components/Flipbook.jsx';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient.js';
+
+const Flipbook = lazy(() => import('../components/Flipbook.jsx'));
 
 function getYouTubeEmbedUrl(url) {
   const match = url.match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/);
@@ -110,11 +111,13 @@ export default function CourseWeekPage({ course }) {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 pb-14 sm:px-8 lg:pb-20">
-        <Flipbook
-          fileUrl={presentationUrl}
-          storageKey={`course-week-${course.programmeTitle}-${course.weekNumber}-page`}
-          title={`Week ${course.weekNumber}: ${course.weekTitle}`}
-        />
+        <Suspense fallback={<div className="rounded-3xl bg-slate-50 p-8 text-center text-slate-500">Loading presentation viewer...</div>}>
+          <Flipbook
+            fileUrl={presentationUrl}
+            storageKey={`course-week-${course.programmeTitle}-${course.weekNumber}-page`}
+            title={`Week ${course.weekNumber}: ${course.weekTitle}`}
+          />
+        </Suspense>
       </section>
     </main>
   );

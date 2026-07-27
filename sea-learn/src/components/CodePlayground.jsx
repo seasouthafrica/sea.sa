@@ -243,6 +243,11 @@ export default function CodePlayground({ userId }) {
           <div>
             <h4 className={`text-lg font-bold ${colors.text}`}>{challenge.title}</h4>
             <p className="mt-1 text-sm text-slate-700">{challenge.instruction}</p>
+            {!passed && !showHint && (
+              <p className="mt-2 text-sm font-semibold hint-flicker">
+                👆 Stuck? Press the <span className="rounded bg-amber-200 px-1.5 py-0.5 font-bold text-amber-800">💡 Hint</span> button above the code editor to see an example solution.
+              </p>
+            )}
           </div>
           {completedSet.has(challenge.id) && (
             <span className="shrink-0 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">✓ Done</span>
@@ -259,7 +264,7 @@ export default function CodePlayground({ userId }) {
             <div className="flex gap-2">
               <button
                 onClick={() => setShowHint(!showHint)}
-                className="rounded-md bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 transition hover:bg-amber-200"
+                className={`rounded-md bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 transition hover:bg-amber-200 ${!showHint && !passed ? 'hint-btn-pulse' : ''}`}
               >
                 {showHint ? 'Hide Hint' : '💡 Hint'}
               </button>
@@ -396,6 +401,20 @@ export default function CodePlayground({ userId }) {
           0%, 100% { transform: translateX(0); }
           20%, 60% { transform: translateX(-4px); }
           40%, 80% { transform: translateX(4px); }
+        }
+        .hint-flicker {
+          animation: flicker 2s ease-in-out infinite;
+        }
+        @keyframes flicker {
+          0%, 100% { opacity: 1; color: #b45309; }
+          50% { opacity: 0.4; color: #d97706; }
+        }
+        .hint-btn-pulse {
+          animation: btnPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes btnPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.5); transform: scale(1); }
+          50% { box-shadow: 0 0 12px 4px rgba(245,158,11,0.3); transform: scale(1.08); }
         }
       `}</style>
     </div>

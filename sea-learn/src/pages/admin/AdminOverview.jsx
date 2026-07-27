@@ -48,7 +48,11 @@ export default function AdminOverview() {
     <div className="max-w-5xl mx-auto px-6 py-10">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Admin — Overview</h1>
-        <Link to="/admin/learners" className="text-sea-teal font-medium">View all learners →</Link>
+        <div className="flex gap-5">
+          <Link to="/admin/courses" className="text-sea-teal font-medium">Manage courses →</Link>
+          <Link to="/admin/submissions" className="text-sea-teal font-medium">Submissions →</Link>
+          <Link to="/admin/learners" className="text-sea-teal font-medium">View all learners →</Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-10">

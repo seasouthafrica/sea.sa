@@ -26,7 +26,7 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && user) navigate('/uplift/chapter/1', { replace: true });
+    if (!authLoading && user) navigate('/uplift/session/1', { replace: true });
   }, [user, authLoading, navigate]);
 
   const update = (field) => (e) => setForm({ ...form, [field]: e.target.value });
@@ -77,7 +77,7 @@ export default function SignUp() {
       await refreshAuth(data.user);
     }
     setLoading(false);
-    navigate('/uplift/chapter/1', { replace: true });
+    navigate('/uplift/session/1', { replace: true });
   };
 
   const selectField = (fieldName, options, placeholder) => (

@@ -34,8 +34,9 @@ The `courses` table already has an `Uplift` row (unpublished). To populate it:
      URL (upload PDFs/slide exports to a Storage bucket first)
 3. Set `courses.published = true` once content is ready to go live.
 
-This is currently a manual/SQL step — a proper "Add Lesson" admin UI is the
-natural next build phase once the core tracking flow is confirmed working.
+Administrators can now create draft courses, add modules and lessons, and
+publish courses from `/admin/courses`. Existing records can still be maintained
+through Supabase while edit/reorder controls are developed.
 
 ## What's stubbed vs. what's real here
 
@@ -48,11 +49,20 @@ natural next build phase once the core tracking flow is confirmed working.
 - Admin overview charts (gender, age, employment, education)
 - Admin learner table with CSV export
 - Admin learner drill-down with activity timeline
+- Admin course builder for courses, modules, video lessons, PDFs, and slides
+- Automatic enrolment when a learner opens a published course
+- Course progress calculated from completed lesson activity
+- Course completion timestamps when every lesson is completed
+- Draft curriculum protection through Supabase row-level security
 
 **Not yet built (next phases, per the development plan):**
 - Certificate generation/issuing on course completion
-- Admin "Add/Edit Lesson" UI (currently via SQL)
 - PDF summary report export (one-pager for funders)
-- Learner-facing % complete calculation from `activity_events`
-  (currently a placeholder 0% bar on the dashboard)
+- Editing, deleting, and drag-and-drop reordering existing curriculum items
 - Password reset flow UI
+
+## Upgrading an existing Supabase project
+
+Run `supabase/migrations/20260718_lms_upgrade.sql` once in the Supabase SQL
+editor. It replaces the original permissive module/lesson read policies so
+draft curricula remain admin-only and adds indexes used by progress queries.

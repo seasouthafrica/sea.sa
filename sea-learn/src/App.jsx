@@ -1,18 +1,19 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom';
 import { AuthProvider, useAuth } from './lib/useAuth';
 
 import Landing from './pages/Landing.jsx';
-import { upliftWeek1 } from './data/courseWeeks.js';
 
 const SignUp = lazy(() => import('./pages/SignUp.jsx'));
 const Login = lazy(() => import('./pages/Login.jsx'));
 const LearnerDashboard = lazy(() => import('./pages/LearnerDashboard.jsx'));
 const CoursePlayer = lazy(() => import('./pages/CoursePlayer.jsx'));
-const CourseWeekPage = lazy(() => import('./pages/CourseWeekPage.jsx'));
+const UpliftCourse = lazy(() => import('./pages/UpliftCourse.jsx'));
 const AdminOverview = lazy(() => import('./pages/admin/AdminOverview.jsx'));
 const AdminLearners = lazy(() => import('./pages/admin/AdminLearners.jsx'));
 const AdminLearnerDetail = lazy(() => import('./pages/admin/AdminLearnerDetail.jsx'));
+const AdminCourses = lazy(() => import('./pages/admin/AdminCourses.jsx'));
+const AdminSubmissions = lazy(() => import('./pages/admin/AdminSubmissions.jsx'));
 
 function PageLoader() {
   return <div className="p-8">Loading...</div>;
@@ -28,10 +29,15 @@ function RequireAuth({ children }) {
 
 function RequireAdmin({ children }) {
   const location = useLocation();
-  const { isAdmin, loading } = useAuth();
-  if (loading) return <div className="p-8">Loading…</div>;
+  const { isAdmin, loading, profileLoading } = useAuth();
+  if (loading || profileLoading) return <div className="p-8">Loading…</div>;
   if (!isAdmin) return <Navigate to="/login?admin=1" replace state={{ from: location }} />;
   return children;
+}
+
+function LegacyChapterRedirect() {
+  const { chapterId } = useParams();
+  return <Navigate to={`/uplift/session/${chapterId}`} replace />;
 }
 
 export default function App() {
@@ -44,13 +50,33 @@ export default function App() {
           <Route path="/login" element={<Login />} />
 
           <Route
-            path="/uplift/week-1"
+            path="/uplift"
             element={
               <RequireAuth>
-                <CourseWeekPage course={upliftWeek1} />
+                <UpliftCourse />
               </RequireAuth>
             }
           />
+          <Route
+            path="/uplift/session/:chapterId"
+            element={
+              <RequireAuth>
+                <UpliftCourse />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/uplift/final-task"
+            element={
+              <RequireAuth>
+                <UpliftCourse />
+              </RequireAuth>
+            }
+          />
+          {/* Legacy route redirects */}
+          <Route path="/uplift/chapter/:chapterId" element={<LegacyChapterRedirect />} />
+          <Route path="/uplift/week-1" element={<Navigate to="/uplift/session/1" replace />} />
+
           <Route
             path="/dashboard"
             element={
@@ -77,6 +103,14 @@ export default function App() {
             }
           />
           <Route
+            path="/admin/courses"
+            element={
+              <RequireAdmin>
+                <AdminCourses />
+              </RequireAdmin>
+            }
+          />
+          <Route
             path="/admin/learners"
             element={
               <RequireAdmin>
@@ -89,6 +123,14 @@ export default function App() {
             element={
               <RequireAdmin>
                 <AdminLearnerDetail />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="/admin/submissions"
+            element={
+              <RequireAdmin>
+                <AdminSubmissions />
               </RequireAdmin>
             }
           />

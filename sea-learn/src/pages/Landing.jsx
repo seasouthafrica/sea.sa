@@ -14,17 +14,18 @@ export default function Landing() {
       </header>
 
       <main className="max-w-3xl mx-auto px-6 py-16 text-center">
-        <h2 className="text-3xl font-bold mb-4">Uplift</h2>
+        <h2 className="text-3xl font-bold mb-2">Uplift Digital Accelerator Course</h2>
+        <p className="text-sm text-gray-500 mb-4">By Social Enterprise Academy and Africa Forward</p>
         <p className="text-gray-600 mb-8">
-          The first course on SEA Learn — free video lessons, readings, and
-          slides to help you grow. Sign up in a couple of minutes to start
-          tracking your progress and earn a certificate on completion.
+          A free five-session course covering market research, branding and logo
+          design, and digital advertising across Facebook, WhatsApp and Google.
+          Sign up in a couple of minutes to start tracking your progress.
         </p>
         <Link
           to="/signup"
           className="inline-block bg-sea-magenta text-white px-6 py-3 rounded-lg font-semibold"
         >
-          Start Week 1
+          Start Session 1
         </Link>
       </main>
 
