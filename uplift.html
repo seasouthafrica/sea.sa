@@ -294,6 +294,23 @@
   .faq-item[open] .plus{transform:rotate(45deg);background:var(--magenta);color:var(--paper);}
   .faq-a{padding:0 24px 22px;color:var(--muted);font-size:15px;line-height:1.65;}
 
+  /* ---------- PARTNERS ---------- */
+  .partners-section{
+    background:linear-gradient(180deg,var(--paper) 0%,var(--cream) 100%);
+    padding:76px 0;
+  }
+  .partners-head{text-align:center;max-width:720px;margin:0 auto 38px;}
+  .partners-head .eyebrow{color:var(--magenta);}
+  .partners-head h2{font-size:clamp(28px,3.4vw,40px);margin-top:12px;}
+  .partners-head p{color:var(--muted);font-size:16px;line-height:1.65;margin:14px 0 0;}
+  .partners-art{
+    overflow-x:auto;padding:18px 0 12px;
+    scrollbar-width:thin;scrollbar-color:var(--teal) #E4E7E3;
+  }
+  .partners-art:focus-visible{outline:3px solid var(--gold);outline-offset:4px;border-radius:8px;}
+  .partners-art img{width:100%;height:auto;margin:0 auto;}
+  .partners-swipe{display:none;color:var(--muted);font-size:12px;text-align:center;margin:10px 0 0;}
+
   /* ---------- CTA STRIP ---------- */
   .cta-strip{
     background:linear-gradient(120deg, var(--magenta) 0%, var(--magenta-deep) 100%);
@@ -345,6 +362,10 @@
     .facil-badges{justify-content:center;}
     .faq-q{padding:19px 18px;font-size:15px;gap:16px;}
     .faq-a{padding:0 18px 20px;}
+    .partners-section{padding:60px 0;}
+    .partners-head{margin-bottom:24px;}
+    .partners-art img{width:820px;max-width:none;}
+    .partners-swipe{display:block;}
     .cta-strip{flex-direction:column;align-items:flex-start;text-align:left;padding:38px 24px;}
     .cta-strip .btn{width:100%;}
     .foot-grid{flex-direction:column;}
@@ -546,6 +567,20 @@
         <div class="faq-a">Absolutely — portfolio development runs through every module. By the end, you'll have a professional portfolio website and client-ready work to show immediately.</div>
       </details>
     </div>
+  </div>
+</section>
+
+<section class="partners-section" aria-labelledby="partners-title">
+  <div class="wrap">
+    <div class="partners-head">
+      <div class="eyebrow">Our partners</div>
+      <h2 id="partners-title">Thank you to our partners</h2>
+      <p>We are grateful to the organisations helping us create meaningful digital-income opportunities for young people.</p>
+    </div>
+    <div class="partners-art" tabindex="0" aria-label="Partner logos — swipe horizontally on smaller screens">
+      <img src="uplift-partners.png" alt="Social Enterprise Academy, Social Enterprise Connect, Africa Forward, and Nondiya FASA">
+    </div>
+    <p class="partners-swipe" aria-hidden="true">Swipe to view all partner logos</p>
   </div>
 </section>
 
