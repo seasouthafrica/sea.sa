@@ -216,7 +216,17 @@ export default function UpliftCourse() {
   const quizzesSubmitted = REQUIRED_QUIZ_KEYS.every((key) => submittedQuizKeys.has(key));
   const finalTaskUnlocked = sessionsComplete && assignmentsSubmitted && simulatorsSubmitted && quizzesSubmitted;
 
+  const isUnlocked = useCallback((id) => id === 1 || completedChapters[id - 1], [completedChapters]);
+
+  useEffect(() => {
+    if (!isFinalTask && !isUnlocked(chapterNum)) {
+      const lastUnlocked = upliftSessions.reduce((max, c) => isUnlocked(c.id) ? c.id : max, 1);
+      navigate(`/uplift/session/${lastUnlocked}`, { replace: true });
+    }
+  }, [chapterNum, isFinalTask, isUnlocked, navigate]);
+
   const goTo = (id) => {
+    if (!isUnlocked(id)) return;
     navigate(`/uplift/session/${id}`);
     setSidebarOpen(false);
     window.scrollTo(0, 0);
@@ -249,29 +259,37 @@ export default function UpliftCourse() {
         <p className="mb-5 text-sm font-semibold text-gray-600">{overallProgress}% complete</p>
 
         <nav className="space-y-1.5">
-          {upliftSessions.map((c) => (
+          {upliftSessions.map((c) => {
+            const locked = !isUnlocked(c.id);
+            return (
             <button
               key={c.id}
               onClick={() => goTo(c.id)}
+              disabled={locked}
               className={`w-full rounded-xl px-4 py-3 text-left text-sm transition ${
-                !isFinalTask && c.id === chapter.id
-                  ? 'bg-sea-teal text-white shadow-md'
-                  : 'hover:bg-gray-50'
+                locked
+                  ? 'cursor-not-allowed opacity-50'
+                  : !isFinalTask && c.id === chapter.id
+                    ? 'bg-sea-teal text-white shadow-md'
+                    : 'hover:bg-gray-50'
               }`}
             >
               <span className="flex items-center gap-2">
-                {completedChapters[c.id] && (
+                {locked ? (
+                  <span className="shrink-0">🔒</span>
+                ) : completedChapters[c.id] ? (
                   <svg viewBox="0 0 20 20" className="h-4 w-4 shrink-0" fill="none">
                     <path d="M5 10.5 8.2 14 15 6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                )}
+                ) : null}
                 <span>
                   <span className="block font-semibold">Session {c.id}</span>
-                  <span className={`block text-xs ${!isFinalTask && c.id === chapter.id ? 'text-white/80' : 'text-gray-500'}`}>{c.title}</span>
+                  <span className={`block text-xs ${locked ? 'text-gray-400' : !isFinalTask && c.id === chapter.id ? 'text-white/80' : 'text-gray-500'}`}>{c.title}</span>
                 </span>
               </span>
             </button>
-          ))}
+            );
+          })}
           <button
             type="button"
             onClick={goToFinalTask}
@@ -381,9 +399,10 @@ export default function UpliftCourse() {
               {chapter.id < upliftSessions.length && (
                 <button
                   onClick={() => goTo(chapter.id + 1)}
-                  className="rounded-xl bg-slate-900 px-5 py-3 font-semibold text-white transition hover:bg-slate-700"
+                  disabled={!completedChapters[chapter.id]}
+                  className="rounded-xl bg-slate-900 px-5 py-3 font-semibold text-white transition hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Continue to Session {chapter.id + 1} →
+                  {completedChapters[chapter.id] ? `Continue to Session ${chapter.id + 1} →` : '🔒 Complete this session first'}
                 </button>
               )}
             </div>
