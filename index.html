@@ -124,8 +124,10 @@
       <ul class="dd-menu">
         <li><a href="#news">Latest News</a></li>
         <li><a href="#news">Learning Resources</a></li>
-        <li><a href="uplift.html">Uplift Programme</a></li>
       </ul>
+    </div>
+    <div class="dd">
+      <a href="uplift.html" style="font-weight:800;color:#bb1e6d;">Uplift Programme 🚀</a>
     </div>
     <div class="dd nav-search">
       <a href="https://sea-learn.vercel.app" target="_blank" rel="noopener" style="font-weight:800;">SEA Learn ↗</a>
@@ -464,7 +466,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span>&copy; 2025 Social Enterprise Academy South Africa. All rights reserved.</span>
+    <span>&copy; 2026 Social Enterprise Academy South Africa. All rights reserved.</span>
     <div class="social-row">
       <a href="#" title="Facebook">f</a>
       <a href="#" title="X">𝕏</a>
@@ -534,15 +536,15 @@
       <div class="news-card">
         <div class="news-card-img">
           ${item.image_url
-            ? `<img src="${item.image_url}" alt="${item.title}" onerror="this.style.display='none'">`
-            : `<div class="img-placeholder" style="background:#555; height:200px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700;">${item.title}</div>`
+            ? `<img src="${esc(item.image_url)}" alt="${esc(item.title)}" onerror="this.style.display='none'">`
+            : `<div class="img-placeholder" style="background:#555; height:200px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700;">${esc(item.title)}</div>`
           }
           <div class="news-accent ${accents[i % 3]}"></div>
         </div>
         <div class="news-card-body">
-          <h3>${item.title}</h3>
-          <p>${item.excerpt || ''}</p>
-          ${item.url ? `<a href="${item.url}" class="read-more" target="_blank">Read more →</a>` : ''}
+          <h3>${esc(item.title)}</h3>
+          <p>${esc(item.excerpt)}</p>
+          ${item.url ? `<a href="${esc(item.url)}" class="read-more" target="_blank">Read more →</a>` : ''}
         </div>
       </div>
     `).join('');
@@ -564,14 +566,14 @@
       <div class="prog-card">
         <div class="prog-img">
           ${p.image_url
-            ? `<img src="${p.image_url}" alt="${p.title}">`
-            : `<div class="prog-img-placeholder" style="background:var(--${accents[i % 3] === 'magenta' ? 'magenta' : accents[i % 3] === 'teal' ? 'teal' : 'red'}); height:220px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700;">${p.title}</div>`
+            ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}">`
+            : `<div class="prog-img-placeholder" style="background:var(--${accents[i % 3] === 'magenta' ? 'magenta' : accents[i % 3] === 'teal' ? 'teal' : 'red'}); height:220px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700;">${esc(p.title)}</div>`
           }
           <div class="prog-accent ${accents[i % 3]}"></div>
         </div>
         <div class="prog-body">
-          <h3><a href="${p.url || '#'}">${p.title}</a></h3>
-          <p>${p.description || ''}</p>
+          <h3><a href="${esc(p.url) || '#'}">${esc(p.title)}</a></h3>
+          <p>${esc(p.description)}</p>
         </div>
       </div>
     `).join('');
@@ -603,6 +605,8 @@
       form.reset();
     }
   }
+
+  function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
 
   // ── Boot ───────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
