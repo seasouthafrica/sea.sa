@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/useAuth';
 import { upliftSessions } from '../data/courseChapters';
@@ -15,6 +15,7 @@ function loadLocalProgress(userId) {
 }
 
 export default function LearnerDashboard() {
+  const navigate = useNavigate();
   const { user, profile } = useAuth();
   const [courses, setCourses] = useState([]);
   const [completedIds, setCompletedIds] = useState(new Set());
@@ -77,9 +78,17 @@ export default function LearnerDashboard() {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-10">
-      <h1 className="text-2xl font-bold mb-1">
-        Welcome{profile ? `, ${profile.first_name}` : ''}
-      </h1>
+      <div className="flex items-center justify-between mb-1">
+        <h1 className="text-2xl font-bold">
+          Welcome{profile ? `, ${profile.first_name}` : ''}
+        </h1>
+        <button
+          onClick={async () => { await supabase.auth.signOut(); navigate('/login', { replace: true }); }}
+          className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+        >
+          Log out
+        </button>
+      </div>
       <p className="text-gray-500 mb-8">Here's your learning progress on SEA Learn.</p>
       {error && <p className="mb-5 rounded-lg bg-red-50 p-4 text-red-700" role="alert">{error}</p>}
 

@@ -30,6 +30,8 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
 
   useEffect(() => {
     if (authLoading || profileLoading) return;
@@ -99,6 +101,24 @@ export default function Login() {
           {loading ? 'Logging in...' : 'Log in'}
         </button>
       </form>
+      <button
+        type="button"
+        disabled={resetLoading}
+        onClick={async () => {
+          if (!email.trim()) { setError('Enter your email above, then click Forgot password.'); return; }
+          setResetLoading(true);
+          setError('');
+          const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+            redirectTo: `${window.location.origin}/login`,
+          });
+          setResetLoading(false);
+          if (resetError) { setError(resetError.message); return; }
+          setResetSent(true);
+        }}
+        className="mt-3 text-sm text-sea-teal hover:underline disabled:opacity-50"
+      >
+        {resetLoading ? 'Sending…' : resetSent ? '✓ Reset link sent — check your email' : 'Forgot password?'}
+      </button>
       {!adminMode && (
         <p className="text-sm text-gray-500 mt-4">
           New here? <Link to="/signup" className="text-sea-teal">Create an account</Link>

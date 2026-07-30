@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/useAuth';
 import { upliftSessions } from '../data/courseChapters';
@@ -313,6 +313,15 @@ export default function UpliftCourse() {
             </span>
           </button>
         </nav>
+
+        <div className="mt-6 border-t border-gray-100 pt-4">
+          <button
+            onClick={async () => { await supabase.auth.signOut(); navigate('/login', { replace: true }); }}
+            className="w-full rounded-xl px-4 py-2.5 text-left text-sm font-semibold text-red-600 transition hover:bg-red-50"
+          >
+            Log out
+          </button>
+        </div>
       </aside>
 
       {/* Main content */}
