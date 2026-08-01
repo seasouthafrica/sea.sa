@@ -33,7 +33,7 @@ function exportCsv(rows, progressByUser) {
       `${learner.first_name} ${learner.last_name}`.trim(),
       learner.age_range,
       learner.location,
-      learner.paid ? 'Paid' : 'Free',
+      'Active',
       progress === 100 ? 'Completed' : 'In progress',
       `${progress}%`,
       new Date(learner.created_at).toLocaleDateString('en-ZA'),
@@ -63,7 +63,7 @@ export default function AdminLearners() {
     Promise.all([
       supabase
         .from('profiles')
-        .select('id, first_name, last_name, location, age_range, paid, created_at')
+        .select('id, first_name, last_name, location, age_range, created_at')
         .eq('role', 'learner')
         .order('created_at', { ascending: false }),
       supabase
@@ -128,7 +128,6 @@ export default function AdminLearners() {
             <th className="p-3">Name</th>
             <th className="p-3">Location</th>
             <th className="p-3">Age range</th>
-            <th className="p-3">Status</th>
             <th className="p-3">Uplift result</th>
             <th className="p-3">Registered</th>
             <th className="p-3"></th>
@@ -140,11 +139,6 @@ export default function AdminLearners() {
               <td className="p-3">{l.first_name} {l.last_name}</td>
               <td className="p-3">{l.location}</td>
               <td className="p-3">{l.age_range}</td>
-              <td className="p-3">
-                <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${l.paid ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-500'}`}>
-                  {l.paid ? 'Paid' : 'Free'}
-                </span>
-              </td>
               <td className="p-3">
                 <div className="flex min-w-28 items-center gap-2">
                   <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100">
