@@ -56,6 +56,7 @@ export default function AdminLearners() {
   const [learners, setLearners] = useState([]);
   const [progressByUser, setProgressByUser] = useState({});
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -78,6 +79,7 @@ export default function AdminLearners() {
       setProgressByUser(Object.fromEntries(
         Object.entries(grouped).map(([userId, rows]) => [userId, getUpliftProgress(rows)])
       ));
+      setLoading(false);
     });
     return () => {
       cancelled = true;
@@ -94,15 +96,21 @@ export default function AdminLearners() {
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Learners</h1>
-        <button
+      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-wide text-sea-teal">SEA Learn admin</p>
+          <h1 className="text-2xl font-bold">Learners</h1>
+        </div>
+        <div className="flex items-center gap-3">
+          <Link to="/admin" className="font-semibold text-sea-teal text-sm">Back to overview</Link>
+          <button
           onClick={() => exportCsv(filtered, progressByUser)}
           disabled={!filtered.length}
           className="rounded-lg bg-sea-teal px-4 py-2 text-sm font-medium text-white transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Download learner CSV
-        </button>
+            Download learner CSV
+          </button>
+        </div>
       </div>
 
       <input
@@ -111,6 +119,8 @@ export default function AdminLearners() {
         onChange={(e) => setSearch(e.target.value)}
         className="border rounded-lg px-3 py-2 mb-4 w-full max-w-sm"
       />
+
+      {loading && <p className="mb-4 text-gray-500">Loading learners…</p>}
 
       <table className="w-full text-sm border rounded-xl overflow-hidden">
         <thead className="bg-gray-50 text-left">
