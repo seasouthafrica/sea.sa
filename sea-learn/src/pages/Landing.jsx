@@ -34,7 +34,7 @@ export default function Landing() {
           © {new Date().getFullYear()} Social Enterprise Academy South Africa
         </p>
         <Link
-          to="/login?admin=1"
+          to="/admin/login"
           title="Admin access"
           aria-label="Admin login"
           className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-sea-teal"

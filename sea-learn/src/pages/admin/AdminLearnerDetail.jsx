@@ -2,8 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 
-const SIM_LABELS = { 21: 'Prompt Engineering', 31: 'Logo Maker', 41: 'Facebook Ad Simulator', 51: 'Code Playground' };
+const SIM_LABELS = { 21: 'Prompt Engineering', 31: 'Logo Maker', 41: 'Facebook Ad Simulator', 51: 'Code Playground', 52: 'Website Prompt Generator' };
 const SESSION_LABELS = { 1: 'Introduction to Entrepreneurship', 2: 'Market Research', 3: 'Branding & Identity', 4: 'Digital Advertising', 5: 'Web Development with AI' };
+const ASSIGNMENT_IDS = [2, 3, 4, 5];
+const SIMULATOR_IDS = [21, 31, 41, 51, 52];
+const SESSION_PROGRESS_IDS = [101, 102, 103, 104, 105];
+const TOTAL_REQUIREMENTS = 19; // 5 sessions + 4 assignments + 5 simulators + 5 quizzes
 
 function isSimulator(id) { return id in SIM_LABELS; }
 
@@ -13,6 +17,10 @@ function parseSimData(explanation) {
     if (p?.type === 'simulator') return p;
   } catch {}
   return null;
+}
+
+function parsePayload(explanation) {
+  try { return JSON.parse(explanation); } catch { return null; }
 }
 
 export default function AdminLearnerDetail() {
@@ -49,11 +57,16 @@ export default function AdminLearnerDetail() {
 
   if (!profile) return <div className="p-8">Loading…</div>;
 
-  const simSubmissions = submissions.filter((s) => isSimulator(s.chapter_id));
-  const assignmentSubmissions = submissions.filter((s) => !isSimulator(s.chapter_id));
-  const totalActivities = submissions.filter((s) => s.status === 'submitted').length;
-  const maxActivities = 9; // 5 session assignments + 4 simulators
-  const progressPct = Math.round((totalActivities / maxActivities) * 100);
+  const completedIds = new Set(submissions.filter((s) => s.status === 'submitted').map((s) => s.chapter_id));
+  const simSubmissions = submissions.filter((s) => SIMULATOR_IDS.includes(s.chapter_id));
+  const assignmentSubmissions = submissions.filter((s) => ASSIGNMENT_IDS.includes(s.chapter_id));
+  const quizSubmissions = submissions.filter((s) => parsePayload(s.explanation)?.type === 'quiz');
+  const completedAssignments = ASSIGNMENT_IDS.filter((id) => completedIds.has(id)).length;
+  const completedSimulators = SIMULATOR_IDS.filter((id) => completedIds.has(id)).length;
+  const completedSessions = SESSION_PROGRESS_IDS.filter((id) => completedIds.has(id)).length;
+  const completedQuizzes = quizSubmissions.filter((s) => s.status === 'submitted').length;
+  const totalActivities = completedAssignments + completedSimulators + completedSessions + completedQuizzes;
+  const progressPct = Math.min(100, Math.round((totalActivities / TOTAL_REQUIREMENTS) * 100));
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-10">
@@ -81,9 +94,28 @@ export default function AdminLearnerDetail() {
           <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center">
             <p className="text-xs font-semibold text-emerald-600">Overall Progress</p>
             <p className="text-2xl font-bold text-emerald-700">{progressPct}%</p>
-            <p className="text-xs text-emerald-500">{totalActivities}/{maxActivities} activities</p>
+            <p className="text-xs text-emerald-500">{totalActivities}/{TOTAL_REQUIREMENTS} requirements</p>
           </div>
           <PaidToggle userId={userId} paid={profile.paid} onUpdate={(paid, paidAt) => setProfile((p) => ({ ...p, paid, paid_at: paidAt }))} />
+        </div>
+      </div>
+
+      <div className="mb-8 overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-600 to-teal-600 p-5 text-white shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-100">Uplift programme result</p>
+            <h2 className="mt-1 text-2xl font-black">{progressPct === 100 ? 'Successfully completed' : 'In progress'}</h2>
+            <p className="mt-1 text-sm text-emerald-50">Sessions, assignments, practical activities and knowledge checks are included.</p>
+          </div>
+          <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-white/40 bg-white/15 text-2xl font-black">
+            {progressPct}%
+          </div>
+        </div>
+        <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <ResultMetric label="Sessions" value={`${completedSessions}/5`} />
+          <ResultMetric label="Assignments" value={`${completedAssignments}/4`} />
+          <ResultMetric label="Simulators" value={`${completedSimulators}/5`} />
+          <ResultMetric label="Quizzes" value={`${completedQuizzes}/5`} />
         </div>
       </div>
 
@@ -186,7 +218,7 @@ export default function AdminLearnerDetail() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {[1, 2, 21, 3, 31, 4, 41, 5, 51].map((id) => {
+            {[2, 21, 3, 31, 4, 41, 5, 51, 52].map((id) => {
               const sub = submissions.find((s) => s.chapter_id === id);
               const done = sub?.status === 'submitted';
               return (
@@ -214,6 +246,29 @@ export default function AdminLearnerDetail() {
         </table>
       </div>
 
+      {/* Knowledge check results */}
+      <h2 className="mb-3 text-lg font-bold text-slate-900">Knowledge Check Results</h2>
+      <div className="mb-8 grid gap-3 sm:grid-cols-2">
+        {quizSubmissions.map((submission) => {
+          const result = parsePayload(submission.explanation);
+          return (
+            <div key={submission.id} className="rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-white p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-sm font-bold text-violet-950">{result.quizKey}</p>
+                  <p className="mt-1 text-xs font-semibold text-emerald-700">Passed</p>
+                </div>
+                <span className="rounded-full bg-violet-600 px-3 py-1 text-sm font-black text-white">{result.pct}%</span>
+              </div>
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-violet-100">
+                <div className="h-full rounded-full bg-gradient-to-r from-violet-500 to-emerald-500" style={{ width: `${Math.min(100, result.pct)}%` }} />
+              </div>
+              <p className="mt-2 text-xs text-slate-500">Score: {result.score} out of {result.total}</p>
+            </div>
+          );
+        })}
+      </div>
+
       {/* Activity Timeline */}
       <h2 className="mb-3 text-lg font-bold text-slate-900">Activity Timeline</h2>
       {events.length === 0 ? (
@@ -233,6 +288,15 @@ export default function AdminLearnerDetail() {
 }
 
 function SimDataDetail({ chapterId, data }) {
+  if (chapterId === 21) {
+    const completed = data.challengesScored || data.completed || 0;
+    const total = data.total || 3;
+    return (
+      <div className="mt-2 text-sm font-semibold text-indigo-700">
+        {completed}/{total} prompt challenges completed
+      </div>
+    );
+  }
   if (chapterId === 31) {
     return (
       <div className="mt-2 grid gap-1 text-sm sm:grid-cols-3">
@@ -271,7 +335,25 @@ function SimDataDetail({ chapterId, data }) {
       </div>
     );
   }
+  if (chapterId === 52) {
+    return (
+      <div className="mt-2 grid gap-1 text-sm sm:grid-cols-3">
+        <span><b className="text-indigo-700">Business:</b> {data.businessName}</span>
+        <span><b className="text-indigo-700">Type:</b> {data.businessType}</span>
+        <span><b className="text-indigo-700">Style:</b> {data.style}</span>
+      </div>
+    );
+  }
   return null;
+}
+
+function ResultMetric({ label, value }) {
+  return (
+    <div className="rounded-xl border border-white/20 bg-white/10 px-3 py-2.5 backdrop-blur-sm">
+      <p className="text-xs text-emerald-100">{label}</p>
+      <p className="mt-0.5 text-lg font-black">{value}</p>
+    </div>
+  );
 }
 
 function PaidToggle({ userId, paid, onUpdate }) {

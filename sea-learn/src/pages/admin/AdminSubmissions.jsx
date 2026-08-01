@@ -8,8 +8,9 @@ function getYouTubeEmbedUrl(url) {
   return match ? `https://www.youtube.com/embed/${match[1]}` : null;
 }
 
-const SIM_LABELS = { 21: 'Prompt Engineering', 31: 'Logo Maker', 41: 'Facebook Ad Simulator', 51: 'Code Playground' };
+const SIM_LABELS = { 21: 'Prompt Engineering', 31: 'Logo Maker', 41: 'Facebook Ad Simulator', 51: 'Code Playground', 52: 'Website Prompt Generator' };
 const CHAPTER_LABELS = { 1: 'Session 1', 2: 'Session 2', 3: 'Session 3', 4: 'Session 4', 5: 'Session 5' };
+const ASSIGNMENT_IDS = new Set([2, 3, 4, 5]);
 
 function getLabel(chapterId) {
   return SIM_LABELS[chapterId] || CHAPTER_LABELS[chapterId] || `Session ${chapterId}`;
@@ -48,7 +49,8 @@ export default function AdminSubmissions() {
     return () => { cancelled = true; };
   }, []);
 
-  const filtered = submissions.filter((s) => {
+  const reviewableSubmissions = submissions.filter((s) => ASSIGNMENT_IDS.has(s.chapter_id) || isSimulator(s.chapter_id));
+  const filtered = reviewableSubmissions.filter((s) => {
     if (filter === 'simulators' && !isSimulator(s.chapter_id)) return false;
     if (filter === 'assignments' && isSimulator(s.chapter_id)) return false;
     if (search) {
@@ -58,8 +60,8 @@ export default function AdminSubmissions() {
     return true;
   });
 
-  const simCount = submissions.filter((s) => isSimulator(s.chapter_id)).length;
-  const assignmentCount = submissions.filter((s) => !isSimulator(s.chapter_id)).length;
+  const simCount = reviewableSubmissions.filter((s) => isSimulator(s.chapter_id)).length;
+  const assignmentCount = reviewableSubmissions.filter((s) => ASSIGNMENT_IDS.has(s.chapter_id)).length;
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
@@ -73,7 +75,7 @@ export default function AdminSubmissions() {
 
       {/* Stats */}
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatCard label="Total Submissions" value={submissions.length} color="blue" />
+        <StatCard label="Completed Activities" value={reviewableSubmissions.length} color="blue" />
         <StatCard label="Assignments" value={assignmentCount} color="amber" />
         <StatCard label="Simulator Activities" value={simCount} color="purple" />
         <StatCard label="Unique Learners" value={new Set(submissions.map((s) => s.user_id)).size} color="emerald" />
@@ -179,6 +181,22 @@ export default function AdminSubmissions() {
 }
 
 function SimulatorDataView({ chapterId, data }) {
+  if (chapterId === 21) {
+    const completed = data.challengesScored || data.completed || 0;
+    const total = data.total || 3;
+    const pct = Math.min(100, Math.round((completed / total) * 100));
+    return (
+      <div className="mt-3 rounded-xl bg-indigo-50 p-4">
+        <h4 className="mb-2 text-sm font-bold text-indigo-800">Prompt Engineering Results</h4>
+        <div className="flex items-center gap-3">
+          <div className="h-3 flex-1 overflow-hidden rounded-full bg-indigo-100">
+            <div className="h-full rounded-full bg-indigo-600" style={{ width: `${pct}%` }} />
+          </div>
+          <span className="text-sm font-black text-indigo-700">{completed}/{total} ({pct}%)</span>
+        </div>
+      </div>
+    );
+  }
   if (chapterId === 31) {
     return (
       <div className="mt-3 rounded-xl bg-purple-50 p-4">
@@ -234,6 +252,23 @@ function SimulatorDataView({ chapterId, data }) {
         {data.challenges && (
           <p className="mt-1 text-xs text-amber-600">Completed: {data.challenges.join(', ')}</p>
         )}
+      </div>
+    );
+  }
+
+  if (chapterId === 52) {
+    return (
+      <div className="mt-3 rounded-xl bg-indigo-50 p-4">
+        <h4 className="mb-2 text-sm font-bold text-indigo-800">Website Prompt</h4>
+        <div className="grid gap-2 text-sm sm:grid-cols-3">
+          <Field label="Business" value={data.businessName} />
+          <Field label="Business Type" value={data.businessType} />
+          <Field label="Style" value={data.style} />
+          <Field label="Colour Scheme" value={data.colorScheme} />
+          <Field label="Sections" value={data.sections?.join(', ')} />
+          <Field label="CTA" value={data.ctaText} />
+          {data.prompt && <div className="sm:col-span-3"><Field label="Generated Prompt" value={data.prompt} /></div>}
+        </div>
       </div>
     );
   }

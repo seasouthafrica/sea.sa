@@ -9,6 +9,7 @@ import LogoMaker from '../components/LogoMaker';
 import FacebookAdSimulator from '../components/FacebookAdSimulator';
 import WebsitePromptSimulator from '../components/WebsitePromptSimulator';
 import PromptSimulator from '../components/PromptSimulator';
+import LogoPromptBuilder from '../components/LogoPromptBuilder';
 import FreeUserBanner from '../components/FreeUserBanner';
 import Certificate from '../components/Certificate';
 
@@ -61,7 +62,8 @@ function ResourceList({ resources }) {
 const PROGRESS_KEY = 'uplift-chapter-progress';
 const QUIZ_KEY = 'uplift-quiz-scores';
 const SK_ACADEMY_LEARNERS_LICENCE_URL = 'https://skonlineacademy.thinkific.com/users/sign_in';
-const SIM_TO_SESSION = { 21: 2, 31: 3, 41: 4, 51: 5 };
+const SIM_TO_SESSION = { 21: 2, 31: 3, 41: 4, 51: 5, 52: 5 };
+const REQUIRED_SIM_IDS = Object.keys(SIM_TO_SESSION).map(Number);
 const REQUIRED_QUIZ_KEYS = [
   'Market Research Knowledge Check',
   'Branding Knowledge Check',
@@ -139,6 +141,7 @@ export default function UpliftCourse() {
         data.forEach((s) => {
           map[s.chapter_id] = s;
           if (s.chapter_id in SIM_TO_SESSION && s.status === 'submitted') {
+            simsDone[s.chapter_id] = true;
             simsDone[SIM_TO_SESSION[s.chapter_id]] = true;
           }
           if (s.explanation) {
@@ -170,7 +173,11 @@ export default function UpliftCourse() {
     const handleActivitySubmitted = (event) => {
       const sessionId = SIM_TO_SESSION[event.detail?.activityId];
       if (sessionId) {
-        setCompletedSims((current) => ({ ...current, [sessionId]: true }));
+        setCompletedSims((current) => ({
+          ...current,
+          [event.detail.activityId]: true,
+          [sessionId]: true,
+        }));
       }
     };
     window.addEventListener('sea:activity-submitted', handleActivitySubmitted);
@@ -212,7 +219,7 @@ export default function UpliftCourse() {
   const sessionsComplete = upliftSessions.every((session) => completedChapters[session.id]);
   const requiredAssignmentIds = upliftSessions.filter((session) => session.hasAssignment).map((session) => session.id);
   const assignmentsSubmitted = requiredAssignmentIds.every((id) => submissions[id]?.status === 'submitted');
-  const simulatorsSubmitted = Object.values(SIM_TO_SESSION).every((sessionId) => completedSims[sessionId]);
+  const simulatorsSubmitted = REQUIRED_SIM_IDS.every((simId) => completedSims[simId]);
   const quizzesSubmitted = REQUIRED_QUIZ_KEYS.every((key) => submittedQuizKeys.has(key));
   const finalTaskUnlocked = sessionsComplete && assignmentsSubmitted && simulatorsSubmitted && quizzesSubmitted;
 
@@ -782,12 +789,13 @@ function Chapter3({ chapter, userId, submission, onSubmissionChange, onQuizScore
           </div>
         </div>
 
-        <div className="rounded-xl bg-gray-50 p-4 text-sm leading-8 text-gray-800 font-mono">
+        <LogoPromptBuilder />
+        <div className="hidden">
           Create a modern and professional logo for a business called <span className="rounded bg-yellow-200 px-1.5 py-0.5 font-bold">[BUSINESS NAME]</span>. The business provides <span className="rounded bg-yellow-200 px-1.5 py-0.5 font-bold">[PRODUCT OR SERVICE]</span> and serves <span className="rounded bg-yellow-200 px-1.5 py-0.5 font-bold">[TARGET AUDIENCE]</span>. Use <span className="rounded bg-yellow-200 px-1.5 py-0.5 font-bold">[PREFERRED COLOURS]</span> as the main colours. The logo should communicate <span className="rounded bg-yellow-200 px-1.5 py-0.5 font-bold">[BRAND PERSONALITY OR VALUES]</span>. Include <span className="rounded bg-yellow-200 px-1.5 py-0.5 font-bold">[PREFERRED SYMBOL OR ICON, IF ANY]</span>. The design must be simple, memorable, scalable and suitable for a website, social media profile, printed material and favicon. Avoid <span className="rounded bg-yellow-200 px-1.5 py-0.5 font-bold">[ELEMENTS OR STYLES TO AVOID]</span>.
         </div>
         <button
           onClick={copyPrompt}
-          className="mt-4 rounded-lg bg-sea-teal px-5 py-2.5 font-semibold text-white transition hover:bg-sea-teal/90"
+          className="hidden"
         >
           {copied ? '✓ Copied!' : 'Copy Prompt'}
         </button>
@@ -1264,7 +1272,7 @@ function Chapter5({ chapter, userId, submission, onSubmissionChange, onQuizScore
       <div>
         <h3 className="mb-2 text-xl font-bold text-slate-900">Generate Your Website with AI</h3>
         <p className="mb-4 text-slate-600">Use this tool to describe your dream website — pick your business type, colours, and sections, then copy the generated prompt into any AI tool to build it instantly.</p>
-        <WebsitePromptSimulator />
+        <WebsitePromptSimulator userId={userId} />
       </div>
 
       {/* Video Lesson */}

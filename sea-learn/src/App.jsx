@@ -31,7 +31,7 @@ function RequireAdmin({ children }) {
   const location = useLocation();
   const { isAdmin, loading, profileLoading } = useAuth();
   if (loading || profileLoading) return <div className="p-8">Loading…</div>;
-  if (!isAdmin) return <Navigate to="/login?admin=1" replace state={{ from: location }} />;
+  if (!isAdmin) return <Navigate to="/admin/login" replace state={{ from: location }} />;
   return children;
 }
 
@@ -47,7 +47,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login mode="personal" />} />
+          <Route path="/admin/login" element={<Login mode="admin" />} />
 
           <Route
             path="/uplift"

@@ -12,6 +12,10 @@ import { withTimeout } from './withTimeout';
 const AuthContext = createContext(null);
 const PROFILE_TIMEOUT_MS = 10_000;
 const INITIAL_AUTH_TIMEOUT_MS = 8_000;
+const ADMIN_EMAILS = new Set([
+  'lungi09@gmail.com',
+  'seasa@gmail.com',
+]);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -32,12 +36,29 @@ export function AuthProvider({ children }) {
     const request = withTimeout(
       supabase
         .from('profiles')
-        .select('id, first_name, last_name, role, paid')
+        // Keep authentication compatible with databases that predate the
+        // optional paid-access migration. Admin routing only depends on role.
+        .select('id, first_name, last_name, role')
         .eq('id', sessionUser.id)
         .maybeSingle()
         .then(({ data, error }) => {
           if (error) throw error;
           return data ?? null;
+        })
+        .then(async (profile) => {
+          const email = sessionUser.email?.trim().toLowerCase();
+          if (!profile || !ADMIN_EMAILS.has(email) || ['admin', 'super_admin'].includes(profile.role)) {
+            return profile;
+          }
+
+          const { data, error } = await supabase
+            .from('profiles')
+            .update({ role: 'admin' })
+            .eq('id', sessionUser.id)
+            .select('id, first_name, last_name, role')
+            .single();
+          if (error) throw error;
+          return data;
         }),
       PROFILE_TIMEOUT_MS,
       'Your account was authenticated, but loading its profile timed out.',

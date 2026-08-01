@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
+import SimulatorSaveBar from './SimulatorSaveBar';
 
 const BUSINESS_TYPES = [
   { id: 'restaurant', label: 'Restaurant / Café', icon: '🍽️' },
@@ -42,7 +43,7 @@ const STYLE_OPTIONS = [
   { id: 'playful', label: 'Playful & Friendly', desc: 'Rounded, colourful, approachable' },
 ];
 
-export default function WebsitePromptSimulator() {
+export default function WebsitePromptSimulator({ userId }) {
   const [step, setStep] = useState(0);
   const [businessName, setBusinessName] = useState('');
   const [businessType, setBusinessType] = useState('');
@@ -530,6 +531,28 @@ REQUIREMENTS:
           </div>
         </div>
       </div>
+      {step === steps.length - 1 && businessName.trim() && businessType && (
+        <div className="border-t border-slate-100 p-5">
+          <SimulatorSaveBar
+            userId={userId}
+            simId={52}
+            label="Website Prompt Generator"
+            snapshotData={{
+              businessName,
+              businessType,
+              tagline,
+              description,
+              colorScheme,
+              style,
+              sections,
+              ctaText,
+              phone,
+              email,
+              prompt: generatePrompt(),
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
