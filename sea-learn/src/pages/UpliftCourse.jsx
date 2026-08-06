@@ -10,7 +10,6 @@ import FacebookAdSimulator from '../components/FacebookAdSimulator';
 import WebsitePromptSimulator from '../components/WebsitePromptSimulator';
 import PromptSimulator from '../components/PromptSimulator';
 import LogoPromptBuilder from '../components/LogoPromptBuilder';
-import FreeUserBanner from '../components/FreeUserBanner';
 import Certificate from '../components/Certificate';
 
 function getYouTubeEmbedUrl(url) {
@@ -223,12 +222,11 @@ export default function UpliftCourse() {
   const quizzesSubmitted = REQUIRED_QUIZ_KEYS.every((key) => submittedQuizKeys.has(key));
   const finalTaskUnlocked = sessionsComplete && assignmentsSubmitted && simulatorsSubmitted && quizzesSubmitted;
 
-  const isUnlocked = useCallback((id) => id === 1 || completedChapters[id - 1], [completedChapters]);
+  const isUnlocked = useCallback(() => true, []);
 
   useEffect(() => {
     if (!isFinalTask && !isUnlocked(chapterNum)) {
-      const lastUnlocked = upliftSessions.reduce((max, c) => isUnlocked(c.id) ? c.id : max, 1);
-      navigate(`/uplift/session/${lastUnlocked}`, { replace: true });
+      navigate(`/uplift/session/1`, { replace: true });
     }
   }, [chapterNum, isFinalTask, isUnlocked, navigate]);
 
@@ -415,10 +413,9 @@ export default function UpliftCourse() {
               {chapter.id < upliftSessions.length && (
                 <button
                   onClick={() => goTo(chapter.id + 1)}
-                  disabled={!completedChapters[chapter.id]}
-                  className="rounded-xl bg-slate-900 px-5 py-3 font-semibold text-white transition hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-xl bg-slate-900 px-5 py-3 font-semibold text-white transition hover:bg-slate-700"
                 >
-                  {completedChapters[chapter.id] ? `Continue to Session ${chapter.id + 1} →` : '🔒 Complete this session first'}
+                  Continue to Session {chapter.id + 1} →
                 </button>
               )}
             </div>
@@ -431,7 +428,6 @@ export default function UpliftCourse() {
           )}
         </div>
       </main>
-      <FreeUserBanner profile={profile} />
     </div>
   );
 }
