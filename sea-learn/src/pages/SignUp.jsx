@@ -120,7 +120,7 @@ export default function SignUp() {
 
         <input required type="email" placeholder="Email" value={form.email}
           onChange={update('email')} className="w-full border rounded-lg px-3 py-2" />
-        <input required type="password" placeholder="Password" value={form.password}
+        <input required type="password" placeholder="Password (min 6 characters)" minLength={6} value={form.password}
           onChange={update('password')} className="w-full border rounded-lg px-3 py-2" />
 
         {error && <p className="text-red-600 text-sm">{error}</p>}

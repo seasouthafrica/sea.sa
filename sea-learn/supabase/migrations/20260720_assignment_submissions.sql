@@ -26,16 +26,27 @@ create policy "submissions_select_own_or_admin" on public.assignment_submissions
   for select using (auth.uid() = user_id or public.is_admin());
 
 create policy "submissions_insert_own" on public.assignment_submissions
-  for insert with check (auth.uid() = user_id);
+  for insert with check (
+    auth.uid() = user_id
+    and status in ('draft', 'submitted')
+    and reviewed_at is null
+    and reviewer_notes is null
+  );
 
-create policy "submissions_update_own_or_admin" on public.assignment_submissions
-  for update using (auth.uid() = user_id or public.is_admin());
+create policy "submissions_update_own" on public.assignment_submissions
+  for update using (auth.uid() = user_id)
+  with check (
+    auth.uid() = user_id
+    and status in ('draft', 'submitted')
+    and reviewed_at is null
+    and reviewer_notes is null
+  );
 
--- Create a storage bucket for assignment file uploads (logos etc.)
--- NOTE: If the bucket already exists this will error harmlessly.
--- You may need to create it manually in the Supabase dashboard:
---   Storage > New bucket > name: "assignments", public: true
--- Then add a policy allowing authenticated users to upload to their own folder.
+create policy "submissions_update_admin" on public.assignment_submissions
+  for update using (public.is_admin()) with check (public.is_admin());
+
+-- Storage is provisioned as a private bucket by the security-hardening
+-- migration. Do not make assignment submissions publicly readable.
 
 -- Update gender constraint to allow only male/female for new registrations.
 -- Existing rows with other values are preserved.

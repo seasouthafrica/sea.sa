@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
+import AssignmentFile, { getAssignmentObjectPath } from '../../components/AssignmentFile';
 
 function getYouTubeEmbedUrl(url) {
   if (!url) return null;
@@ -152,11 +153,12 @@ export default function AdminSubmissions() {
 
                 {s.file_url && (
                   <div className="mt-3">
-                    {s.file_url.match(/\.(png|jpe?g|svg)$/i) ? (
-                      <img src={s.file_url} alt="Submission" className="max-h-48 rounded-lg border" />
-                    ) : (
-                      <a href={s.file_url} target="_blank" rel="noopener noreferrer" className="text-sm text-sea-teal underline">View uploaded file ↗</a>
-                    )}
+                    <AssignmentFile
+                      value={s.file_url}
+                      image={/\.(png|jpe?g)$/i.test(getAssignmentObjectPath(s.file_url))}
+                      imageClassName="max-h-48 rounded-lg border"
+                      label="View uploaded file ↗"
+                    />
                   </div>
                 )}
 

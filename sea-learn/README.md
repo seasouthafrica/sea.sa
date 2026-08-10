@@ -5,6 +5,9 @@
 1. Create a new Supabase project.
 2. Run `supabase/schema.sql` in the Supabase SQL editor. This creates every
    table, the `handle_new_user` trigger, and all RLS policies.
+   Then run every file in `supabase/migrations/` in filename order. The final
+   security migration makes assignment storage private and locks role/payment
+   fields against browser-side updates.
 3. Copy `.env.example` to `.env` and fill in your project's URL + anon key
    (Supabase project settings → API).
 4. `npm install`
@@ -63,6 +66,7 @@ through Supabase while edit/reorder controls are developed.
 
 ## Upgrading an existing Supabase project
 
-Run `supabase/migrations/20260718_lms_upgrade.sql` once in the Supabase SQL
-editor. It replaces the original permissive module/lesson read policies so
-draft curricula remain admin-only and adds indexes used by progress queries.
+Run every file in `supabase/migrations/` that has not yet been applied, in
+filename order. In particular, apply `20260810_security_hardening.sql` before
+the next deployment; the frontend assumes its private storage and RLS policies
+are active.

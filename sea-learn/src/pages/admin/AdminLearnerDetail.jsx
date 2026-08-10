@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
+import AssignmentFile, { getAssignmentObjectPath } from '../../components/AssignmentFile';
 
 const SIM_LABELS = { 21: 'Prompt Engineering', 31: 'Logo Maker', 41: 'Facebook Ad Simulator', 51: 'Code Playground', 52: 'Website Prompt Generator' };
 const SESSION_LABELS = { 1: 'Introduction to Entrepreneurship', 2: 'Market Research', 3: 'Branding & Identity', 4: 'Digital Advertising', 5: 'Web Development with AI' };
@@ -10,6 +11,11 @@ const SESSION_PROGRESS_IDS = [101, 102, 103, 104, 105];
 const TOTAL_REQUIREMENTS = 19; // 5 sessions + 4 assignments + 5 simulators + 5 quizzes
 
 function isSimulator(id) { return id in SIM_LABELS; }
+
+function getSafeYouTubeUrl(url) {
+  const match = url?.match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/);
+  return match ? `https://www.youtube.com/watch?v=${match[1]}` : null;
+}
 
 function parseSimData(explanation) {
   try {
@@ -174,17 +180,18 @@ export default function AdminLearnerDetail() {
 
               {s.file_url && (
                 <div className="mt-2">
-                  {s.file_url.match(/\.(png|jpe?g|svg)$/i) ? (
-                    <img src={s.file_url} alt="Submission" className="max-h-32 rounded-lg border" />
-                  ) : (
-                    <a href={s.file_url} target="_blank" rel="noopener noreferrer" className="text-sm text-sea-teal underline">View file ↗</a>
-                  )}
+                  <AssignmentFile
+                    value={s.file_url}
+                    image={/\.(png|jpe?g)$/i.test(getAssignmentObjectPath(s.file_url))}
+                    imageClassName="max-h-32 rounded-lg border"
+                    label="View file ↗"
+                  />
                 </div>
               )}
 
-              {s.youtube_url && (
+              {getSafeYouTubeUrl(s.youtube_url) && (
                 <p className="mt-2 text-sm text-slate-600">
-                  Video: <a href={s.youtube_url} target="_blank" rel="noopener noreferrer" className="text-sea-teal underline">{s.youtube_url}</a>
+                  Video: <a href={getSafeYouTubeUrl(s.youtube_url)} target="_blank" rel="noopener noreferrer" className="text-sea-teal underline">Open YouTube submission</a>
                 </p>
               )}
             </div>

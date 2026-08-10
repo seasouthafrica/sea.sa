@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
+import AssignmentFile, { getAssignmentObjectPath } from './AssignmentFile';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
-const ACCEPTED_FILE_TYPES = '.png,.jpg,.jpeg,.pdf,.svg';
-const ACCEPTED_MIMES = ['image/png', 'image/jpeg', 'image/svg+xml', 'application/pdf'];
+const ACCEPTED_FILE_TYPES = '.png,.jpg,.jpeg,.pdf';
+const ACCEPTED_MIMES = ['image/png', 'image/jpeg', 'application/pdf'];
 
 function isValidYouTubeUrl(url) {
   return /^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/.test(url);
@@ -46,7 +47,7 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
     if (existingSubmission) {
       setYoutubeUrl(existingSubmission.youtube_url || '');
       setExplanation(existingSubmission.explanation || '');
-      if (existingSubmission.file_url) setFilePreview(existingSubmission.file_url);
+      setFilePreview(null);
       return;
     }
     const draft = loadDraft(userId, chapterId);
@@ -63,7 +64,7 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
     if (!selected) return;
 
     if (!ACCEPTED_MIMES.includes(selected.type)) {
-      setErrorMsg('Please upload a PNG, JPG, JPEG, PDF or SVG file.');
+      setErrorMsg('Please upload a PNG, JPG, JPEG or PDF file.');
       return;
     }
     if (selected.size > MAX_FILE_SIZE) {
@@ -92,12 +93,14 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
     setStatus('submitting');
 
     try {
-      let fileUrl = existingSubmission?.file_url || null;
+      let fileUrl = getAssignmentObjectPath(existingSubmission?.file_url) || null;
 
       // Upload file for logo assignments
       if (type === 'logo-upload' && file) {
-        const ext = file.name.split('.').pop();
-        const path = `assignments/${userId}/chapter-${chapterId}/logo-${Date.now()}.${ext}`;
+        const ext = file.type === 'application/pdf'
+          ? 'pdf'
+          : file.type === 'image/png' ? 'png' : 'jpg';
+        const path = `${userId}/chapter-${chapterId}/logo-${crypto.randomUUID()}.${ext}`;
         const { error: uploadError } = await supabase.storage
           .from('assignments')
           .upload(path, file, { upsert: true });
@@ -108,8 +111,7 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
           return;
         }
 
-        const { data: publicData } = supabase.storage.from('assignments').getPublicUrl(path);
-        fileUrl = publicData.publicUrl;
+        fileUrl = path;
       }
 
       // Validate YouTube link
@@ -180,11 +182,11 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
         {existingSubmission?.file_url && (
           <div className="mt-3">
             <p className="mb-1 text-sm font-semibold text-emerald-700">Your uploaded file:</p>
-            {existingSubmission.file_url.match(/\.(png|jpe?g|svg)$/i) ? (
-              <img src={existingSubmission.file_url} alt="Submitted logo" className="max-h-40 rounded-lg border" />
-            ) : (
-              <a href={existingSubmission.file_url} target="_blank" rel="noopener noreferrer" className="text-sm text-sea-teal underline">View file ↗</a>
-            )}
+            <AssignmentFile
+              value={existingSubmission.file_url}
+              image={/\.(png|jpe?g)$/i.test(getAssignmentObjectPath(existingSubmission.file_url))}
+              label="View file ↗"
+            />
           </div>
         )}
         {existingSubmission?.youtube_url && (
@@ -215,7 +217,7 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
     <div className="space-y-4">
       {type === 'logo-upload' && (
         <div>
-          <label className="mb-2 block text-sm font-semibold text-gray-700">Upload your logo (PNG, JPG, JPEG, PDF or SVG — max 10 MB)</label>
+          <label className="mb-2 block text-sm font-semibold text-gray-700">Upload your logo (PNG, JPG, JPEG or PDF — max 10 MB)</label>
           <input
             ref={fileInputRef}
             type="file"

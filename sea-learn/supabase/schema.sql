@@ -157,13 +157,21 @@ returns boolean as $$
     select 1 from public.profiles
     where id = auth.uid() and role in ('admin','super_admin')
   );
-$$ language sql security definer stable;
+$$ language sql security definer stable set search_path = '';
 
 -- PROFILES: learners see/edit only their own row; admins see all.
 create policy "profiles_select_own_or_admin" on public.profiles
   for select using (auth.uid() = id or public.is_admin());
 create policy "profiles_update_own" on public.profiles
-  for update using (auth.uid() = id);
+  for update using (auth.uid() = id) with check (auth.uid() = id);
+
+-- Browser clients may edit profile details, but privilege and payment fields
+-- are controlled only through trusted SQL/service-role operations.
+revoke update on table public.profiles from authenticated;
+grant update (
+  first_name, last_name, age_range, location, education_level,
+  employment_status, disability_status, gender
+) on table public.profiles to authenticated;
 
 -- COURSES / MODULES / LESSONS: published content is publicly readable
 -- (so the catalogue page can show course info before signup);
