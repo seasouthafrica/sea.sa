@@ -26,13 +26,14 @@ function escapeCsv(value) {
 
 function exportCsv(rows, progressByUser) {
   if (!rows.length) return;
-  const headers = ['Learner name', 'Age range', 'Location', 'Access status', 'Uplift status', 'Uplift completion', 'Registered'];
+  const headers = ['Learner name', 'Age range', 'Province', 'Country', 'Access status', 'Uplift status', 'Uplift completion', 'Registered'];
   const reportRows = rows.map((learner) => {
     const progress = progressByUser[learner.id] || 0;
     return [
       `${learner.first_name} ${learner.last_name}`.trim(),
       learner.age_range,
-      learner.location,
+      learner.province || learner.location || '',
+      learner.country || '',
       'Active',
       progress === 100 ? 'Completed' : 'In progress',
       `${progress}%`,
@@ -63,7 +64,7 @@ export default function AdminLearners() {
     Promise.all([
       supabase
         .from('profiles')
-        .select('id, first_name, last_name, location, age_range, created_at')
+        .select('id, first_name, last_name, location, province, age_range, country, created_at')
         .eq('role', 'learner')
         .order('created_at', { ascending: false }),
       supabase
@@ -126,7 +127,7 @@ export default function AdminLearners() {
         <thead className="bg-gray-50 text-left">
           <tr>
             <th className="p-3">Name</th>
-            <th className="p-3">Location</th>
+            <th className="p-3">Province</th>
             <th className="p-3">Age range</th>
             <th className="p-3">Uplift result</th>
             <th className="p-3">Registered</th>
@@ -137,7 +138,7 @@ export default function AdminLearners() {
           {filtered.map((l) => (
             <tr key={l.id} className="border-t">
               <td className="p-3">{l.first_name} {l.last_name}</td>
-              <td className="p-3">{l.location}</td>
+              <td className="p-3">{l.province || l.location || '—'}</td>
               <td className="p-3">{l.age_range}</td>
               <td className="p-3">
                 <div className="flex min-w-28 items-center gap-2">

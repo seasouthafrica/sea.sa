@@ -10,7 +10,8 @@ create policy "profiles_update_own" on public.profiles
 revoke update on table public.profiles from authenticated;
 grant update (
   first_name, last_name, age_range, location, education_level,
-  employment_status, disability_status, gender
+  employment_status, disability_status, gender,
+  country, phone, province, ethnicity, referral_channel, referral_other
 ) on table public.profiles to authenticated;
 
 -- Learners may submit their own work, but cannot self-approve it or write

@@ -39,7 +39,7 @@ export default function AdminLearnerDetail() {
     let cancelled = false;
     supabase
       .from('profiles')
-      .select('id, first_name, last_name, location, age_range, gender, education_level, employment_status, disability_status, created_at')
+      .select('id, first_name, last_name, location, age_range, gender, education_level, employment_status, disability_status, country, phone, province, ethnicity, referral_channel, referral_other, created_at')
       .eq('id', userId)
       .single()
       .then(({ data }) => { if (!cancelled) setProfile(data); });
@@ -114,11 +114,17 @@ export default function AdminLearnerDetail() {
 
       {/* Profile Details */}
       <div className="mb-8 grid grid-cols-2 gap-4 rounded-xl border border-slate-200 bg-white p-5 text-sm sm:grid-cols-3">
-        <Field label="Age range" value={profile.age_range} />
+        <Field label="Country" value={profile.country} />
+        <Field label="Province" value={profile.province} />
+        <Field label="Phone" value={profile.phone} />
+        <Field label="Ethnicity" value={profile.ethnicity} />
+        <Field label="Age group" value={profile.age_range} />
         <Field label="Gender" value={profile.gender} />
-        <Field label="Education level" value={profile.education_level} />
-        <Field label="Employment status" value={profile.employment_status} />
-        <Field label="Disability status" value={profile.disability_status} />
+        <Field label="Disability" value={profile.disability_status} />
+        <Field label="Employment" value={profile.employment_status} />
+        <Field label="Education" value={profile.education_level} />
+        <Field label="Referral" value={profile.referral_channel === 'other' && profile.referral_other ? `Other: ${profile.referral_other}` : profile.referral_channel} />
+        <Field label="Location" value={profile.location} />
         <Field label="Registered" value={new Date(profile.created_at).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' })} />
       </div>
 

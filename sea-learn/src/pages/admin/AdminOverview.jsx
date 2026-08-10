@@ -29,7 +29,7 @@ export default function AdminOverview() {
     Promise.all([
       supabase
         .from('profiles')
-        .select('id, gender, age_range, employment_status, education_level')
+        .select('id, gender, age_range, employment_status, education_level, ethnicity, province')
         .eq('role', 'learner'),
       supabase
         .from('assignment_submissions')
@@ -74,6 +74,8 @@ export default function AdminOverview() {
   const ageData = useMemo(() => groupCount(profiles, 'age_range'), [profiles]);
   const employmentData = useMemo(() => groupCount(profiles, 'employment_status'), [profiles]);
   const educationData = useMemo(() => groupCount(profiles, 'education_level'), [profiles]);
+  const ethnicityData = useMemo(() => groupCount(profiles, 'ethnicity'), [profiles]);
+  const provinceData = useMemo(() => groupCount(profiles, 'province'), [profiles]);
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10">
@@ -149,6 +151,28 @@ export default function AdminOverview() {
                   <YAxis allowDecimals={false} />
                   <Tooltip />
                   <Bar dataKey="value" fill="#F2A900" />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            <ChartCard title="Ethnicity">
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie data={ethnicityData} dataKey="value" nameKey="name" outerRadius={90} label>
+                    {ethnicityData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            <ChartCard title="Province">
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={provinceData}>
+                  <XAxis dataKey="name" fontSize={10} />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="value" fill="#6C5CE7" />
                 </BarChart>
               </ResponsiveContainer>
             </ChartCard>
