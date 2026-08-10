@@ -31,6 +31,11 @@ const EMPLOYMENT = [
   'Unemployed', 'Employed', 'Self-employed', 'Student', 'Prefer not to say',
 ];
 
+const EDUCATION_LEVELS = [
+  'No schooling', 'Some primary', 'Primary', 'Some secondary', 'Matric',
+  'Certificate / diploma', 'Degree or higher', 'Prefer not to say',
+];
+
 const REFERRAL_CHANNELS = [
   'Social media', 'Word of mouth', 'SEA website', 'Partner organisation',
   'Event / workshop', 'Google search', 'Other',
@@ -47,7 +52,7 @@ export default function SignUp() {
     first_name: '', last_name: '', email: '', password: '',
     country: '', phone: '', province: '', ethnicity: '',
     age_range: '', gender: '', disability_status: '',
-    employment_status: '', referral_channel: '', referral_other: '',
+    education_level: '', employment_status: '', referral_channel: '', referral_other: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -57,6 +62,7 @@ export default function SignUp() {
   }, [user, authLoading, navigate]);
 
   const update = (field) => (e) => setForm({ ...form, [field]: e.target.value });
+  const updateCountry = (e) => setForm({ ...form, country: e.target.value, province: '' });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,6 +83,7 @@ export default function SignUp() {
           age_range: toValue(form.age_range),
           gender: toValue(form.gender),
           disability_status: toValue(form.disability_status),
+          education_level: toValue(form.education_level).replace('degree_or_higher', 'degree_plus'),
           employment_status: toValue(form.employment_status),
           referral_channel: toValue(form.referral_channel),
           referral_other: form.referral_channel === 'Other' ? form.referral_other : '',
@@ -162,19 +169,41 @@ export default function SignUp() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="mb-1 block text-xs font-semibold text-slate-600">Country / Region *</label>
-                {selectField('country', COUNTRIES, 'Select country / region')}
+                <input
+                  required
+                  list="country-options"
+                  placeholder="Select or enter country"
+                  value={form.country}
+                  onChange={updateCountry}
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm"
+                />
+                <datalist id="country-options">
+                  {COUNTRIES.filter((country) => country !== 'Other').map((country) => (
+                    <option key={country} value={country} />
+                  ))}
+                </datalist>
               </div>
               <div>
                 <label className="mb-1 block text-xs font-semibold text-slate-600">Phone *</label>
-                <input required type="tel" placeholder="e.g. 071 234 5678" value={form.phone}
+                <input required type="tel" inputMode="tel" minLength={7} maxLength={30}
+                  pattern="[+0-9][0-9 ().-]{6,29}" title="Enter a valid phone number"
+                  placeholder="e.g. +27 71 234 5678" value={form.phone}
                   onChange={update('phone')}
                   className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm" />
               </div>
             </div>
 
             <div>
-              <label className="mb-1 block text-xs font-semibold text-slate-600">Province *</label>
-              {selectField('province', PROVINCES, 'Select province')}
+              <label className="mb-1 block text-xs font-semibold text-slate-600">
+                {form.country === 'South Africa' ? 'Province *' : 'State / Province / Region *'}
+              </label>
+              {form.country === 'South Africa' ? (
+                selectField('province', PROVINCES, 'Select province')
+              ) : (
+                <input required placeholder="Enter state, province or region" value={form.province}
+                  onChange={update('province')}
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm" />
+              )}
             </div>
           </fieldset>
 
@@ -201,6 +230,11 @@ export default function SignUp() {
                 <label className="mb-1 block text-xs font-semibold text-slate-600">Disabled *</label>
                 {selectField('disability_status', DISABILITY, 'Select')}
               </div>
+            </div>
+
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-slate-600">Education Level *</label>
+              {selectField('education_level', EDUCATION_LEVELS, 'Select')}
             </div>
 
             <div>

@@ -58,30 +58,43 @@ export default function AdminLearners() {
   const [progressByUser, setProgressByUser] = useState({});
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([
-      supabase
-        .from('profiles')
-        .select('id, first_name, last_name, location, province, age_range, country, created_at')
-        .eq('role', 'learner')
-        .order('created_at', { ascending: false }),
-      supabase
-        .from('assignment_submissions')
-        .select('user_id, chapter_id, status, explanation'),
-    ]).then(([profilesResult, submissionsResult]) => {
-      if (cancelled) return;
-      setLearners(profilesResult.data ?? []);
-      const grouped = {};
-      (submissionsResult.data ?? []).forEach((row) => {
-        (grouped[row.user_id] ||= []).push(row);
-      });
-      setProgressByUser(Object.fromEntries(
-        Object.entries(grouped).map(([userId, rows]) => [userId, getUpliftProgress(rows)])
-      ));
-      setLoading(false);
-    });
+    async function loadLearners() {
+      try {
+        const [profilesResult, submissionsResult] = await Promise.all([
+          supabase.from('profiles').select('*').eq('role', 'learner').order('created_at', { ascending: false }),
+          supabase.from('assignment_submissions').select('user_id, chapter_id, status, explanation'),
+        ]);
+        if (cancelled) return;
+
+        const errors = [profilesResult.error, submissionsResult.error].filter(Boolean);
+        if (errors.length) {
+          console.error('[admin/learners] Unable to load learner information.', errors);
+          setError(errors.map((queryError) => queryError.message).join('; '));
+        }
+
+        setLearners(profilesResult.data ?? []);
+        const grouped = {};
+        (submissionsResult.data ?? []).forEach((row) => {
+          (grouped[row.user_id] ||= []).push(row);
+        });
+        setProgressByUser(Object.fromEntries(
+          Object.entries(grouped).map(([userId, rows]) => [userId, getUpliftProgress(rows)])
+        ));
+      } catch (loadError) {
+        if (!cancelled) {
+          console.error('[admin/learners] Unexpected learner query error.', loadError);
+          setError(loadError.message || 'Unable to load learner information.');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    void loadLearners();
     return () => {
       cancelled = true;
     };
@@ -122,6 +135,7 @@ export default function AdminLearners() {
       />
 
       {loading && <p className="mb-4 text-gray-500">Loading learners…</p>}
+      {error && <p className="mb-4 rounded-xl bg-red-50 p-4 text-red-700" role="alert">{error}</p>}
 
       <table className="w-full text-sm border rounded-xl overflow-hidden">
         <thead className="bg-gray-50 text-left">
@@ -161,6 +175,13 @@ export default function AdminLearners() {
               </td>
             </tr>
           ))}
+          {!loading && filtered.length === 0 && (
+            <tr>
+              <td colSpan="6" className="border-t p-8 text-center text-slate-500">
+                {search ? 'No learners match your search.' : 'No learner profiles are available yet.'}
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

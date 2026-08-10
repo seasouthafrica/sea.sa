@@ -11,10 +11,19 @@ const TOTAL_UPLIFT_REQUIREMENTS = 19;
 function groupCount(rows, field) {
   const counts = {};
   rows.forEach((r) => {
-    const key = r[field] || 'Unknown';
+    const raw = typeof r[field] === 'string' ? r[field].trim() : r[field];
+    const key = raw ? formatLabel(raw) : 'Not provided';
     counts[key] = (counts[key] || 0) + 1;
   });
-  return Object.entries(counts).map(([name, value]) => ({ name, value }));
+  return Object.entries(counts)
+    .map(([name, value]) => ({ name, value }))
+    .sort((a, b) => b.value - a.value || a.name.localeCompare(b.name));
+}
+
+function formatLabel(value) {
+  return String(value)
+    .replaceAll('_', ' ')
+    .replace(/\b\w/g, (character) => character.toUpperCase());
 }
 
 export default function AdminOverview() {
@@ -26,22 +35,35 @@ export default function AdminOverview() {
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([
-      supabase
-        .from('profiles')
-        .select('id, gender, age_range, employment_status, education_level, ethnicity, province')
-        .eq('role', 'learner'),
-      supabase
-        .from('assignment_submissions')
-        .select('user_id, chapter_id, status, explanation'),
-    ]).then(([profilesResult, submissionsResult]) => {
-      if (cancelled) return;
-      if (profilesResult.error) setError(profilesResult.error.message);
-      if (submissionsResult.error) setError((prev) => prev ? `${prev}; ${submissionsResult.error.message}` : submissionsResult.error.message);
-      setProfiles(profilesResult.data ?? []);
-      setSubmissions(submissionsResult.data ?? []);
-      setLoading(false);
-    });
+    async function loadDashboard() {
+      setError('');
+      try {
+        const [profilesResult, submissionsResult] = await Promise.all([
+          // Avoid rejecting the entire query while optional registration
+          // columns roll out across Supabase environments.
+          supabase.from('profiles').select('*').eq('role', 'learner'),
+          supabase.from('assignment_submissions').select('user_id, chapter_id, status, explanation'),
+        ]);
+        if (cancelled) return;
+
+        const errors = [profilesResult.error, submissionsResult.error].filter(Boolean);
+        if (errors.length) {
+          console.error('[admin/overview] Unable to load dashboard data.', errors);
+          setError(errors.map((queryError) => queryError.message).join('; '));
+        }
+        setProfiles(profilesResult.data ?? []);
+        setSubmissions(submissionsResult.data ?? []);
+      } catch (loadError) {
+        if (!cancelled) {
+          console.error('[admin/overview] Unexpected dashboard error.', loadError);
+          setError(loadError.message || 'Unable to load dashboard information.');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    void loadDashboard();
     return () => { cancelled = true; };
   }, []);
 
@@ -76,6 +98,9 @@ export default function AdminOverview() {
   const educationData = useMemo(() => groupCount(profiles, 'education_level'), [profiles]);
   const ethnicityData = useMemo(() => groupCount(profiles, 'ethnicity'), [profiles]);
   const provinceData = useMemo(() => groupCount(profiles, 'province'), [profiles]);
+  const countryData = useMemo(() => groupCount(profiles, 'country'), [profiles]);
+  const disabilityData = useMemo(() => groupCount(profiles, 'disability_status'), [profiles]);
+  const referralData = useMemo(() => groupCount(profiles, 'referral_channel'), [profiles]);
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10">
@@ -110,8 +135,14 @@ export default function AdminOverview() {
             <StatCard label="Uplift completion rate" value={`${completionRate}%`} />
           </div>
 
+          {totalLearners === 0 && !error && (
+            <p className="mb-8 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-slate-600">
+              No learner profiles are available yet. New registrations will appear here automatically.
+            </p>
+          )}
+
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <ChartCard title="Gender">
+            <ChartCard title="Gender" data={genderData}>
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie data={genderData} dataKey="value" nameKey="name" outerRadius={90} label>
@@ -122,7 +153,7 @@ export default function AdminOverview() {
               </ResponsiveContainer>
             </ChartCard>
 
-            <ChartCard title="Age range">
+            <ChartCard title="Age range" data={ageData}>
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={ageData}>
                   <XAxis dataKey="name" fontSize={10} />
@@ -133,7 +164,7 @@ export default function AdminOverview() {
               </ResponsiveContainer>
             </ChartCard>
 
-            <ChartCard title="Employment status">
+            <ChartCard title="Employment status" data={employmentData}>
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={employmentData}>
                   <XAxis dataKey="name" fontSize={10} />
@@ -144,7 +175,7 @@ export default function AdminOverview() {
               </ResponsiveContainer>
             </ChartCard>
 
-            <ChartCard title="Education level">
+            <ChartCard title="Education level" data={educationData}>
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={educationData}>
                   <XAxis dataKey="name" fontSize={10} />
@@ -155,7 +186,7 @@ export default function AdminOverview() {
               </ResponsiveContainer>
             </ChartCard>
 
-            <ChartCard title="Ethnicity">
+            <ChartCard title="Ethnicity" data={ethnicityData}>
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie data={ethnicityData} dataKey="value" nameKey="name" outerRadius={90} label>
@@ -166,13 +197,46 @@ export default function AdminOverview() {
               </ResponsiveContainer>
             </ChartCard>
 
-            <ChartCard title="Province">
+            <ChartCard title="Province / region" data={provinceData}>
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={provinceData}>
                   <XAxis dataKey="name" fontSize={10} />
                   <YAxis allowDecimals={false} />
                   <Tooltip />
                   <Bar dataKey="value" fill="#6C5CE7" />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            <ChartCard title="Country" data={countryData}>
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={countryData}>
+                  <XAxis dataKey="name" fontSize={10} />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="value" fill="#00B894" />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            <ChartCard title="Disability status" data={disabilityData}>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie data={disabilityData} dataKey="value" nameKey="name" outerRadius={90} label>
+                    {disabilityData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            <ChartCard title="Referral channel" data={referralData}>
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={referralData}>
+                  <XAxis dataKey="name" fontSize={10} />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="value" fill="#636E72" />
                 </BarChart>
               </ResponsiveContainer>
             </ChartCard>
@@ -192,11 +256,15 @@ function StatCard({ label, value }) {
   );
 }
 
-function ChartCard({ title, children }) {
+function ChartCard({ title, data, children }) {
   return (
     <div className="border rounded-xl p-5">
       <h3 className="font-semibold mb-3">{title}</h3>
-      {children}
+      {data.length ? children : (
+        <div className="flex h-[250px] items-center justify-center text-sm text-slate-400">
+          No information available
+        </div>
+      )}
     </div>
   );
 }

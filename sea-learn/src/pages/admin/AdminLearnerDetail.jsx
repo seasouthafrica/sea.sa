@@ -34,34 +34,60 @@ export default function AdminLearnerDetail() {
   const [profile, setProfile] = useState(null);
   const [events, setEvents] = useState([]);
   const [submissions, setSubmissions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     let cancelled = false;
-    supabase
-      .from('profiles')
-      .select('id, first_name, last_name, location, age_range, gender, education_level, employment_status, disability_status, country, phone, province, ethnicity, referral_channel, referral_other, created_at')
-      .eq('id', userId)
-      .single()
-      .then(({ data }) => { if (!cancelled) setProfile(data); });
+    async function loadLearner() {
+      try {
+        const [profileResult, eventsResult, submissionsResult] = await Promise.all([
+          supabase.from('profiles').select('*').eq('id', userId).single(),
+          supabase
+            .from('activity_events')
+            .select('id, event_type, progress_value, occurred_at, lessons(title)')
+            .eq('user_id', userId).order('occurred_at', { ascending: false })
+            .limit(200),
+          supabase
+            .from('assignment_submissions')
+            .select('id, chapter_id, status, explanation, youtube_url, file_url, submitted_at')
+            .eq('user_id', userId)
+            .order('submitted_at', { ascending: false }),
+        ]);
+        if (cancelled) return;
 
-    supabase
-      .from('activity_events')
-      .select('id, event_type, progress_value, occurred_at, lessons(title)')
-      .eq('user_id', userId).order('occurred_at', { ascending: false })
-      .limit(200)
-      .then(({ data }) => { if (!cancelled) setEvents(data ?? []); });
+        const errors = [profileResult.error, eventsResult.error, submissionsResult.error].filter(Boolean);
+        if (errors.length) {
+          console.error('[admin/learner-detail] Unable to load learner information.', errors);
+          setError(errors.map((queryError) => queryError.message).join('; '));
+        }
+        setProfile(profileResult.data ?? null);
+        setEvents(eventsResult.data ?? []);
+        setSubmissions(submissionsResult.data ?? []);
+      } catch (loadError) {
+        if (!cancelled) {
+          console.error('[admin/learner-detail] Unexpected learner query error.', loadError);
+          setError(loadError.message || 'Unable to load learner information.');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
 
-    supabase
-      .from('assignment_submissions')
-      .select('id, chapter_id, status, explanation, youtube_url, file_url, submitted_at')
-      .eq('user_id', userId)
-      .order('submitted_at', { ascending: false })
-      .then(({ data }) => { if (!cancelled) setSubmissions(data ?? []); });
+    void loadLearner();
 
     return () => { cancelled = true; };
   }, [userId]);
 
-  if (!profile) return <div className="p-8">Loading…</div>;
+  if (loading) return <div className="p-8">Loading…</div>;
+  if (!profile) return (
+    <div className="mx-auto max-w-3xl p-8">
+      <p className="rounded-xl bg-red-50 p-4 text-red-700" role="alert">
+        {error || 'Learner information could not be found.'}
+      </p>
+      <Link to="/admin/learners" className="mt-4 inline-block font-semibold text-sea-teal">Back to learners</Link>
+    </div>
+  );
 
   const completedIds = new Set(submissions.filter((s) => s.status === 'submitted').map((s) => s.chapter_id));
   const simSubmissions = submissions.filter((s) => SIMULATOR_IDS.includes(s.chapter_id));
@@ -84,7 +110,9 @@ export default function AdminLearnerDetail() {
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">{profile.first_name} {profile.last_name}</h1>
-          <p className="text-gray-500">{profile.location}</p>
+          <p className="text-gray-500">
+            {[profile.province || profile.location, profile.country].filter(Boolean).join(', ') || 'Location not provided'}
+          </p>
         </div>
         <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center">
           <p className="text-xs font-semibold text-emerald-600">Overall Progress</p>

@@ -10,9 +10,18 @@ create table public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   first_name text not null,
   last_name text not null,
-  age_range text not null check (age_range in
-    ('under_18','18_24','25_34','35_44','45_54','55_plus','prefer_not_to_say')),
+  age_range text not null check (age_range in (
+    'under_18','18_24','25_34','35_44','45_54','55_plus',
+    'under 18','18–24','25–34','35–44','45–54','55+',
+    'prefer_not_to_say'
+  )),
   location text,
+  country text,
+  phone text,
+  province text,
+  ethnicity text,
+  referral_channel text,
+  referral_other text,
   education_level text check (education_level in
     ('no_schooling','some_primary','primary','some_secondary','matric',
      'certificate_diploma','degree_plus','prefer_not_to_say')),
@@ -33,22 +42,29 @@ returns trigger as $$
 begin
   insert into public.profiles (
     id, first_name, last_name, age_range, location,
-    education_level, employment_status, disability_status, gender
+    education_level, employment_status, disability_status, gender,
+    country, phone, province, ethnicity, referral_channel, referral_other
   )
   values (
     new.id,
-    new.raw_user_meta_data->>'first_name',
-    new.raw_user_meta_data->>'last_name',
-    new.raw_user_meta_data->>'age_range',
+    coalesce(new.raw_user_meta_data->>'first_name', ''),
+    coalesce(new.raw_user_meta_data->>'last_name', ''),
+    coalesce(new.raw_user_meta_data->>'age_range', 'prefer_not_to_say'),
     new.raw_user_meta_data->>'location',
     new.raw_user_meta_data->>'education_level',
     new.raw_user_meta_data->>'employment_status',
     new.raw_user_meta_data->>'disability_status',
-    new.raw_user_meta_data->>'gender'
+    new.raw_user_meta_data->>'gender',
+    new.raw_user_meta_data->>'country',
+    new.raw_user_meta_data->>'phone',
+    new.raw_user_meta_data->>'province',
+    new.raw_user_meta_data->>'ethnicity',
+    new.raw_user_meta_data->>'referral_channel',
+    new.raw_user_meta_data->>'referral_other'
   );
   return new;
 end;
-$$ language plpgsql security definer;
+$$ language plpgsql security definer set search_path = '';
 
 create trigger on_auth_user_created
   after insert on auth.users
@@ -170,7 +186,8 @@ create policy "profiles_update_own" on public.profiles
 revoke update on table public.profiles from authenticated;
 grant update (
   first_name, last_name, age_range, location, education_level,
-  employment_status, disability_status, gender
+  employment_status, disability_status, gender,
+  country, phone, province, ethnicity, referral_channel, referral_other
 ) on table public.profiles to authenticated;
 
 -- COURSES / MODULES / LESSONS: published content is publicly readable

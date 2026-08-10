@@ -54,4 +54,10 @@ begin
   );
   return new;
 end;
-$$ language plpgsql security definer;
+$$ language plpgsql security definer set search_path = '';
+
+-- Preserve the restricted profile-update model while allowing users to edit
+-- the newly introduced non-privileged fields in future profile screens.
+grant update (
+  country, phone, province, ethnicity, referral_channel, referral_other
+) on table public.profiles to authenticated;
