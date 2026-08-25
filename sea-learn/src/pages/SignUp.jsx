@@ -50,7 +50,7 @@ export default function SignUp() {
   const { user, loading: authLoading, refreshAuth } = useAuth();
   const [form, setForm] = useState({
     first_name: '', last_name: '', email: '', password: '',
-    country: '', phone: '', province: '', ethnicity: '',
+    id_number: '', country: '', phone: '', province: '', ethnicity: '',
     age_range: '', gender: '', disability_status: '',
     education_level: '', employment_status: '', referral_channel: '', referral_other: '',
   });
@@ -76,6 +76,7 @@ export default function SignUp() {
         data: {
           first_name: form.first_name,
           last_name: form.last_name,
+          id_number: form.id_number,
           country: form.country,
           phone: form.phone,
           province: form.province,
@@ -157,6 +158,13 @@ export default function SignUp() {
                   onChange={update('last_name')}
                   className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm" />
               </div>
+            </div>
+
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-slate-600">SA ID Number / Passport Number *</label>
+              <input required placeholder="e.g. 9501015800085" value={form.id_number}
+                onChange={update('id_number')}
+                className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm" />
             </div>
 
             <div>

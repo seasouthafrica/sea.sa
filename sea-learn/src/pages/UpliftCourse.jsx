@@ -11,6 +11,7 @@ import WebsitePromptSimulator from '../components/WebsitePromptSimulator';
 import PromptSimulator from '../components/PromptSimulator';
 import LogoPromptBuilder from '../components/LogoPromptBuilder';
 import Certificate from '../components/Certificate';
+import IdUpdateBanner from '../components/IdUpdateBanner';
 
 function getYouTubeEmbedUrl(url) {
   if (!url) return null;
@@ -244,7 +245,9 @@ export default function UpliftCourse() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col lg:flex-row">
+    <div className="flex min-h-screen flex-col">
+      <IdUpdateBanner />
+      <div className="flex flex-1 flex-col lg:flex-row">
       {/* Mobile header */}
       <div className="flex items-center justify-between border-b bg-white p-4 lg:hidden">
         <h1 className="text-lg font-bold text-slate-900">Uplift Digital Accelerator</h1>
@@ -428,6 +431,7 @@ export default function UpliftCourse() {
           )}
         </div>
       </main>
+      </div>
     </div>
   );
 }

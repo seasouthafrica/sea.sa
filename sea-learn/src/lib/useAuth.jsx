@@ -38,7 +38,7 @@ export function AuthProvider({ children }) {
     const request = withTimeout(
       supabase
         .from('profiles')
-        .select('id, first_name, last_name, role')
+        .select('id, first_name, last_name, role, id_number')
         .eq('id', sessionUser.id)
         .maybeSingle()
         .then(({ data, error }) => {
@@ -54,7 +54,7 @@ export function AuthProvider({ children }) {
             .from('profiles')
             .update({ role: 'admin' })
             .eq('id', sessionUser.id)
-            .select('id, first_name, last_name, role')
+            .select('id, first_name, last_name, role, id_number')
             .single();
           if (error) throw error;
           return data;

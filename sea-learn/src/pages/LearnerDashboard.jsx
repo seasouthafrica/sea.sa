@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/useAuth';
 import { upliftSessions } from '../data/courseChapters';
 import { getCourseProgress } from '../lib/courseProgress';
+import IdUpdateBanner from '../components/IdUpdateBanner';
 
 const PROGRESS_KEY = 'uplift-chapter-progress';
 
@@ -77,6 +78,8 @@ export default function LearnerDashboard() {
   }, [user]);
 
   return (
+    <div>
+      <IdUpdateBanner />
     <div className="max-w-2xl mx-auto px-6 py-10">
       <div className="flex items-center justify-between mb-1">
         <h1 className="text-2xl font-bold">
@@ -142,6 +145,7 @@ export default function LearnerDashboard() {
           );
         })}
       </div>
+    </div>
     </div>
   );
 }
