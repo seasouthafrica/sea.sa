@@ -16,6 +16,7 @@ const ADMIN_EMAILS = new Set([
   'lungi09@gmail.com',
   'seasa@gmail.com',
   'ntoyantosabele@gmail.com',
+  'sabele@socialenterprise.academy',
 ]);
 
 export function AuthProvider({ children }) {
