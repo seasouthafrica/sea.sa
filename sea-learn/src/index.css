@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  body {
+    background: white !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .print-hidden {
+    display: none !important;
+  }
+
+  .funder-report {
+    background: white !important;
+  }
+
+  .funder-report > div {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  .print-break {
+    break-before: page;
+  }
+
+  article {
+    break-inside: avoid;
+  }
+}

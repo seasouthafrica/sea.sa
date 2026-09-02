@@ -6,14 +6,13 @@ import { upliftSessions } from '../data/courseChapters';
 import { getCourseProgress } from '../lib/courseProgress';
 import IdUpdateBanner from '../components/IdUpdateBanner';
 
-const PROGRESS_KEY = 'uplift-chapter-progress';
-
-function loadLocalProgress(userId) {
-  try {
-    const raw = localStorage.getItem(`${PROGRESS_KEY}-${userId}`);
-    return raw ? JSON.parse(raw) : {};
-  } catch { return {}; }
-}
+const REQUIRED_QUIZ_KEYS = [
+  'Market Research Knowledge Check',
+  'Branding Knowledge Check',
+  'Digital Advertising Knowledge Check',
+  'Knowledge Check — The Anatomy of a Website',
+  'Final Quiz — Web Development Fundamentals',
+];
 
 export default function LearnerDashboard() {
   const navigate = useNavigate();
@@ -21,33 +20,39 @@ export default function LearnerDashboard() {
   const [courses, setCourses] = useState([]);
   const [completedIds, setCompletedIds] = useState(new Set());
   const [error, setError] = useState('');
-  const [chapterProgress, setChapterProgress] = useState({});
+  const [hasLogo, setHasLogo] = useState(false);
+  const [hasQuiz, setHasQuiz] = useState(false);
+  const [hasYoutube, setHasYoutube] = useState(false);
 
-  const completedChapters = upliftSessions.filter((c) => chapterProgress[c.id]).length;
-  const upliftPercent = Math.round((completedChapters / upliftSessions.length) * 100);
+  const upliftPercent = hasLogo ? 100 : (hasQuiz ? 25 : 0) + (hasYoutube ? 25 : 0);
 
   useEffect(() => {
     if (!user) return;
-    const local = loadLocalProgress(user.id);
-    setChapterProgress(local);
     supabase
       .from('assignment_submissions')
-      .select('chapter_id, status, explanation')
+      .select('chapter_id, status, explanation, file_url')
       .eq('user_id', user.id)
       .then(({ data }) => {
         if (!data) return;
-        const fromDb = {};
+        let logo = false;
+        let quiz = false;
+        let youtube = false;
         data.forEach((s) => {
-          try {
-            const parsed = JSON.parse(s.explanation);
-            if (parsed?.type === 'chapter' && s.status === 'submitted') {
-              fromDb[parsed.chapterId] = true;
-            }
-          } catch {}
+          if (s.status !== 'submitted') return;
+          if (s.chapter_id === 3 && s.file_url) logo = true;
+          if (s.chapter_id === 4 || s.chapter_id === 5) youtube = true;
+          if (s.explanation) {
+            try {
+              const parsed = JSON.parse(s.explanation);
+              if (parsed.type === 'quiz' && REQUIRED_QUIZ_KEYS.includes(parsed.quizKey)) {
+                quiz = true;
+              }
+            } catch {}
+          }
         });
-        const merged = { ...local, ...fromDb };
-        setChapterProgress(merged);
-        localStorage.setItem(`${PROGRESS_KEY}-${user.id}`, JSON.stringify(merged));
+        setHasLogo(logo);
+        setHasQuiz(quiz);
+        setHasYoutube(youtube);
       });
   }, [user]);
 
@@ -107,13 +112,22 @@ export default function LearnerDashboard() {
           <h2 className="text-xl font-bold text-gray-950">Uplift Digital Accelerator Course</h2>
           <p className="mt-1 text-sm text-gray-500">By Social Enterprise Academy and Africa Forward</p>
 
-          <div className="mt-4 grid grid-cols-4 gap-2">
-            {upliftSessions.map((c) => (
-              <div key={c.id} className={`rounded-lg p-2 text-center text-xs ${chapterProgress[c.id] ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-500'}`}>
-                <span className="block font-semibold">Session {c.id}</span>
-                <span className="block truncate">{chapterProgress[c.id] ? '✓' : '—'}</span>
-              </div>
-            ))}
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            <div className={`rounded-lg p-3 text-center text-xs ${hasLogo ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-500'}`}>
+              <span className="block text-lg mb-1">{hasLogo ? '✅' : '🎨'}</span>
+              <span className="block font-semibold">Logo Upload</span>
+              <span className="block text-[10px] mt-0.5">100%</span>
+            </div>
+            <div className={`rounded-lg p-3 text-center text-xs ${hasQuiz ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-500'}`}>
+              <span className="block text-lg mb-1">{hasQuiz ? '✅' : '📝'}</span>
+              <span className="block font-semibold">Quiz</span>
+              <span className="block text-[10px] mt-0.5">25%</span>
+            </div>
+            <div className={`rounded-lg p-3 text-center text-xs ${hasYoutube ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-500'}`}>
+              <span className="block text-lg mb-1">{hasYoutube ? '✅' : '🎬'}</span>
+              <span className="block font-semibold">YouTube Upload</span>
+              <span className="block text-[10px] mt-0.5">25%</span>
+            </div>
           </div>
 
           <p className="mt-4 text-sm font-semibold text-gray-600">{upliftPercent}% complete</p>

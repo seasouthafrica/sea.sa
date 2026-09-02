@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://socialenterprise.academy/za/sitemap.xml

@@ -6,6 +6,7 @@ const REQUIRED_ACTIVITY_IDS = new Set([2, 3, 4, 5, 21, 31, 41, 51, 52, 101, 102,
 const TOTAL_UPLIFT_REQUIREMENTS = 19;
 
 function getUpliftProgress(rows) {
+  if (rows.some((row) => row.chapter_id === 3 && row.status === 'submitted' && row.file_url)) return 100;
   const completedActivities = new Set();
   const quizzes = new Set();
   rows.forEach((row) => {
@@ -16,7 +17,7 @@ function getUpliftProgress(rows) {
       if (payload?.type === 'quiz' && payload.quizKey) quizzes.add(payload.quizKey);
     } catch {}
   });
-  return Math.min(100, Math.round(((completedActivities.size + quizzes.size) / TOTAL_UPLIFT_REQUIREMENTS) * 100));
+  return Math.min(99, Math.round(((completedActivities.size + quizzes.size) / TOTAL_UPLIFT_REQUIREMENTS) * 100));
 }
 
 // Simple CSV export from an array of objects — no extra dependency needed.
@@ -66,7 +67,7 @@ export default function AdminLearners() {
       try {
         const [profilesResult, submissionsResult] = await Promise.all([
           supabase.from('profiles').select('*').eq('role', 'learner').order('created_at', { ascending: false }),
-          supabase.from('assignment_submissions').select('user_id, chapter_id, status, explanation'),
+          supabase.from('assignment_submissions').select('user_id, chapter_id, status, explanation, file_url'),
         ]);
         if (cancelled) return;
 

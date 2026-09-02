@@ -98,7 +98,12 @@ export default function AdminLearnerDetail() {
   const completedSessions = SESSION_PROGRESS_IDS.filter((id) => completedIds.has(id)).length;
   const completedQuizzes = quizSubmissions.filter((s) => s.status === 'submitted').length;
   const totalActivities = completedAssignments + completedSimulators + completedSessions + completedQuizzes;
-  const progressPct = Math.min(100, Math.round((totalActivities / TOTAL_REQUIREMENTS) * 100));
+  const hasLogoUpload = submissions.some((submission) => (
+    submission.chapter_id === 3 && submission.status === 'submitted' && submission.file_url
+  ));
+  const progressPct = hasLogoUpload
+    ? 100
+    : Math.min(99, Math.round((totalActivities / TOTAL_REQUIREMENTS) * 100));
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-10">
@@ -117,7 +122,7 @@ export default function AdminLearnerDetail() {
         <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center">
           <p className="text-xs font-semibold text-emerald-600">Overall Progress</p>
           <p className="text-2xl font-bold text-emerald-700">{progressPct}%</p>
-          <p className="text-xs text-emerald-500">{totalActivities}/{TOTAL_REQUIREMENTS} requirements</p>
+          <p className="text-xs text-emerald-500">{hasLogoUpload ? 'Logo creation uploaded' : `${totalActivities}/${TOTAL_REQUIREMENTS} requirements`}</p>
         </div>
       </div>
 

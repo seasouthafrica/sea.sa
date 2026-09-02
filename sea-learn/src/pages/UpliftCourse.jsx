@@ -35,11 +35,19 @@ function ResponsiveVideo({ url, title }) {
   );
 }
 
+function SectionDivider() {
+  return <hr className="my-10 border-t-2 border-dashed border-slate-200" />;
+}
+
 function ResourceList({ resources }) {
   if (!resources?.length) return null;
   return (
-    <div className="mt-8 rounded-2xl border border-cyan-200 bg-cyan-50 p-6">
-      <h3 className="mb-4 text-lg font-bold text-slate-900">Additional Resources</h3>
+    <div className="mt-8 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6">
+      <div className="mb-4 flex items-center gap-2">
+        <h3 className="text-lg font-bold text-slate-700">Additional Resources</h3>
+        <span className="rounded-full bg-slate-200 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Optional</span>
+      </div>
+      <p className="mb-4 text-sm text-slate-500">These resources are not required to complete the session, but can deepen your understanding.</p>
       <div className="space-y-3">
         {resources.map((r) => (
           <a
@@ -63,7 +71,6 @@ const PROGRESS_KEY = 'uplift-chapter-progress';
 const QUIZ_KEY = 'uplift-quiz-scores';
 const SK_ACADEMY_LEARNERS_LICENCE_URL = 'https://skonlineacademy.thinkific.com/users/sign_in';
 const SIM_TO_SESSION = { 21: 2, 31: 3, 41: 4, 51: 5, 52: 5 };
-const REQUIRED_SIM_IDS = Object.keys(SIM_TO_SESSION).map(Number);
 const REQUIRED_QUIZ_KEYS = [
   'Market Research Knowledge Check',
   'Branding Knowledge Check',
@@ -118,6 +125,8 @@ export default function UpliftCourse() {
   const [submissions, setSubmissions] = useState({});
   const [quizScores, setQuizScores] = useState({});
   const [submittedQuizKeys, setSubmittedQuizKeys] = useState(new Set());
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -211,17 +220,19 @@ export default function UpliftCourse() {
     }
   }, [user, quizScores]);
 
-  const overallProgress = useMemo(() => {
-    const done = upliftSessions.filter((c) => completedChapters[c.id]).length;
-    return Math.round((done / upliftSessions.length) * 100);
-  }, [completedChapters]);
+  const hasLogoUpload = submissions[3]?.status === 'submitted' && Boolean(submissions[3]?.file_url);
+  const hasQuizSubmitted = REQUIRED_QUIZ_KEYS.some((key) => submittedQuizKeys.has(key));
+  const hasYoutubeUpload = [4, 5].some((id) => submissions[id]?.status === 'submitted');
 
-  const sessionsComplete = upliftSessions.every((session) => completedChapters[session.id]);
-  const requiredAssignmentIds = upliftSessions.filter((session) => session.hasAssignment).map((session) => session.id);
-  const assignmentsSubmitted = requiredAssignmentIds.every((id) => submissions[id]?.status === 'submitted');
-  const simulatorsSubmitted = REQUIRED_SIM_IDS.every((simId) => completedSims[simId]);
-  const quizzesSubmitted = REQUIRED_QUIZ_KEYS.every((key) => submittedQuizKeys.has(key));
-  const finalTaskUnlocked = sessionsComplete && assignmentsSubmitted && simulatorsSubmitted && quizzesSubmitted;
+  const overallProgress = useMemo(() => {
+    if (hasLogoUpload) return 100;
+    let pct = 0;
+    if (hasQuizSubmitted) pct += 25;
+    if (hasYoutubeUpload) pct += 25;
+    return pct;
+  }, [hasLogoUpload, hasQuizSubmitted, hasYoutubeUpload]);
+
+  const finalTaskUnlocked = hasLogoUpload;
 
   const isUnlocked = useCallback(() => true, []);
 
@@ -243,6 +254,36 @@ export default function UpliftCourse() {
     setSidebarOpen(false);
     window.scrollTo(0, 0);
   };
+
+  const handleRestart = useCallback(async () => {
+    if (!user) return;
+    setResetting(true);
+    try {
+      await supabase
+        .from('assignment_submissions')
+        .delete()
+        .eq('user_id', user.id);
+
+      localStorage.removeItem(`${PROGRESS_KEY}-${user.id}`);
+      localStorage.removeItem(`${QUIZ_KEY}-${user.id}`);
+      upliftSessions.forEach((c) => {
+        localStorage.removeItem(`uplift-assignment-draft-${user.id}-${c.id}`);
+      });
+
+      setCompletedChapters({});
+      setCompletedSims({});
+      setSubmissions({});
+      setQuizScores({});
+      setSubmittedQuizKeys(new Set());
+      setShowResetConfirm(false);
+      navigate('/uplift/session/1', { replace: true });
+      window.scrollTo(0, 0);
+    } catch (err) {
+      console.error('Reset failed:', err);
+    } finally {
+      setResetting(false);
+    }
+  }, [user, navigate]);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -322,7 +363,13 @@ export default function UpliftCourse() {
           </button>
         </nav>
 
-        <div className="mt-6 border-t border-gray-100 pt-4">
+        <div className="mt-6 border-t border-gray-100 pt-4 space-y-2">
+          <button
+            onClick={() => setShowResetConfirm(true)}
+            className="w-full rounded-xl px-4 py-2.5 text-left text-sm font-semibold text-amber-600 transition hover:bg-amber-50"
+          >
+            Restart Progress
+          </button>
           <button
             onClick={async () => { await supabase.auth.signOut(); navigate('/login', { replace: true }); }}
             className="w-full rounded-xl px-4 py-2.5 text-left text-sm font-semibold text-red-600 transition hover:bg-red-50"
@@ -332,16 +379,49 @@ export default function UpliftCourse() {
         </div>
       </aside>
 
+      {/* Restart Confirmation Modal */}
+      {showResetConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-xl">⚠️</span>
+              <h3 className="text-lg font-bold text-slate-900">Restart Progress?</h3>
+            </div>
+            <p className="mb-2 text-sm text-slate-600">This will permanently reset:</p>
+            <ul className="mb-6 space-y-1 pl-4 text-sm text-slate-600">
+              <li className="flex items-center gap-2"><span className="text-red-500">•</span> All session completion marks</li>
+              <li className="flex items-center gap-2"><span className="text-red-500">•</span> All quiz scores</li>
+              <li className="flex items-center gap-2"><span className="text-red-500">•</span> All assignment submissions (logo uploads, YouTube links)</li>
+              <li className="flex items-center gap-2"><span className="text-red-500">•</span> All simulator progress</li>
+            </ul>
+            <p className="mb-6 text-sm font-semibold text-red-600">This action cannot be undone.</p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowResetConfirm(false)}
+                disabled={resetting}
+                className="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRestart}
+                disabled={resetting}
+                className="flex-1 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-red-700 disabled:opacity-50"
+              >
+                {resetting ? 'Resetting…' : 'Yes, Restart Everything'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main content */}
       <main className="flex-1">
         <div className="mx-auto max-w-4xl px-5 py-8 sm:px-8 lg:py-12">
           {isFinalTask ? (
             <FinalTask
               unlocked={finalTaskUnlocked}
-              sessionsComplete={sessionsComplete}
-              assignmentsSubmitted={assignmentsSubmitted}
-              simulatorsSubmitted={simulatorsSubmitted}
-              quizzesSubmitted={quizzesSubmitted}
+              hasLogoUpload={hasLogoUpload}
               profile={profile}
             />
           ) : (
@@ -436,12 +516,9 @@ export default function UpliftCourse() {
   );
 }
 
-function FinalTask({ unlocked, sessionsComplete, assignmentsSubmitted, simulatorsSubmitted, quizzesSubmitted, profile }) {
+function FinalTask({ unlocked, hasLogoUpload, profile }) {
   const requirements = [
-    { label: 'Complete 100% of the course sessions', complete: sessionsComplete },
-    { label: 'Submit every practical assignment', complete: assignmentsSubmitted },
-    { label: 'Submit every interactive simulator activity', complete: simulatorsSubmitted },
-    { label: 'Submit every knowledge check and quiz', complete: quizzesSubmitted },
+    { label: 'Upload your logo design (100%)', complete: hasLogoUpload },
   ];
 
   return (
@@ -467,8 +544,8 @@ function FinalTask({ unlocked, sessionsComplete, assignmentsSubmitted, simulator
             </h3>
             <p className="mt-1 text-sm leading-6 text-slate-600">
               {unlocked
-                ? 'You have completed every session and properly submitted every required activity.'
-                : 'The SK Academy course link unlocks only after every requirement below is complete.'}
+                ? 'Your logo creation upload has completed the Uplift programme.'
+                : 'The SK Academy course link unlocks after you upload your logo creation activity.'}
             </p>
           </div>
         </div>
@@ -536,6 +613,8 @@ function Chapter1({ chapter }) {
         {chapter.intro.map((p, i) => <p key={i}>{p}</p>)}
       </div>
 
+      <SectionDivider />
+
       <div className="rounded-2xl bg-slate-950 p-6 text-white">
         <h3 className="text-xl font-bold">What Participants Will Learn</h3>
         <p className="mt-2 text-sm text-cyan-100">By completing this course, participants will learn how to:</p>
@@ -584,6 +663,8 @@ function Chapter2({ chapter, userId, submission, onSubmissionChange, onQuizScore
 
       <ResponsiveVideo url={chapter.mainVideo} title="Market and Product Research" />
 
+      <SectionDivider />
+
       {/* Visual Research Steps */}
       <div>
         <h3 className="mb-2 text-xl font-bold text-slate-900">The 5-Step Research Process</h3>
@@ -612,6 +693,8 @@ function Chapter2({ chapter, userId, submission, onSubmissionChange, onQuizScore
       <div className="space-y-4 text-lg leading-8 text-slate-700">
         {chapter.writtenLesson.map((p, i) => <p key={i}>{p}</p>)}
       </div>
+
+      <SectionDivider />
 
       {/* Customer Persona Template */}
       <div className="rounded-2xl border-2 border-cyan-200 bg-gradient-to-br from-cyan-50 to-white p-6">
@@ -642,6 +725,8 @@ function Chapter2({ chapter, userId, submission, onSubmissionChange, onQuizScore
         <p className="mt-4 rounded-lg bg-white/5 p-3 text-xs text-cyan-300">💡 Pro tip: Record their answers (with permission) and look for patterns across all interviews. Three or more people mentioning the same problem is a strong signal.</p>
       </div>
 
+      <SectionDivider />
+
       {/* Prompt Engineering Simulator */}
       <div>
         <h3 className="mb-2 text-xl font-bold text-slate-900">Master AI Prompts</h3>
@@ -651,7 +736,11 @@ function Chapter2({ chapter, userId, submission, onSubmissionChange, onQuizScore
 
       <ResourceList resources={chapter.resources} />
 
+      <SectionDivider />
+
       <Quiz questions={chapter.quiz} title="Market Research Knowledge Check" onScore={onQuizScore} savedScore={quizScores?.['Market Research Knowledge Check']} />
+
+      <SectionDivider />
 
       {/* Google Trends Assignment */}
       <div className="rounded-2xl border-2 border-amber-200 bg-amber-50 p-6">
@@ -720,6 +809,8 @@ function Chapter3({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* Logo Types */}
       <div className="rounded-2xl bg-slate-950 p-6 text-white">
         <h3 className="mb-1 text-lg font-bold">Types of Logos</h3>
@@ -735,12 +826,16 @@ function Chapter3({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* Logo Maker */}
       <div>
         <h3 className="mb-2 text-xl font-bold text-slate-900">Practice Logo Design</h3>
         <p className="mb-4 text-slate-600">Put your branding knowledge into practice — create a logo for your business using the tool below.</p>
         <LogoMaker userId={userId} />
       </div>
+
+      <SectionDivider />
 
       {/* Brand Identity Checklist */}
       <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-6">
@@ -760,10 +855,16 @@ function Chapter3({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </div>
       </div>
 
+      <SectionDivider />
+
       <ResourceList resources={chapter.resources} />
+
+      <SectionDivider />
 
       {/* Quiz */}
       <Quiz questions={chapter.quiz} title="Branding Knowledge Check" onScore={onQuizScore} savedScore={quizScores?.['Branding Knowledge Check']} />
+
+      <SectionDivider />
 
       {/* AI Prompt with step-by-step */}
       <div className="rounded-2xl border-2 border-sea-teal/30 bg-white p-6">
@@ -800,6 +901,8 @@ function Chapter3({ chapter, userId, submission, onSubmissionChange, onQuizScore
           {copied ? '✓ Copied!' : 'Copy Prompt'}
         </button>
       </div>
+
+      <SectionDivider />
 
       {/* Assignment */}
       <div className="rounded-2xl border-2 border-amber-200 bg-amber-50 p-6">
@@ -922,6 +1025,8 @@ function Chapter4({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </ul>
       </div>
 
+      <SectionDivider />
+
       {/* Ad Platforms Comparison */}
       <div>
         <h3 className="mb-2 text-xl font-bold text-slate-900">📱 Advertising Platforms Compared</h3>
@@ -953,6 +1058,8 @@ function Chapter4({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* Ad Funnel */}
       <div className="rounded-2xl bg-slate-950 p-6 text-white">
         <h3 className="mb-2 text-lg font-bold">🔻 The Advertising Funnel (AIDA)</h3>
@@ -978,12 +1085,16 @@ function Chapter4({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </div>
       </div>
 
+      <SectionDivider />
+
       {chapter.videos.map((v, i) => (
         <div key={i}>
           <h3 className="mb-3 text-lg font-bold text-slate-800">{v.title}</h3>
           <ResponsiveVideo url={v.url} title={v.title} />
         </div>
       ))}
+
+      <SectionDivider />
 
       {/* WhatsApp Ad Step-by-Step Guide */}
       <div className="rounded-2xl border-2 border-green-200 bg-gradient-to-br from-green-50 to-white p-6">
@@ -1082,6 +1193,8 @@ function Chapter4({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* Key Metrics */}
       <div>
         <h3 className="mb-2 text-xl font-bold text-slate-900">📊 Key Advertising Metrics</h3>
@@ -1097,12 +1210,16 @@ function Chapter4({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* Facebook Ad Simulator */}
       <div>
         <h3 className="mb-2 text-xl font-bold text-slate-900">Build Your Own Facebook Ad</h3>
         <p className="mb-4 text-slate-600">Practice creating a real Facebook ad campaign — choose your objective, audience, budget, and creative, then see estimated results.</p>
         <FacebookAdSimulator userId={userId} />
       </div>
+
+      <SectionDivider />
 
       {/* Google Ads Placeholder */}
       <div className="rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 p-8 text-center">
@@ -1119,10 +1236,16 @@ function Chapter4({ chapter, userId, submission, onSubmissionChange, onQuizScore
         <p className="mt-1 text-xs text-gray-400">Placeholder — replace with a direct YouTube video URL in the admin panel.</p>
       </div>
 
+      <SectionDivider />
+
       <ResourceList resources={chapter.resources} />
+
+      <SectionDivider />
 
       {/* Quiz */}
       <Quiz questions={chapter.quiz} title="Digital Advertising Knowledge Check" onScore={onQuizScore} savedScore={quizScores?.['Digital Advertising Knowledge Check']} />
+
+      <SectionDivider />
 
       {/* Assignment */}
       <div className="rounded-2xl border-2 border-amber-200 bg-amber-50 p-6">
@@ -1166,6 +1289,8 @@ function Chapter5({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </ul>
       </div>
 
+      <SectionDivider />
+
       {/* The Human Metaphor */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6">
         <h3 className="mb-4 text-xl font-bold text-slate-900">The Human Body Metaphor</h3>
@@ -1192,6 +1317,8 @@ function Chapter5({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* HTML: The Skeleton */}
       <div>
         <h3 className="mb-4 text-xl font-bold text-slate-900">HTML: The Skeleton</h3>
@@ -1206,6 +1333,8 @@ function Chapter5({ chapter, userId, submission, onSubmissionChange, onQuizScore
           ))}
         </div>
       </div>
+
+      <SectionDivider />
 
       {/* CSS: The Skin */}
       <div>
@@ -1222,6 +1351,8 @@ function Chapter5({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* JavaScript: The Organs */}
       <div>
         <h3 className="mb-4 text-xl font-bold text-slate-900">JavaScript: The Vital Organs</h3>
@@ -1237,12 +1368,16 @@ function Chapter5({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* Global Web Adoption Chart */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6">
         <h3 className="mb-4 text-xl font-bold text-slate-900">Global Web Adoption</h3>
         <img src="/images/chapter7/image13.png" alt="Web language adoption — HTML 100%, CSS 99.2%, JavaScript 98.1%" className="mx-auto max-w-lg" />
         <p className="mt-4 text-center text-sm text-slate-500">The combination of these three languages is non-negotiable for professional web development.</p>
       </div>
+
+      <SectionDivider />
 
       {/* Timeline */}
       <div className="rounded-2xl bg-slate-950 p-6 text-white">
@@ -1258,8 +1393,12 @@ function Chapter5({ chapter, userId, submission, onSubmissionChange, onQuizScore
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* Intro Quiz */}
       <Quiz questions={chapter.introQuiz} title="Knowledge Check — The Anatomy of a Website" onScore={onQuizScore} savedScore={quizScores?.['Knowledge Check — The Anatomy of a Website']} />
+
+      <SectionDivider />
 
       {/* Interactive Code Playground */}
       <div>
@@ -1268,12 +1407,16 @@ function Chapter5({ chapter, userId, submission, onSubmissionChange, onQuizScore
         <CodePlayground userId={userId} />
       </div>
 
+      <SectionDivider />
+
       {/* Website Prompt Generator */}
       <div>
         <h3 className="mb-2 text-xl font-bold text-slate-900">Generate Your Website with AI</h3>
         <p className="mb-4 text-slate-600">Use this tool to describe your dream website — pick your business type, colours, and sections, then copy the generated prompt into any AI tool to build it instantly.</p>
         <WebsitePromptSimulator userId={userId} />
       </div>
+
+      <SectionDivider />
 
       {/* Video Lesson */}
       <div>
@@ -1282,15 +1425,23 @@ function Chapter5({ chapter, userId, submission, onSubmissionChange, onQuizScore
         <ResponsiveVideo url={chapter.mainVideo} title="Web Development with AI" />
       </div>
 
+      <SectionDivider />
+
       {/* Written Lesson */}
       <div className="space-y-4 text-lg leading-8 text-slate-700">
         {chapter.writtenLesson.map((p, i) => <p key={i}>{p}</p>)}
       </div>
 
+      <SectionDivider />
+
       <ResourceList resources={chapter.resources} />
+
+      <SectionDivider />
 
       {/* Final Quiz */}
       <Quiz questions={chapter.finalQuiz} title="Final Quiz — Web Development Fundamentals" onScore={onQuizScore} savedScore={quizScores?.['Final Quiz — Web Development Fundamentals']} />
+
+      <SectionDivider />
 
       {/* Assignment */}
       <div className="rounded-2xl border-2 border-amber-200 bg-amber-50 p-6">
