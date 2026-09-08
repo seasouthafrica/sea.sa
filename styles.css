@@ -478,6 +478,7 @@ ul   { list-style: none; }
   height: 6px;
   background: var(--teal);
 }
+.who-logo { max-width: 180px; margin-bottom: 1rem; }
 .who-text h2 {
   font-size: clamp(1.8rem, 3vw, 2.4rem);
   font-weight: 900;
@@ -546,6 +547,9 @@ ul   { list-style: none; }
 .prog-body h3 a { color: inherit; }
 .prog-body h3 a:hover { color: var(--teal); text-decoration: underline; }
 .prog-body p { font-size: .88rem; color: var(--gray); line-height: 1.6; }
+.prog-links { display: flex; gap: 1.2rem; margin-top: .8rem; }
+.prog-link { font-size: .85rem; font-weight: 600; color: var(--teal); text-decoration: none; }
+.prog-link:hover { text-decoration: underline; color: var(--magenta); }
 
 /* ── Section 6: Support next gen ───────────────────────────── */
 .support-section {
