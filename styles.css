@@ -987,6 +987,62 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
   font-weight: 700;
 }
 
+/* ── Why Partner With Us ─────────────────────────────────── */
+.why-partner-section {
+  background: var(--cream);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+.why-partner-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.why-partner-inner h2 {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--brand-ink);
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.04em;
+}
+.why-partner-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.why-partner-card {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  text-align: left;
+  border-left: 4px solid var(--magenta);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.why-partner-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.why-partner-text strong {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--brand-ink);
+  margin-bottom: 0.4rem;
+}
+.why-partner-text p {
+  font-size: 0.9rem;
+  color: var(--gray);
+  line-height: 1.5;
+  margin: 0;
+}
+@media (max-width: 960px) { .why-partner-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .why-partner-grid { grid-template-columns: 1fr; } }
+
 /* ── Community of Practice ────────────────────────────────── */
 .community-section {
   background: white;
