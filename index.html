@@ -109,7 +109,7 @@
     <img src="graphics/SEA Logo.png" alt="Social Enterprise Academy logo" class="logo-icon">
   </a>
   <div class="top-actions">
-    <a href="#partner" class="btn-donate">DONATE HERE</a>
+    <a href="https://www.payfast.co.za/eng/process?merchant_id=16392740&merchant_key=ksaewtaas2rld&return_url=https%3A%2F%2Fsocialenterpriseacademy.org.za%2F%3Fdonated%3Dthank-you&cancel_url=https%3A%2F%2Fsocialenterpriseacademy.org.za%2F%3Fdonated%3Dcancelled&item_name=Donation+to+Social+Enterprise+Academy+SA&item_description=General+donation" class="btn-donate" target="_blank" rel="noopener noreferrer">DONATE HERE</a>
     <select class="top-select hub" aria-label="Hub">
       <option>HUB</option>
       <option>South Africa</option>
@@ -436,6 +436,31 @@
     <p class="support-quote">
       "Never think you can't be the one to change the world."
     </p>
+
+    <!-- Donate Form -->
+    <div class="donate-card" id="donate">
+      <h3>Make a Donation</h3>
+      <p>Your generosity makes a difference. Enter any amount below to contribute.</p>
+      <form action="https://www.payfast.co.za/eng/process" method="POST" id="donateForm">
+        <input type="hidden" name="merchant_id" value="16392740">
+        <input type="hidden" name="merchant_key" value="ksaewtaas2rld">
+        <input type="hidden" name="return_url" value="https://socialenterpriseacademy.org.za/?donated=thank-you">
+        <input type="hidden" name="cancel_url" value="https://socialenterpriseacademy.org.za/?donated=cancelled">
+        <input type="hidden" name="notify_url" value="https://socialenterpriseacademy.org.za/notify">
+        <input type="hidden" name="item_name" value="Donation to Social Enterprise Academy SA">
+        <input type="hidden" name="item_description" value="General donation">
+        <input type="hidden" name="payment_method" value="eft">
+        <div class="donate-amount-wrap">
+          <span class="donate-currency">R</span>
+          <input type="number" name="amount" class="donate-amount-input" placeholder="0.00" min="5" step="0.01" required>
+        </div>
+        <button type="submit" class="donate-btn">Donate Now</button>
+      </form>
+      <p class="donate-secure">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align:-2px; margin-right:4px;"><path d="M12 2a5 5 0 00-5 5v3H6a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-1V7a5 5 0 00-5-5zm-3 8V7a3 3 0 116 0v3H9z"/></svg>
+        Secured by PayFast
+      </p>
+    </div>
   </div>
 </section>
 
@@ -569,7 +594,7 @@
         <li><a href="meet-our-team.html">Meet Our Team</a></li>
         <li><a href="partner-with-us.html">Partner With Us</a></li>
         <li><a href="#community">Community of Practice</a></li>
-        <li><a href="#partner">Donate</a></li>
+        <li><a href="#donate">Donate</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -750,5 +775,34 @@
     loadProgrammes();
   });
 </script>
+
+<!-- ── Donate Modal ─────────────────────────────────────────── -->
+<div id="donate-modal" class="donate-modal-overlay" hidden onclick="if(event.target===this)this.hidden=true">
+  <div class="donate-modal">
+    <button type="button" class="donate-modal-close" onclick="document.getElementById('donate-modal').hidden=true" aria-label="Close">&times;</button>
+    <h3>Make a Donation</h3>
+    <p>Your generosity makes a difference. Enter any amount below to contribute.</p>
+    <form action="https://www.payfast.co.za/eng/process" method="POST">
+      <input type="hidden" name="merchant_id" value="16392740">
+      <input type="hidden" name="merchant_key" value="ksaewtaas2rld">
+      <input type="hidden" name="return_url" value="https://socialenterpriseacademy.org.za/?donated=thank-you">
+      <input type="hidden" name="cancel_url" value="https://socialenterpriseacademy.org.za/?donated=cancelled">
+      <input type="hidden" name="notify_url" value="https://socialenterpriseacademy.org.za/notify">
+      <input type="hidden" name="item_name" value="Donation to Social Enterprise Academy SA">
+      <input type="hidden" name="item_description" value="General donation">
+      <input type="hidden" name="payment_method" value="eft">
+      <div class="donate-amount-wrap">
+        <span class="donate-currency">R</span>
+        <input type="number" name="amount" class="donate-amount-input" placeholder="0.00" min="5" step="0.01" required>
+      </div>
+      <button type="submit" class="donate-btn">Donate Now</button>
+    </form>
+    <p class="donate-secure">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align:-2px; margin-right:4px;"><path d="M12 2a5 5 0 00-5 5v3H6a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-1V7a5 5 0 00-5-5zm-3 8V7a3 3 0 116 0v3H9z"/></svg>
+      Secured by PayFast
+    </p>
+  </div>
+</div>
+
 </body>
 </html>
