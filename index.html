@@ -293,8 +293,8 @@
     <div class="prog-grid" id="programmes-grid">
 
       <div class="prog-card">
-        <div class="prog-img">
-          <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/sign/Creatives/Young%20people%20and%20unemployed%20youth.jfif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81YTY4YWYzMi04ZWJkLTQ3ZjItYWI5YS1kM2YwMDhkMzg0ODgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJDcmVhdGl2ZXMvWW91bmcgcGVvcGxlIGFuZCB1bmVtcGxveWVkIHlvdXRoLmpmaWYiLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzgyNDY3NDEyLCJleHAiOjE4MTQwMDM0MTJ9.dNqJv78Na33T52ce_jQLQsxjQ4YkJZEPcTEgAzlFOQs" alt="Leadership Development Programme">
+        <div class="prog-img" style="position:relative; padding-top:56.25%; height:0; overflow:hidden;">
+          <iframe src="https://www.youtube.com/embed/s2gm8xiAU9M" title="Leadership Development Programme" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:none;"></iframe>
           <div class="prog-accent magenta"></div>
         </div>
         <div class="prog-body">
@@ -323,8 +323,8 @@
       </div>
 
       <div class="prog-card">
-        <div class="prog-img">
-          <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/sign/Creatives/International%20Student%20Internship%20Programme:%20Social%20Innovation.jfif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81YTY4YWYzMi04ZWJkLTQ3ZjItYWI5YS1kM2YwMDhkMzg0ODgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJDcmVhdGl2ZXMvSW50ZXJuYXRpb25hbCBTdHVkZW50IEludGVybnNoaXAgUHJvZ3JhbW1lOiBTb2NpYWwgSW5ub3ZhdGlvbi5qZmlmIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4MjQ2NzQ5NywiZXhwIjoxODE0MDAzNDk3fQ.YGBLBwpImakSlWpKN_OcBTL3am5aZj7mrIkwEK5MOi8" alt="Social Innovation Internship Programme">
+        <div class="prog-img" style="position:relative; padding-top:56.25%; height:0; overflow:hidden;">
+          <iframe src="https://www.youtube.com/embed/X1KX89bDnqY" title="Social Innovation Internship Programme" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:none;"></iframe>
           <div class="prog-accent red"></div>
         </div>
         <div class="prog-body">
@@ -338,8 +338,8 @@
       </div>
 
       <div class="prog-card">
-        <div class="prog-img">
-          <img src="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/sign/Creatives/Social%20entrepreneurs%20through%20Social%20Enterprise%20Connect%20CoP.jfif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81YTY4YWYzMi04ZWJkLTQ3ZjItYWI5YS1kM2YwMDhkMzg0ODgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJDcmVhdGl2ZXMvU29jaWFsIGVudHJlcHJlbmV1cnMgdGhyb3VnaCBTb2NpYWwgRW50ZXJwcmlzZSBDb25uZWN0IENvUC5qZmlmIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4MjQ2NzQ3NSwiZXhwIjoxODE0MDAzNDc1fQ.560mkRbKKqRcuiUibm6_vpWvfMdW-AxwQ53If9J28W8" alt="Social Enterprise in Education">
+        <div class="prog-img" style="position:relative; padding-top:56.25%; height:0; overflow:hidden;">
+          <iframe src="https://www.youtube.com/embed/hfet5uwhJAc" title="Social Enterprise in Education Programme" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:none;"></iframe>
           <div class="prog-accent magenta"></div>
         </div>
         <div class="prog-body">
@@ -675,10 +675,12 @@
     const grid = document.getElementById('programmes-grid');
     grid.innerHTML = data.map((p, i) => `
       <div class="prog-card">
-        <div class="prog-img">
+        <div class="prog-img" ${!p.image_url && p.video_url ? 'style="position:relative; padding-top:56.25%; height:0; overflow:hidden;"' : ''}>
           ${p.image_url
             ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}">`
-            : `<div class="prog-img-placeholder" style="background:var(--${accents[i % 5] === 'magenta' ? 'magenta' : accents[i % 5] === 'teal' ? 'teal' : 'red'}); height:220px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700;">${esc(p.title)}</div>`
+            : p.video_url
+              ? `<iframe src="https://www.youtube.com/embed/${esc(p.video_url.split('v=')[1] || '')}" title="${esc(p.title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:none;"></iframe>`
+              : `<div class="prog-img-placeholder" style="background:var(--${accents[i % 5] === 'magenta' ? 'magenta' : accents[i % 5] === 'teal' ? 'teal' : 'red'}); height:220px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700;">${esc(p.title)}</div>`
           }
           <div class="prog-accent ${accents[i % 5]}"></div>
         </div>
