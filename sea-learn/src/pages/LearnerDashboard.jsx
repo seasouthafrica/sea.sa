@@ -140,6 +140,23 @@ export default function LearnerDashboard() {
           </div>
         </Link>
 
+        {/* Quarter 2 — Work Readiness Course Card */}
+        <Link
+          to="/work-readiness"
+          className="block rounded-2xl border border-sea-teal/30 bg-gradient-to-br from-white to-cyan-50 p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-sea-teal hover:shadow-md"
+        >
+          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-sea-teal">Quarter 2</p>
+          <h2 className="text-xl font-bold text-gray-950">Work Readiness &amp; Professional Skills</h2>
+          <p className="mt-1 text-sm text-gray-500">By Social Enterprise Academy and Africa Forward</p>
+          <p className="mt-4 text-sm text-gray-600">
+            Five sessions covering career resilience, punctuality and grooming, professional
+            communication, modern CVs with AI, and interview preparation.
+          </p>
+          <div className="mt-5 inline-flex rounded-full bg-sea-teal px-5 py-2 text-sm font-bold text-white">
+            Open Course
+          </div>
+        </Link>
+
         {/* Other DB-driven courses */}
         {courses.filter((course) => course.slug !== 'uplift').map((course) => {
           const progress = getCourseProgress(course, completedIds);

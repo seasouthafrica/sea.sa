@@ -9,6 +9,7 @@ const Login = lazy(() => import('./pages/Login.jsx'));
 const LearnerDashboard = lazy(() => import('./pages/LearnerDashboard.jsx'));
 const CoursePlayer = lazy(() => import('./pages/CoursePlayer.jsx'));
 const UpliftCourse = lazy(() => import('./pages/UpliftCourse.jsx'));
+const WorkReadinessCourse = lazy(() => import('./pages/WorkReadinessCourse.jsx'));
 const AdminOverview = lazy(() => import('./pages/admin/AdminOverview.jsx'));
 const AdminLearners = lazy(() => import('./pages/admin/AdminLearners.jsx'));
 const AdminLearnerDetail = lazy(() => import('./pages/admin/AdminLearnerDetail.jsx'));
@@ -77,6 +78,24 @@ export default function App() {
           {/* Legacy route redirects */}
           <Route path="/uplift/chapter/:chapterId" element={<LegacyChapterRedirect />} />
           <Route path="/uplift/week-1" element={<Navigate to="/uplift/session/1" replace />} />
+
+          {/* Quarter 2 — Work Readiness & Professional Skills */}
+          <Route
+            path="/work-readiness"
+            element={
+              <RequireAuth>
+                <WorkReadinessCourse />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/work-readiness/session/:sessionId"
+            element={
+              <RequireAuth>
+                <WorkReadinessCourse />
+              </RequireAuth>
+            }
+          />
 
           <Route
             path="/dashboard"
