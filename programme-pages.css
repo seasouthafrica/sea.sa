@@ -241,6 +241,35 @@
   margin: 0;
 }
 
+/* Always-stacked photo hero, for crops so wide that overlaid copy would sit on
+   people's faces. The image keeps its own ratio; the copy goes underneath. */
+.canva-programme-page .programme-hero--stack {
+  display: block;
+  aspect-ratio: auto;
+  min-height: 0;
+  background: #19192d;
+}
+
+.canva-programme-page .programme-hero--stack::after { content: none; }
+
+.canva-programme-page .programme-hero--stack .programme-hero__image {
+  position: static;
+  z-index: auto;
+  height: auto;
+}
+
+.canva-programme-page .programme-hero--stack .programme-hero__content {
+  position: static;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  width: min(1180px, calc(100% - 3rem));
+  max-width: none;
+  padding: 2.25rem 0 2.5rem;
+}
+
+.canva-programme-page .programme-hero--stack h1 { text-shadow: none; }
+
 /* Narrow screens: a portrait-ish hero box would cover-crop a wide group photo
    down to its middle third, losing the people at both ends. Stack instead —
    photo at its own ratio, copy on solid ground beneath it. */
@@ -314,4 +343,10 @@
   .programme-gallery { display: grid; grid-template-columns: 1fr; grid-template-rows: auto; }
   .programme-gallery img:first-child { grid-row: auto; }
   .programme-gallery img { min-height: 210px; }
+}
+
+/* A stacked hero always renders its image at the image's own ratio, so the
+   narrow-screen 16:9 box above must not apply to it. */
+@media (max-width: 860px) {
+  .canva-programme-page .programme-hero--stack .programme-hero__image { aspect-ratio: auto; }
 }
