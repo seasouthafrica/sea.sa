@@ -241,8 +241,33 @@
   margin: 0;
 }
 
+/* Narrow screens: a portrait-ish hero box would cover-crop a wide group photo
+   down to its middle third, losing the people at both ends. Stack instead —
+   photo at its own ratio, copy on solid ground beneath it. */
 @media (max-width: 860px) {
-  .canva-programme-page .programme-hero--photo { aspect-ratio: auto; min-height: 520px; }
+  .canva-programme-page .programme-hero--photo {
+    display: block;
+    aspect-ratio: auto;
+    min-height: 0;
+    background: #19192d;
+  }
+  .canva-programme-page .programme-hero--photo::after { content: none; }
+  .canva-programme-page .programme-hero--photo .programme-hero__image {
+    position: static;
+    z-index: auto;
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+  .canva-programme-page .programme-hero--photo .programme-hero__content {
+    position: static;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    width: min(1180px, calc(100% - 3rem));
+    max-width: none;
+    padding: 2.25rem 0 2.5rem;
+  }
+  .canva-programme-page .programme-hero--photo h1 { text-shadow: none; }
 }
 
 .canva-programme-page .programme-section { padding-top: 4.6rem; padding-bottom: 4.6rem; }
