@@ -34,7 +34,70 @@ export const workReadinessSessions = [
           'Rejection is rarely personal. Often, a company has internal candidates, the budget got cut, or you simply didn’t match the exact algorithm of their hiring software. Treat every "no" as data. If you get rejected after an interview, you have proven your CV works—now you just need to practice your interview skills. Protect your mental health by setting boundaries: allocate specific hours for job hunting, and use the rest of your day to upskill, volunteer, or rest.',
         ],
       },
+      {
+        heading: 'Professional Conduct Practices',
+        eyebrow: 'Being Professional',
+        groups: [
+          { label: 'Punctuality', points: ['Arrive on time for work, meetings, and deadlines.', 'Shows respect for others’ time and builds trust.'] },
+          { label: 'Positive Attitude', points: ['Stay optimistic, even when things get tough.', 'A good attitude makes you more approachable and easier to work with.'] },
+          { label: 'Clear Communication', points: ['Speak and write clearly, professionally, and respectfully.', 'Ask questions when unsure and confirm understanding.'] },
+          { label: 'Dependability', points: ['Follow through on tasks and commitments.', 'Be someone your team can count on.'] },
+          { label: 'Respect for Others', points: ['Treat everyone — regardless of role or background — with courtesy and professionalism.', 'Listen actively and avoid interrupting.'] },
+          { label: 'Appropriate Appearance', points: ['Dress according to the workplace culture or dress code.', 'Maintain good hygiene and grooming.'] },
+          { label: 'Confidentiality', points: ['Keep sensitive information private.', 'Don’t share company or client details without permission.'] },
+          { label: 'Accountability', points: ['Own your actions, including mistakes.', 'Learn from feedback and take responsibility seriously.'] },
+          { label: 'Teamwork', points: ['Collaborate well with others and contribute to group success.', 'Be willing to help and share credit.'] },
+          { label: 'Adaptability', points: ['Be open to change and willing to learn new things.', 'Stay flexible when plans or priorities shift.'] },
+          { label: 'Leverage Your Strengths', points: ['Use what you’re naturally good at to do your best work.'] },
+          { label: 'Engage in Self-Care', points: ['Take care of your physical, mental, and emotional health.'] },
+          { label: 'Professional Boundaries', points: ['Keep personal and professional lives separate.', 'Avoid gossip and maintain a respectful tone in all interactions.'] },
+          { label: 'Take Initiative', points: ['Step up and do things without being told.'] },
+          { label: 'Continuous Learning', points: ['Seek out opportunities to grow your skills and knowledge.', 'Stay curious and open to feedback.'] },
+        ],
+        reflection: {
+          title: 'Reflection',
+          questions: [
+            'Of the professional conduct practices, which ones do you already apply? Identify how you can apply them better.',
+            'Identify which of these practices you haven’t applied or applied poorly. Identify how you can apply them.',
+          ],
+        },
+      },
+      {
+        heading: 'Bouncing Back from Challenges, Stress, or Failure',
+        groups: [
+          { label: 'Keep going, even when it’s hard', points: ['Break big tasks into small steps.', 'Celebrate progress, not just perfection.'] },
+          { label: 'Learn from mistakes', points: ['Don’t fear failure — it’s part of learning.', 'Ask: "What can I do differently next time?"'] },
+          { label: 'Stay flexible', points: ['Be open to change and new ideas.', 'If Plan A doesn’t work, try Plan B — or even Plan Z!'] },
+        ],
+        quote: 'Resilience is like a muscle — the more you use it, the stronger it gets.',
+        reflection: {
+          title: 'Reflection',
+          questions: ['Identify for each aspect of bouncing back how you can practice it daily.'],
+        },
+      },
+      {
+        heading: 'Dress Code — Smart Casual',
+        groups: [
+          {
+            label: 'Men',
+            points: [
+              'Neutral button-down shirt (no jacket or tie needed)',
+              'Neutral coloured pants, chinos or corduroys — no need to get too fancy, stay away from blue jeans',
+              'Casual leather or suede shoes (anything you’d wear to the gym is a no-go)',
+            ],
+          },
+          {
+            label: 'Women',
+            points: [
+              'Neutral blouse or top (mild patterns are good too)',
+              'Neutral coloured pants — while jeans look good, some companies frown upon them for interviews, better safe than sorry',
+              'Casual flats/ballet flats',
+            ],
+          },
+        ],
+      },
     ],
+    source: 'Professional conduct, bouncing back and dress code material adapted from the SK Online Academy Work Readiness workbook, 2025.',
     proTip: 'Lean on platforms like SA Youth and Harambee. They are specifically designed to support young South Africans and often provide data-free resources and micro-learning opportunities.',
     video: {
       id: 'af9Emi4PRCc',

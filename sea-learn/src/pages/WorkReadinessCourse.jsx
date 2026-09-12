@@ -181,6 +181,36 @@ function SessionBody({ session }) {
               ))}
             </ol>
           )}
+          {sec.groups && (
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {sec.groups.map((g) => (
+                <div key={g.label} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <p className="font-bold text-slate-900">{g.label}</p>
+                  <ul className="mt-2 space-y-1.5">
+                    {g.points.map((p) => (
+                      <li key={p} className="flex gap-2 text-sm text-slate-600">
+                        <span className="text-sea-teal">•</span>
+                        <span>{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
+          {sec.quote && (
+            <blockquote className="mt-5 rounded-2xl border-l-4 border-sea-teal bg-teal-50/70 p-5 text-base font-semibold italic text-slate-800">
+              {sec.quote}
+            </blockquote>
+          )}
+          {sec.reflection && (
+            <div className="mt-5 rounded-2xl border-2 border-dashed border-violet-300 bg-violet-50 p-5">
+              <p className="text-xs font-bold uppercase tracking-wide text-violet-700">{sec.reflection.title}</p>
+              <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-sm text-violet-900">
+                {sec.reflection.questions.map((q) => <li key={q}>{q}</li>)}
+              </ol>
+            </div>
+          )}
         </div>
       ))}
 
@@ -221,6 +251,10 @@ function SessionBody({ session }) {
       <div className="rounded-2xl border-l-4 border-sea-teal bg-white p-5 shadow-sm">
         <p className="text-sm text-slate-800"><strong>Practical Action Item:</strong> {session.actionItem}</p>
       </div>
+
+      {session.source && (
+        <p className="text-xs italic text-slate-400">{session.source}</p>
+      )}
     </div>
   );
 }
