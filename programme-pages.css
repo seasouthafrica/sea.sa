@@ -213,6 +213,38 @@
   text-shadow: 0 .12em .35em rgba(0, 0, 0, .55);
 }
 
+/* Photo-led hero: the height tracks the image's own ratio, so the group
+   photo is never cropped, and the copy stacks clear of people's faces. */
+.canva-programme-page .programme-hero--photo {
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+  align-items: flex-end;
+}
+
+.canva-programme-page .programme-hero--photo::after {
+  background: linear-gradient(to top, rgba(18, 18, 38, .88) 0%, rgba(18, 18, 38, .5) 26%, rgba(18, 18, 38, .08) 52%, rgba(18, 18, 38, 0) 100%);
+}
+
+.canva-programme-page .programme-hero--photo .programme-hero__image {
+  object-position: center center;
+}
+
+.canva-programme-page .programme-hero--photo .programme-hero__content {
+  flex-direction: column;
+  gap: .85rem;
+  padding: 0 0 clamp(1.75rem, 4vw, 3.25rem);
+}
+
+.canva-programme-page .programme-hero--photo h1,
+.canva-programme-page .programme-hero--photo p {
+  max-width: 100%;
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .canva-programme-page .programme-hero--photo { aspect-ratio: auto; min-height: 520px; }
+}
+
 .canva-programme-page .programme-section { padding-top: 4.6rem; padding-bottom: 4.6rem; }
 .canva-programme-page .programme-section--soft { background: #f5f6f7; }
 .canva-programme-page .programme-section--dark { background: #304254; }
