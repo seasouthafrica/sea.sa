@@ -36,9 +36,11 @@ export const workReadinessSessions = [
       },
     ],
     proTip: 'Lean on platforms like SA Youth and Harambee. They are specifically designed to support young South Africans and often provide data-free resources and micro-learning opportunities.',
-    videoPlaceholder: {
-      topic: 'Building Career Resilience',
-      searchQuery: 'How to stay motivated during a long job search',
+    video: {
+      id: 'af9Emi4PRCc',
+      title: 'How to Handle Interview Rejection — Advice and Next Steps',
+      channel: 'Aced',
+      duration: '3:54',
     },
     actionItem: 'Write down three major challenges you’ve overcome in the past five years. Review this list whenever job hunting feels overwhelming to remind yourself of your inherent resilience.',
     quiz: {
@@ -102,9 +104,11 @@ export const workReadinessSessions = [
       },
     ],
     proTip: 'If load-shedding is scheduled for the morning, iron your clothes the night before!',
-    videoPlaceholder: {
-      topic: 'dressing for interviews on a budget',
-      searchQuery: 'Capsule wardrobe for work affordable',
+    video: {
+      id: '_KZJ69AHXZQ',
+      title: 'Updating a business casual wardrobe on a limited budget',
+      channel: 'Age With Style Coach',
+      duration: '3:46',
     },
     actionItem: 'Use a map app (or local knowledge) to calculate the travel time to your nearest central business district during peak traffic (07:00 AM). Add 45 minutes to that time. That is your actual commute budget.',
     quiz: {
@@ -167,9 +171,11 @@ export const workReadinessSessions = [
       title: 'Template for messaging a recruiter on WhatsApp',
       body: 'Good morning Mr. Ndlovu. My name is [Your Name]. I am following up on the junior admin position I applied for on SA Youth. Please let me know if you require any further information from me. Thank you.',
     },
-    videoPlaceholder: {
-      topic: 'professional communication',
-      searchQuery: 'Phone and email etiquette in the workplace',
+    video: {
+      id: 'qkNWTW3raGE',
+      title: 'How to Answer the Phone At Work (Like a Pro)',
+      channel: 'Adriana Girdler',
+      duration: '3:40',
     },
     actionItem: 'Audit your WhatsApp profile right now. Change your profile picture to a clear, friendly headshot (against a plain wall) and update your bio to something professional.',
     quiz: {
@@ -232,9 +238,11 @@ export const workReadinessSessions = [
       subtitle: 'Copy/paste this into ChatGPT',
       body: 'I am applying for a [Insert Job Title] role. Here is the job description: [Paste Description]. Here are my skills and past experiences: [Type your real experience here, even informal work]. Please rewrite my experience into 5 professional bullet points that highlight how my skills match the keywords in this job description. Keep the tone professional but realistic. Do not invent any experience I haven’t mentioned.',
     },
-    videoPlaceholder: {
-      topic: 'using AI for resumes',
-      searchQuery: 'How to use ChatGPT to write a resume for ATS',
+    video: {
+      id: '-0ZHoBZ_BzM',
+      title: 'Build a Job-Winning Resume Using AI the Right Way',
+      channel: 'Real Demo',
+      duration: '11:06',
     },
     actionItem: 'Create a free account on ChatGPT or Gemini. Paste the prompt above using a job advert from Harambee or LinkedIn, and update your CV with the generated bullet points.',
     quiz: {
@@ -300,9 +308,11 @@ export const workReadinessSessions = [
         ],
       },
     ],
-    videoPlaceholder: {
-      topic: 'virtual interview tips',
-      searchQuery: 'How to ace a Zoom interview lighting and sound',
+    video: {
+      id: 'resCGEf0cMU',
+      title: '4 Tips for a Great Zoom Interview',
+      channel: 'MherMardoyan Career Coach',
+      duration: '2:40',
     },
     actionItem: 'Use your phone’s front camera to record a 1-minute video of yourself answering: "Tell me about a time you had to overcome a sudden problem." Watch it back to check your eye contact, lighting, and use of the STAR method.',
     quiz: {

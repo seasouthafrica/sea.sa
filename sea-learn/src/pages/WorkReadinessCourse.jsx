@@ -26,7 +26,29 @@ function saveLocal(key, userId, data) {
   try { localStorage.setItem(`${key}-${userId}`, JSON.stringify(data)); } catch { /* storage unavailable */ }
 }
 
-function VideoPlaceholder({ placeholder }) {
+function SessionVideo({ video, placeholder }) {
+  if (video?.id) {
+    return (
+      <div>
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl bg-black shadow-lg">
+          <iframe
+            className="absolute inset-0 h-full w-full"
+            src={`https://www.youtube-nocookie.com/embed/${video.id}`}
+            title={video.title}
+            loading="lazy"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        </div>
+        <p className="mt-2 text-xs text-slate-500">
+          {video.title}
+          {video.channel ? ` — ${video.channel}` : ''}
+          {video.duration ? ` (${video.duration})` : ''}
+        </p>
+      </div>
+    );
+  }
+
   if (!placeholder) return null;
   return (
     <div className="rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50 p-6">
@@ -194,7 +216,7 @@ function SessionBody({ session }) {
         </div>
       )}
 
-      <VideoPlaceholder placeholder={session.videoPlaceholder} />
+      <SessionVideo video={session.video} placeholder={session.videoPlaceholder} />
 
       <div className="rounded-2xl border-l-4 border-sea-teal bg-white p-5 shadow-sm">
         <p className="text-sm text-slate-800"><strong>Practical Action Item:</strong> {session.actionItem}</p>
