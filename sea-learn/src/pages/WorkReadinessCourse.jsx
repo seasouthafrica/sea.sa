@@ -33,7 +33,7 @@ function SessionVideo({ video, placeholder }) {
         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl bg-black shadow-lg">
           <iframe
             className="absolute inset-0 h-full w-full"
-            src={`https://www.youtube-nocookie.com/embed/${video.id}`}
+            src={`https://www.youtube.com/embed/${video.id}`}
             title={video.title}
             loading="lazy"
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
