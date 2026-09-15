@@ -325,6 +325,29 @@ ul   { list-style: none; }
 }
 .btn-red:hover { background: #c62828; }
 
+.btn-outline {
+  display: inline-block;
+  background: white;
+  color: #333;
+  font-weight: 700;
+  font-size: .8rem;
+  letter-spacing: .04em;
+  padding: .65rem 1.4rem;
+  border-radius: 999px;
+  border: 2px solid #ddd;
+  text-decoration: none;
+  transition: border-color .2s, background .2s;
+}
+.btn-outline:hover { border-color: var(--teal); background: #f0fafa; }
+
+.support-sub {
+  font-size: 1.3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin: 1rem 0;
+}
+
 /* ── Section 2: PARTNER WITH US stats ─────────────────────── */
 .stats-section {
   background: linear-gradient(180deg, #ffffff 0%, #f6f2ee 100%);
@@ -1115,6 +1138,19 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
   font-size: 1rem;
   font-weight: 700;
 }
+.prospectus-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  border: 2px solid var(--teal);
+  border-radius: 12px;
+  padding: 1.2rem 2rem;
+  text-align: left;
+  cursor: pointer;
+  transition: box-shadow .2s;
+}
+.prospectus-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
 
 /* ── Why Partner With Us ─────────────────────────────────── */
 .why-partner-section {
