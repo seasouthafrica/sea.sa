@@ -68,7 +68,7 @@ export default function CoursePlayer() {
     return () => {
       cancelled = true;
     };
-  }, [courseSlug, user?.id]);
+  }, [courseSlug, user.id]);
 
   const progress = useMemo(
     () => (lessons.length ? Math.round((lessons.filter((lesson) => completedIds.has(lesson.id)).length / lessons.length) * 100) : 0),
@@ -78,12 +78,16 @@ export default function CoursePlayer() {
   const handleLessonComplete = useCallback(async (lessonId) => {
     if (completedIds.has(lessonId)) return;
 
-    const next = new Set(completedIds);
-    next.add(lessonId);
-    setCompletedIds(next);
+    setCompletedIds((current) => {
+      const next = new Set(current);
+      next.add(lessonId);
+      return next;
+    });
 
-    if (!course || !user) return;
-    const completedCount = lessons.filter((lesson) => next.has(lesson.id)).length;
+    if (!course) return;
+    const completedCount = lessons.filter(
+      (lesson) => lesson.id === lessonId || completedIds.has(lesson.id)
+    ).length;
     if (lessons.length && completedCount >= lessons.length) {
       const { error: completionError } = await supabase
         .from('enrollments')
@@ -92,7 +96,7 @@ export default function CoursePlayer() {
         .eq('course_id', course.id);
       if (completionError) setError(completionError.message);
     }
-  }, [completedIds, course, lessons, user]);
+  }, [completedIds, course, lessons.length, user.id]);
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
