@@ -84,7 +84,7 @@ export default function CourseWeekPage({ course }) {
             Week {course.weekNumber}: {course.weekTitle}
           </h2>
           <div className="mt-6 space-y-5 text-lg leading-8 text-slate-700">
-            {course.intro.map((paragraph) => (
+            {(course.intro ?? []).map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
@@ -96,7 +96,7 @@ export default function CourseWeekPage({ course }) {
             By the end of this week, participants will be able to:
           </p>
           <ul className="mt-5 space-y-3">
-            {course.learningOutcomes.map((outcome) => (
+            {(course.learningOutcomes ?? []).map((outcome) => (
               <li key={outcome} className="flex gap-3 text-sm leading-6">
                 <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sea-teal text-white" aria-hidden="true">
                   <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none">
@@ -111,7 +111,7 @@ export default function CourseWeekPage({ course }) {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 pb-14 sm:px-8 lg:pb-20">
-        <Suspense fallback={<div className="rounded-3xl bg-slate-50 p-8 text-center text-slate-500">Loading presentation viewer...</div>}>
+        {presentationUrl && <Suspense fallback={<div className="rounded-3xl bg-slate-50 p-8 text-center text-slate-500">Loading presentation viewer...</div>}>
           <Flipbook
             fileUrl={presentationUrl}
             storageKey={`course-week-${course.programmeTitle}-${course.weekNumber}-page`}

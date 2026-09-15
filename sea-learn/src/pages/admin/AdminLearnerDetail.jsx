@@ -2,13 +2,20 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import AssignmentFile, { getAssignmentObjectPath } from '../../components/AssignmentFile';
+import { downloadCertificateForUser } from '../../components/Certificate';
 
 const SIM_LABELS = { 21: 'Prompt Engineering', 31: 'Logo Maker', 41: 'Facebook Ad Simulator', 51: 'Code Playground', 52: 'Website Prompt Generator' };
 const SESSION_LABELS = { 1: 'Introduction to Entrepreneurship', 2: 'Market Research', 3: 'Branding & Identity', 4: 'Digital Advertising', 5: 'Web Development with AI' };
 const ASSIGNMENT_IDS = [2, 3, 4, 5];
 const SIMULATOR_IDS = [21, 31, 41, 51, 52];
 const SESSION_PROGRESS_IDS = [101, 102, 103, 104, 105];
-const TOTAL_REQUIREMENTS = 19; // 5 sessions + 4 assignments + 5 simulators + 5 quizzes
+const REQUIRED_QUIZ_KEYS = [
+  'Market Research Knowledge Check',
+  'Branding Knowledge Check',
+  'Digital Advertising Knowledge Check',
+  'Knowledge Check — The Anatomy of a Website',
+  'Final Quiz — Web Development Fundamentals',
+];
 
 function isSimulator(id) { return id in SIM_LABELS; }
 
@@ -101,9 +108,15 @@ export default function AdminLearnerDetail() {
   const hasLogoUpload = submissions.some((submission) => (
     submission.chapter_id === 3 && submission.status === 'submitted' && submission.file_url
   ));
-  const progressPct = hasLogoUpload
-    ? 100
-    : Math.min(99, Math.round((totalActivities / TOTAL_REQUIREMENTS) * 100));
+  const hasQuizSubmitted = quizSubmissions.some((s) => {
+    const p = parsePayload(s.explanation);
+    return s.status === 'submitted' && p?.type === 'quiz' && REQUIRED_QUIZ_KEYS.includes(p.quizKey);
+  });
+  const hasYoutubeUpload = submissions.some((s) =>
+    (s.chapter_id === 4 || s.chapter_id === 5) && s.status === 'submitted'
+  );
+  const progressPct = (hasLogoUpload ? 50 : 0) + (hasQuizSubmitted ? 25 : 0) + (hasYoutubeUpload ? 25 : 0);
+  const courseCompleted = hasLogoUpload && hasQuizSubmitted && hasYoutubeUpload;
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-10">
@@ -122,7 +135,7 @@ export default function AdminLearnerDetail() {
         <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center">
           <p className="text-xs font-semibold text-emerald-600">Overall Progress</p>
           <p className="text-2xl font-bold text-emerald-700">{progressPct}%</p>
-          <p className="text-xs text-emerald-500">{hasLogoUpload ? 'Logo creation uploaded' : `${totalActivities}/${TOTAL_REQUIREMENTS} requirements`}</p>
+          <p className="text-xs text-emerald-500">{courseCompleted ? 'Course completed' : `${totalActivities} activities done`}</p>
         </div>
       </div>
 
@@ -130,7 +143,7 @@ export default function AdminLearnerDetail() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-100">Uplift programme result</p>
-            <h2 className="mt-1 text-2xl font-black">{progressPct === 100 ? 'Successfully completed' : 'In progress'}</h2>
+            <h2 className="mt-1 text-2xl font-black">{courseCompleted ? 'Successfully completed' : 'In progress'}</h2>
             <p className="mt-1 text-sm text-emerald-50">Sessions, assignments, practical activities and knowledge checks are included.</p>
           </div>
           <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-white/40 bg-white/15 text-2xl font-black">
@@ -144,6 +157,30 @@ export default function AdminLearnerDetail() {
           <ResultMetric label="Quizzes" value={`${completedQuizzes}/5`} />
         </div>
       </div>
+
+      {/* Download Certificate (admin) */}
+      {courseCompleted && (
+        <div className="mb-8 flex items-center gap-4 rounded-2xl border-2 border-emerald-300 bg-gradient-to-r from-emerald-50 to-white p-5">
+          <span className="text-3xl">🎓</span>
+          <div className="flex-1">
+            <h3 className="font-bold text-emerald-900">Certificate Available</h3>
+            <p className="text-sm text-emerald-700">This learner has completed the Uplift programme. Download their certificate below.</p>
+          </div>
+          <button
+            onClick={() => downloadCertificateForUser(
+              `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Learner',
+              new Date().toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' })
+            )}
+            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white shadow transition hover:bg-emerald-700"
+          >
+            <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+              <path d="M10 3a1 1 0 011 1v7.586l2.293-2.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 11.586V4a1 1 0 011-1z" />
+              <path d="M3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+            </svg>
+            Download Certificate
+          </button>
+        </div>
+      )}
 
       {/* Profile Details */}
       <div className="mb-8 grid grid-cols-2 gap-4 rounded-xl border border-slate-200 bg-white p-5 text-sm sm:grid-cols-3">
@@ -284,6 +321,7 @@ export default function AdminLearnerDetail() {
       <div className="mb-8 grid gap-3 sm:grid-cols-2">
         {quizSubmissions.map((submission) => {
           const result = parsePayload(submission.explanation);
+          if (!result) return null;
           return (
             <div key={submission.id} className="rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-white p-4">
               <div className="flex items-start justify-between gap-3">

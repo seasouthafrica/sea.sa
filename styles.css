@@ -18,6 +18,7 @@
   --brand-ink: #211f2d;
   --shadow: 0 16px 35px rgba(18, 20, 29, 0.12);
   --font:    'Segoe UI', Arial, sans-serif;
+  --heading: Georgia, 'Times New Roman', serif;
 }
 
 html { scroll-behavior: smooth; }
@@ -355,6 +356,7 @@ ul   { list-style: none; }
 
 .stats-heading {
   text-align: center;
+  font-family: var(--heading);
   font-size: clamp(1.6rem, 3vw, 2.2rem);
   font-weight: 900;
   text-transform: uppercase;
@@ -503,6 +505,7 @@ ul   { list-style: none; }
 }
 .who-logo { max-width: 180px; margin-bottom: 1rem; }
 .who-text h2 {
+  font-family: var(--heading);
   font-size: clamp(1.8rem, 3vw, 2.4rem);
   font-weight: 900;
   text-transform: uppercase;
@@ -538,7 +541,7 @@ ul   { list-style: none; }
   overflow: hidden;
   box-shadow: 0 12px 26px rgba(17,17,17,.06);
   transition: transform .25s, box-shadow .25s;
-  text-align: center;
+  text-align: left;
   background: #fff;
 }
 .prog-card:hover { transform: translateY(-4px); box-shadow: 0 18px 30px rgba(17,17,17,.12); }
@@ -570,9 +573,20 @@ ul   { list-style: none; }
 .prog-body h3 a { color: inherit; }
 .prog-body h3 a:hover { color: var(--teal); text-decoration: underline; }
 .prog-body p { font-size: .88rem; color: var(--gray); line-height: 1.6; }
-.prog-links { display: flex; gap: 1.2rem; margin-top: .8rem; }
-.prog-link { font-size: .85rem; font-weight: 600; color: var(--teal); text-decoration: none; }
-.prog-link:hover { text-decoration: underline; color: var(--magenta); }
+.prog-links { display: flex; gap: .8rem; margin-top: 1rem; flex-wrap: wrap; }
+.prog-link {
+  display: inline-block;
+  font-size: .82rem;
+  font-weight: 700;
+  color: white;
+  background: var(--teal);
+  padding: .55rem 1.3rem;
+  border-radius: 4px;
+  text-decoration: none;
+  letter-spacing: .03em;
+  transition: background .2s;
+}
+.prog-link:hover { background: var(--teal-dk); color: white; }
 
 /* ── Section 6: Support next gen ───────────────────────────── */
 .support-section {
@@ -582,6 +596,7 @@ ul   { list-style: none; }
 }
 .support-inner { max-width: 1100px; margin: 0 auto; }
 .support-section h2 {
+  font-family: var(--heading);
   font-size: clamp(1.5rem, 3vw, 2.2rem);
   font-weight: 900;
   text-transform: uppercase;
@@ -875,6 +890,7 @@ ul   { list-style: none; }
   text-align: center;
 }
 .findout-section h2 {
+  font-family: var(--heading);
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 900;
   text-transform: uppercase;
@@ -921,6 +937,7 @@ ul   { list-style: none; }
 }
 .news-inner { max-width: 1200px; margin: 0 auto; }
 .news-section h2 {
+  font-family: var(--heading);
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 900;
   text-transform: uppercase;
@@ -1053,7 +1070,7 @@ ul   { list-style: none; }
   text-align: center;
   color: white;
 }
-.newsletter h2  { font-size: 1.7rem; font-weight: 800; margin-bottom: .5rem; }
+.newsletter h2  { font-family: var(--heading); font-size: 1.7rem; font-weight: 800; margin-bottom: .5rem; font-style: italic; }
 .newsletter p   { opacity: .9; margin-bottom: 1.5rem; }
 .nl-form        { display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
 .nl-form input  { padding: .75rem 1.2rem; border: none; border-radius: 4px; font-size: .9rem; min-width: 260px; outline: none; }
@@ -1103,6 +1120,11 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
 #search-bar input { width: 100%; max-width: 500px; padding: .55rem 1rem; border-radius: 4px; border: none; font-size: .9rem; outline: none; }
 
 /* ── Programmes subtitle ──────────────────────────────────── */
+.programmes-section h2 {
+  font-family: var(--heading);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
 .programmes-sub {
   text-align: center;
   max-width: 700px;
@@ -1110,6 +1132,7 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
   color: var(--gray);
   font-size: 1.05rem;
   line-height: 1.6;
+  font-style: italic;
 }
 
 /* ── Programme Prospectus ─────────────────────────────────── */
@@ -1123,7 +1146,11 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
   margin: 0 auto;
 }
 .prospectus-inner h2 {
+  font-family: var(--heading);
   font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
   margin-bottom: 1rem;
   color: var(--brand-ink);
 }
@@ -1154,7 +1181,7 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
 
 /* ── Why Partner With Us ─────────────────────────────────── */
 .why-partner-section {
-  background: var(--cream);
+  background: #f9f9f9;
   padding: 4rem 3rem;
   text-align: center;
   overflow: hidden;
@@ -1164,11 +1191,13 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
   margin: 0 auto;
 }
 .why-partner-inner h2 {
+  font-family: var(--heading);
   font-size: 2rem;
   font-weight: 900;
   color: var(--brand-ink);
   margin-bottom: 2.5rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 .why-partner-grid {
   display: grid;
@@ -1177,15 +1206,16 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
 }
 .why-partner-card {
   background: white;
-  border-radius: 10px;
+  border-radius: 14px;
   padding: 2rem 1.5rem;
   display: flex;
   align-items: flex-start;
   gap: 1rem;
   text-align: left;
-  border-left: 4px solid var(--magenta);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  transition: transform .2s, box-shadow .2s;
 }
+.why-partner-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.1); }
 .why-partner-icon {
   flex-shrink: 0;
   width: 48px;
@@ -1223,16 +1253,23 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
   margin: 0 auto;
 }
 .community-text h2 {
+  font-family: var(--heading);
   font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .05em;
   margin-bottom: 1rem;
   color: var(--brand-ink);
 }
 .community-quote {
-  font-size: 1.05rem;
+  font-size: .95rem;
   font-style: italic;
-  color: var(--dark);
-  line-height: 1.75;
+  color: white;
+  line-height: 1.65;
   margin: 1.5rem 0;
+  background: var(--teal);
+  padding: 1.5rem;
+  border-radius: 10px;
 }
 .community-btns {
   display: flex;
@@ -1255,7 +1292,11 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
   text-align: center;
 }
 .sponsors-section h2 {
+  font-family: var(--heading);
   font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .06em;
   margin-bottom: 2rem;
   color: var(--brand-ink);
 }

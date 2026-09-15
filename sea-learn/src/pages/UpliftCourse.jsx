@@ -106,7 +106,9 @@ function saveProgressToSupabase(userId, chapterId, type, data) {
     status: 'submitted',
     explanation: JSON.stringify({ type, chapterId, ...data }),
     submitted_at: new Date().toISOString(),
-  }, { onConflict: 'user_id,chapter_id' });
+  }, { onConflict: 'user_id,chapter_id' }).then(({ error }) => {
+    if (error) console.error('Failed to save progress:', error);
+  });
 }
 
 export default function UpliftCourse() {
@@ -225,11 +227,7 @@ export default function UpliftCourse() {
   const hasYoutubeUpload = [4, 5].some((id) => submissions[id]?.status === 'submitted');
 
   const overallProgress = useMemo(() => {
-    if (hasLogoUpload) return 100;
-    let pct = 0;
-    if (hasQuizSubmitted) pct += 25;
-    if (hasYoutubeUpload) pct += 25;
-    return pct;
+    return (hasLogoUpload ? 50 : 0) + (hasQuizSubmitted ? 25 : 0) + (hasYoutubeUpload ? 25 : 0);
   }, [hasLogoUpload, hasQuizSubmitted, hasYoutubeUpload]);
 
   const finalTaskUnlocked = hasLogoUpload;
@@ -262,7 +260,8 @@ export default function UpliftCourse() {
       await supabase
         .from('assignment_submissions')
         .delete()
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .in('chapter_id', [1, 2, 3, 4, 5, 21, 31, 41, 51, 52, 101, 102, 103, 104, 105]);
 
       localStorage.removeItem(`${PROGRESS_KEY}-${user.id}`);
       localStorage.removeItem(`${QUIZ_KEY}-${user.id}`);

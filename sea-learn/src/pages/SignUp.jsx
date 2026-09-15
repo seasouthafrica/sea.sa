@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/useAuth';
 
@@ -289,7 +289,7 @@ export default function SignUp() {
 
           <p className="mt-4 text-center text-sm text-slate-500">
             Already have an account?{' '}
-            <a href="/login" className="font-semibold text-sea-teal">Log in</a>
+            <Link to="/login" className="font-semibold text-sea-teal">Log in</Link>
           </p>
         </form>
       </div>

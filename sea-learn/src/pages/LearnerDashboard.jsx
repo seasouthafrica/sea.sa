@@ -24,7 +24,7 @@ export default function LearnerDashboard() {
   const [hasQuiz, setHasQuiz] = useState(false);
   const [hasYoutube, setHasYoutube] = useState(false);
 
-  const upliftPercent = hasLogo ? 100 : (hasQuiz ? 25 : 0) + (hasYoutube ? 25 : 0);
+  const upliftPercent = (hasLogo ? 50 : 0) + (hasQuiz ? 25 : 0) + (hasYoutube ? 25 : 0);
 
   useEffect(() => {
     if (!user) return;
@@ -116,7 +116,7 @@ export default function LearnerDashboard() {
             <div className={`rounded-lg p-3 text-center text-xs ${hasLogo ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-500'}`}>
               <span className="block text-lg mb-1">{hasLogo ? '✅' : '🎨'}</span>
               <span className="block font-semibold">Logo Upload</span>
-              <span className="block text-[10px] mt-0.5">100%</span>
+              <span className="block text-[10px] mt-0.5">50%</span>
             </div>
             <div className={`rounded-lg p-3 text-center text-xs ${hasQuiz ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-500'}`}>
               <span className="block text-lg mb-1">{hasQuiz ? '✅' : '📝'}</span>

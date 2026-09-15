@@ -1,23 +1,30 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
+import { downloadCertificateForUser } from '../../components/Certificate';
 
-const REQUIRED_ACTIVITY_IDS = new Set([2, 3, 4, 5, 21, 31, 41, 51, 52, 101, 102, 103, 104, 105]);
-const TOTAL_UPLIFT_REQUIREMENTS = 19;
+const REQUIRED_QUIZ_KEYS = new Set([
+  'Market Research Knowledge Check',
+  'Branding Knowledge Check',
+  'Digital Advertising Knowledge Check',
+  'Knowledge Check — The Anatomy of a Website',
+  'Final Quiz — Web Development Fundamentals',
+]);
 
 function getUpliftProgress(rows) {
-  if (rows.some((row) => row.chapter_id === 3 && row.status === 'submitted' && row.file_url)) return 100;
-  const completedActivities = new Set();
-  const quizzes = new Set();
+  let hasLogo = false;
+  let hasQuiz = false;
+  let hasYoutube = false;
   rows.forEach((row) => {
     if (row.status !== 'submitted') return;
-    if (REQUIRED_ACTIVITY_IDS.has(row.chapter_id)) completedActivities.add(row.chapter_id);
+    if (row.chapter_id === 3 && row.file_url) hasLogo = true;
+    if (row.chapter_id === 4 || row.chapter_id === 5) hasYoutube = true;
     try {
       const payload = JSON.parse(row.explanation);
-      if (payload?.type === 'quiz' && payload.quizKey) quizzes.add(payload.quizKey);
+      if (payload?.type === 'quiz' && REQUIRED_QUIZ_KEYS.has(payload.quizKey)) hasQuiz = true;
     } catch {}
   });
-  return Math.min(99, Math.round(((completedActivities.size + quizzes.size) / TOTAL_UPLIFT_REQUIREMENTS) * 100));
+  return (hasLogo ? 50 : 0) + (hasQuiz ? 25 : 0) + (hasYoutube ? 25 : 0);
 }
 
 // Simple CSV export from an array of objects — no extra dependency needed.
@@ -170,9 +177,26 @@ export default function AdminLearners() {
               </td>
               <td className="p-3">{new Date(l.created_at).toLocaleDateString()}</td>
               <td className="p-3">
-                <Link to={`/admin/learners/${l.id}`} className="text-sea-teal font-medium">
-                  View →
-                </Link>
+                <div className="flex items-center gap-2">
+                  <Link to={`/admin/learners/${l.id}`} className="text-sea-teal font-medium">
+                    View →
+                  </Link>
+                  {(progressByUser[l.id] || 0) === 100 && (
+                    <button
+                      onClick={() => downloadCertificateForUser(
+                        `${l.first_name || ''} ${l.last_name || ''}`.trim() || 'Learner',
+                        new Date().toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' })
+                      )}
+                      title="Download certificate"
+                      className="rounded-lg bg-emerald-100 p-1.5 text-emerald-700 transition hover:bg-emerald-200"
+                    >
+                      <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+                        <path d="M10 3a1 1 0 011 1v7.586l2.293-2.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 11.586V4a1 1 0 011-1z" />
+                        <path d="M3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
               </td>
             </tr>
           ))}
