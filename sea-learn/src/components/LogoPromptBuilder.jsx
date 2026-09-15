@@ -30,9 +30,13 @@ export default function LogoPromptBuilder() {
   }, [values]);
 
   const copyPrompt = async () => {
-    await navigator.clipboard.writeText(prompt);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(prompt);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.prompt('Copy this prompt:', prompt);
+    }
   };
 
   return (

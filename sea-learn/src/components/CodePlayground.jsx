@@ -108,7 +108,7 @@ const CHALLENGES = [
     hint: '<h1 id="title">Click the button!</h1>\n<button id="btn">Change Text</button>\n\n<script>\n  document.getElementById("btn").addEventListener("click", function() {\n    document.getElementById("title").textContent = "You clicked it! 🎉";\n  });\n</script>',
     validate: (doc) => {
       const script = doc.querySelector('script');
-      return script && script.textContent.includes('addEventListener') || (script && script.textContent.includes('onclick'));
+      return script && (script.textContent.includes('addEventListener') || script.textContent.includes('onclick'));
     },
     successMsg: 'You gave your website a heartbeat — JavaScript responds to user actions!',
   },

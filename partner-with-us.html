@@ -277,7 +277,7 @@
     </div>
   </a>
   <div class="top-actions">
-    <a href="#contact" class="btn-donate">DONATE HERE</a>
+      <a href="#donation" class="btn-donate">DONATE HERE</a>
     <select class="top-select hub" aria-label="Hub">
       <option>HUB</option>
       <option>South Africa</option>
@@ -431,6 +431,17 @@
     <a href="#contact" class="btn-magenta" style="margin-top:1rem; display:inline-block;">Get In Touch</a>
   </div>
 
+  <!-- Donation box moved here -->
+  <div id="donation" class="get-involved-section" style="margin-top:1.2rem;">
+    <h2>Make a Donation</h2>
+    <p style="color:var(--gray);">Enter an amount below and we'll contact you with donation details and a Section 18A receipt.</p>
+    <form id="donation-form" onsubmit="handleDonate(event)" style="display:flex; gap:.6rem; align-items:center; margin-top:.8rem;">
+      <input name="amount" type="number" min="1" placeholder="Amount (ZAR)" required style="padding:.6rem .8rem; border-radius:6px; border:1px solid #ddd; max-width:180px;">
+      <button type="submit" class="btn-teal" style="padding:.6rem .9rem;">Donate</button>
+    </form>
+    <p id="don-msg" style="display:none; margin-top:.6rem; color:var(--teal);">Opening your email client…</p>
+  </div>
+
   <!-- Contact -->
   <div class="contact-block" id="contact">
     <div class="contact-block-img">
@@ -515,6 +526,20 @@
     e.preventDefault();
     document.getElementById('sub-msg').style.display = 'block';
     e.target.reset();
+  }
+
+  function handleDonate(e) {
+    e.preventDefault();
+    const form = document.getElementById('donation-form');
+    const amt = form.amount.value;
+    const msg = document.getElementById('don-msg');
+    msg.style.display = 'block';
+    // Open mail client with donation amount prefilled; fallback to simple alert if mailto blocked
+    const mail = 'jamy@socialenterprise.academy';
+    const subject = encodeURIComponent('Donation enquiry — ZAR ' + amt);
+    const body = encodeURIComponent('I would like to donate ZAR ' + amt + ". Please contact me with payment details and a Section 18A receipt.\n\nThank you.");
+    const mailto = `mailto:${mail}?subject=${subject}&body=${body}`;
+    window.location.href = mailto;
   }
 </script>
 </body>
