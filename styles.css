@@ -1259,6 +1259,9 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
   color: var(--brand-ink);
 }
 
+/* Keyboard users can open a dropdown without a pointer. */
+.dd:focus-within .dd-menu { display: block; }
+
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 960px) {
   .prog-grid, .findout-grid, .news-grid { grid-template-columns: 1fr 1fr; }
@@ -1267,12 +1270,33 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
   .footer-grid                         { grid-template-columns: 1fr 1fr; }
   .filmstrip                           { grid-template-columns: 1fr; }
   .filmstrip-img:not(:first-child)     { display: none; }
+
+  /* The bar runs out of room around 800px, so collapse it here rather
+     than at 600px where the last items were being clipped off-screen. */
+  .navbar .nav-inner { flex-direction: column; align-items: stretch; display: none; }
+  .navbar .nav-inner.open { display: flex; }
+  .nav-toggle { display: block; }
+  .nav-search { margin-left: 0; }
+
+  /* Touch devices never fire :hover, which left every submenu link
+     unreachable. Expand them inline instead of on hover. */
+  .dd-menu {
+    display: block;
+    position: static;
+    min-width: 0;
+    background: transparent;
+    box-shadow: none;
+    border-top: none;
+  }
+  .dd-menu a {
+    color: rgba(255,255,255,.88);
+    font-size: .8rem;
+    padding: .55rem 1rem .55rem 2.2rem;
+  }
+  .dd-menu a:hover { background: rgba(255,255,255,.12); color: #fff; }
 }
 @media (max-width: 600px) {
   .top-bar { padding: 0 1rem; }
-  .navbar .nav-inner { flex-direction: column; align-items: flex-start; display: none; }
-  .navbar .nav-inner.open { display: flex; }
-  .nav-toggle { display: block; }
   .prog-grid, .findout-grid, .news-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
 }
