@@ -90,7 +90,7 @@ export default function Login({ mode = 'personal' }) {
     setResetLoading(true);
     setError('');
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: `${window.location.origin}${adminMode ? '/admin/login' : '/login'}`,
+      redirectTo: `${window.location.origin}/reset-password`,
     });
     setResetLoading(false);
     if (resetError) {

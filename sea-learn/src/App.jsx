@@ -6,6 +6,7 @@ import Landing from './pages/Landing.jsx';
 
 const SignUp = lazy(() => import('./pages/SignUp.jsx'));
 const Login = lazy(() => import('./pages/Login.jsx'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword.jsx'));
 const LearnerDashboard = lazy(() => import('./pages/LearnerDashboard.jsx'));
 const CoursePlayer = lazy(() => import('./pages/CoursePlayer.jsx'));
 const UpliftCourse = lazy(() => import('./pages/UpliftCourse.jsx'));
@@ -50,6 +51,7 @@ export default function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login mode="personal" />} />
           <Route path="/admin/login" element={<Login mode="admin" />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           <Route
             path="/uplift"

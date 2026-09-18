@@ -40,10 +40,13 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
   const [status, setStatus] = useState('idle'); // idle | saving | submitting | success | error
   const [errorMsg, setErrorMsg] = useState('');
   const [draftSaved, setDraftSaved] = useState(false);
+  const [editing, setEditing] = useState(false);
   const fileInputRef = useRef(null);
 
   // Load draft or existing submission
   useEffect(() => {
+    // Never overwrite what the learner is currently typing.
+    if (editing) return;
     if (existingSubmission) {
       setYoutubeUrl(existingSubmission.youtube_url || '');
       setExplanation(existingSubmission.explanation || '');
@@ -82,11 +85,32 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
     }
   }, []);
 
-  const handleSaveDraft = useCallback(() => {
+  const handleSaveDraft = useCallback(async () => {
+    setErrorMsg('');
+    // Keep the local copy first so a failed request never loses what was typed.
     saveDraft(userId, chapterId, { youtubeUrl, explanation });
+
+    setStatus('saving');
+    const { error: draftError } = await supabase
+      .from('assignment_submissions')
+      .upsert({
+        user_id: userId,
+        chapter_id: chapterId,
+        youtube_url: youtubeUrl.trim() || null,
+        explanation: explanation.trim() || null,
+        status: 'draft',
+      }, { onConflict: 'user_id,chapter_id' });
+    setStatus('idle');
+
+    if (draftError) {
+      setErrorMsg(`Saved on this device, but not to your account yet: ${draftError.message}`);
+      return;
+    }
+
     setDraftSaved(true);
     setTimeout(() => setDraftSaved(false), 2000);
-  }, [userId, chapterId, youtubeUrl, explanation]);
+    onSubmissionChange?.();
+  }, [userId, chapterId, youtubeUrl, explanation, onSubmissionChange]);
 
   const handleSubmit = useCallback(async () => {
     setErrorMsg('');
@@ -155,11 +179,18 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
 
       if (submitError) {
         setStatus('error');
-        setErrorMsg(submitError.message);
+        // Learners lose write access once an admin has reviewed the row, which
+        // otherwise surfaces as an unexplained row-level-security error.
+        setErrorMsg(
+          /row-level security|violates/i.test(submitError.message)
+            ? 'This assignment has already been reviewed, so it can no longer be changed. Contact your facilitator if it needs reopening.'
+            : submitError.message,
+        );
         return;
       }
 
       clearDraft(userId, chapterId);
+      setEditing(false);
       setStatus('success');
       onSubmissionChange?.();
     } catch (err) {
@@ -168,7 +199,7 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
     }
   }, [type, file, youtubeUrl, explanation, userId, chapterId, existingSubmission, onSubmissionChange]);
 
-  const isSubmitted = existingSubmission?.status === 'submitted' || status === 'success';
+  const isSubmitted = (existingSubmission?.status === 'submitted' || status === 'success') && !editing;
 
   if (isSubmitted) {
     return (
@@ -209,6 +240,19 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
             <p className="mt-1 text-sm text-emerald-800">{existingSubmission.explanation}</p>
           </div>
         )}
+        <button
+          type="button"
+          onClick={() => {
+            setYoutubeUrl(existingSubmission?.youtube_url || '');
+            setExplanation(existingSubmission?.explanation || '');
+            setErrorMsg('');
+            setStatus('idle');
+            setEditing(true);
+          }}
+          className="mt-4 rounded-lg border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-200"
+        >
+          Edit submission
+        </button>
       </div>
     );
   }
@@ -291,14 +335,14 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
       <div className="flex flex-wrap gap-3">
         <button
           onClick={handleSaveDraft}
-          disabled={status === 'submitting'}
+          disabled={status === 'submitting' || status === 'saving'}
           className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-sea-teal hover:text-sea-teal disabled:opacity-50"
         >
-          {draftSaved ? '✓ Draft Saved' : 'Save Draft'}
+          {status === 'saving' ? 'Saving…' : draftSaved ? '✓ Draft Saved' : 'Save Draft'}
         </button>
         <button
           onClick={handleSubmit}
-          disabled={status === 'submitting'}
+          disabled={status === 'submitting' || status === 'saving'}
           className="rounded-lg bg-sea-teal px-5 py-2.5 text-sm font-bold text-white shadow transition hover:shadow-md disabled:opacity-50"
         >
           {status === 'submitting' ? 'Submitting…' : 'Submit Assignment'}
