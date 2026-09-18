@@ -155,6 +155,30 @@ export const workReadinessSessions = [
         ],
       },
       {
+        heading: 'Time Management Principles',
+        groups: [
+          { label: 'Attitude', points: ['Your mindset shapes how you use time.', 'Believe your time is valuable, stay positive, and take control of your schedule instead of letting it control you.'] },
+          { label: 'Goals', points: ['Knowing what you want to achieve helps you focus.', 'Set short- and long-term goals, write them down, and review them often to stay motivated.'] },
+          { label: 'Priorities', points: ['Not everything is equally important.', 'Use the "urgent vs. important" rule — focus on tasks that move you closer to your goals, not just what feels urgent.'] },
+          { label: 'Analysing', points: ['Understand how you currently spend your time.', 'Track your activities for a few days and notice where time is wasted and where you can improve.'] },
+          { label: 'Planning', points: ['Think ahead about what needs to be done.', 'Use a planner or app to map out your day/week, and break big tasks into smaller steps.'] },
+          { label: 'Scheduling', points: ['Assign specific times to tasks.', 'Block time for studying, working, breaks, and fun — and stick to your schedule as much as possible.'] },
+          { label: 'Interruptions', points: ['Distractions that break your focus.', 'Identify common ones (like your phone) and limit them — use "Do Not Disturb" or find a quiet space.'] },
+          { label: 'Meetings', points: ['Time spent in group discussions or check-ins.', 'Be on time, stay focused, take notes; if leading, keep it short and clear.'] },
+          { label: 'Paperwork (organizing)', points: ['Keeping documents and files in order.', 'Use folders (digital or physical), organize materials, and label everything clearly.'] },
+          { label: 'Delegation', points: ['Sharing tasks with others when appropriate.', 'If working in a team, don’t try to do everything yourself — trust others and divide tasks fairly.'] },
+          { label: 'Procrastination', points: ['Delaying tasks you should be doing now.', 'Start with small steps, use the "2-minute rule" (if it takes less than 2 minutes, do it now).'] },
+          { label: 'Teamwork', points: ['Working well with others to manage time and tasks.', 'Communicate clearly, respect others’ time, and support each other to meet deadlines.'] },
+        ],
+        reflection: {
+          title: 'Reflection',
+          questions: [
+            'Identify which time management principles you struggle with.',
+            'Select a minimum of 2 per week and apply them daily.',
+          ],
+        },
+      },
+      {
         heading: 'Dressing for Success on a Budget',
         paragraphs: [
           '"Business casual" does not mean expensive designer labels. It means clean, neat, and unbranded. You can build a highly effective capsule wardrobe at affordable local retailers like Mr Price, Pep, or by thrifting in the CBD.',
