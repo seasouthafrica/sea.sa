@@ -65,7 +65,11 @@ export default function Login({ mode = 'personal' }) {
 
       if (adminMode && !signedInAsAdmin) {
         await supabase.auth.signOut();
-        setError('This account does not have admin access. Use the personal login instead.');
+        setError(
+          profile
+            ? 'This account does not have admin access. Use the personal login instead.'
+            : 'Your details are correct, but your profile could not be loaded, so admin access could not be confirmed. Please try again, or contact the site administrator if this continues.',
+        );
         return;
       }
 

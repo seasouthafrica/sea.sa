@@ -98,12 +98,17 @@ export default function AssignmentSubmission({ chapterId, type, userId, existing
         chapter_id: chapterId,
         youtube_url: youtubeUrl.trim() || null,
         explanation: explanation.trim() || null,
-        status: 'draft',
+        // Saving a draft while editing must never un-submit finished work.
+        status: existingSubmission?.status === 'submitted' ? 'submitted' : 'draft',
       }, { onConflict: 'user_id,chapter_id' });
     setStatus('idle');
 
     if (draftError) {
-      setErrorMsg(`Saved on this device, but not to your account yet: ${draftError.message}`);
+      setErrorMsg(
+        /row-level security|violates/i.test(draftError.message)
+          ? 'This assignment has already been reviewed, so it can no longer be changed. Contact your facilitator if it needs reopening.'
+          : `Saved on this device, but not to your account yet: ${draftError.message}`,
+      );
       return;
     }
 

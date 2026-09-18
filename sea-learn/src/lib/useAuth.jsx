@@ -50,13 +50,19 @@ export function AuthProvider({ children }) {
           if (!profile || !ADMIN_EMAILS.has(email) || ['admin', 'super_admin'].includes(profile.role)) {
             return profile;
           }
+          // `role` is deliberately not updatable by authenticated clients, so this
+          // promotion can only succeed where an older database still allows it.
+          // A refusal must not discard the profile we already loaded.
           const { data, error } = await supabase
             .from('profiles')
             .update({ role: 'admin' })
             .eq('id', sessionUser.id)
             .select('id, first_name, last_name, role, id_number')
             .single();
-          if (error) throw error;
+          if (error) {
+            console.warn('Admin role must be granted in the database, not from the browser.', error.message);
+            return profile;
+          }
           return data;
         }),
       PROFILE_TIMEOUT_MS,
