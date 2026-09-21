@@ -66,15 +66,30 @@ export const workReadinessSessions = [
       },
       {
         heading: 'Bouncing Back from Challenges, Stress, or Failure',
-        groups: [
-          { label: 'Keep going, even when it’s hard', points: ['Break big tasks into small steps.', 'Celebrate progress, not just perfection.'] },
-          { label: 'Learn from mistakes', points: ['Don’t fear failure — it’s part of learning.', 'Ask: "What can I do differently next time?"'] },
-          { label: 'Stay flexible', points: ['Be open to change and new ideas.', 'If Plan A doesn’t work, try Plan B — or even Plan Z!'] },
+        // Myth/truth pair renders as two contrasting cards.
+        contrast: {
+          title: 'What is Resilience?',
+          lead: 'Resilience means bouncing back from challenges, stress, or failure.',
+          myth: { label: 'The myth', text: 'That it’s about avoiding problems.' },
+          truth: { label: 'The truth', text: 'It’s about learning how to handle them and grow stronger.' },
+        },
+        // Expandable cards, each with its own accent. Kept separate from `groups`
+        // so the plainer group lists elsewhere keep rendering as they are.
+        strategies: [
+          { icon: 'spark', accent: 'teal', label: 'Believe in yourself', points: ['Remind yourself: "I can handle this."', 'Focus on your strengths and past successes, even small ones.'] },
+          { icon: 'hand', accent: 'sky', label: 'Ask for help', points: ['Talk to a mentor, teacher, or friend when things get tough.', 'Resilient people know they don’t have to do it all alone.'] },
+          { icon: 'sun', accent: 'amber', label: 'Stay positive', points: ['Look for the lesson in every setback.', 'Practice gratitude — write down 3 good things each day.'] },
+          { icon: 'heart', accent: 'emerald', label: 'Take care of your body', points: ['Sleep well, eat healthy, and move your body.', 'A strong body supports a strong mind.'] },
+          { icon: 'steps', accent: 'violet', label: 'Keep going, even when it’s hard', points: ['Break big tasks into small steps.', 'Celebrate progress, not just perfection.'] },
+          { icon: 'refresh', accent: 'rose', label: 'Learn from mistakes', points: ['Don’t fear failure — it’s part of learning.', 'Ask: "What can I do differently next time?"'] },
+          { icon: 'branch', accent: 'indigo', label: 'Stay flexible', points: ['Be open to change and new ideas.', 'If Plan A doesn’t work, try Plan B — or even Plan Z!'] },
         ],
-        quote: 'Resilience is like a muscle — the more you use it, the stronger it gets.',
+        remember: 'Resilience is like a muscle — the more you use it, the stronger it gets.',
         reflection: {
           title: 'Reflection',
-          questions: ['Identify for each aspect of bouncing back how you can practice it daily.'],
+          saveable: true,
+          questions: ['Identify one aspect of bouncing back you can practice daily.'],
+          placeholder: 'Which one will you practise daily, and how?',
         },
       },
       {

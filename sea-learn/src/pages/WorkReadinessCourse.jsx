@@ -26,6 +26,130 @@ function saveLocal(key, userId, data) {
   try { localStorage.setItem(`${key}-${userId}`, JSON.stringify(data)); } catch { /* storage unavailable */ }
 }
 
+const REFLECTION_KEY = 'work-readiness-reflections';
+// Namespaced away from this course's quizzes, which use +400.
+const reflectionChapterId = (sessionId) => sessionId + 500;
+
+// Tailwind only keeps classes it can see as whole strings, so these are spelled
+// out rather than built from the accent name at runtime.
+const ACCENTS = {
+  teal:    { ring: 'hover:border-teal-400',    chip: 'bg-teal-100 text-teal-700',       bar: 'bg-teal-400' },
+  sky:     { ring: 'hover:border-sky-400',     chip: 'bg-sky-100 text-sky-700',         bar: 'bg-sky-400' },
+  amber:   { ring: 'hover:border-amber-400',   chip: 'bg-amber-100 text-amber-700',     bar: 'bg-amber-400' },
+  emerald: { ring: 'hover:border-emerald-400', chip: 'bg-emerald-100 text-emerald-700', bar: 'bg-emerald-400' },
+  violet:  { ring: 'hover:border-violet-400',  chip: 'bg-violet-100 text-violet-700',   bar: 'bg-violet-400' },
+  rose:    { ring: 'hover:border-rose-400',    chip: 'bg-rose-100 text-rose-700',       bar: 'bg-rose-400' },
+  indigo:  { ring: 'hover:border-indigo-400',  chip: 'bg-indigo-100 text-indigo-700',   bar: 'bg-indigo-400' },
+};
+
+const ICON_PATHS = {
+  spark:   'M12 3v3m0 12v3m9-9h-3M6 12H3m13.5-6.5-2 2m-7 7-2 2m0-11 2 2m7 7 2 2',
+  hand:    'M7 11V6a1.5 1.5 0 0 1 3 0v5m0-2V4.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V11m0 0a1.5 1.5 0 0 1 3 0v4a6 6 0 0 1-6 6h-1a7 7 0 0 1-7-7v-2a1.5 1.5 0 0 1 3 0',
+  sun:     'M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66 1.41-1.41M4.93 19.07l1.41-1.41m0-11.32L4.93 4.93m14.14 14.14-1.41-1.41M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z',
+  heart:   'M12 20s-7-4.35-7-9a4 4 0 0 1 7-2.65A4 4 0 0 1 19 11c0 4.65-7 9-7 9Z',
+  steps:   'M4 20h4v-5h4v-5h4V5h4',
+  refresh: 'M4 12a8 8 0 0 1 13.66-5.66L20 8m0 0V4m0 4h-4M20 12a8 8 0 0 1-13.66 5.66L4 16m0 0v4m0-4h4',
+  branch:  'M6 4v6a4 4 0 0 0 4 4h8m0 0-3-3m3 3-3 3M6 14v6',
+};
+
+function StrategyIcon({ name }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d={ICON_PATHS[name] || ICON_PATHS.spark} />
+    </svg>
+  );
+}
+
+function StrategyCard({ item }) {
+  const [open, setOpen] = useState(false);
+  const a = ACCENTS[item.accent] || ACCENTS.teal;
+  return (
+    <button
+      type="button"
+      onClick={() => setOpen((v) => !v)}
+      aria-expanded={open}
+      className={`group rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:shadow-md ${a.ring}`}
+    >
+      <span className={`mb-3 block h-1 rounded-full transition-all duration-300 ${a.bar} ${open ? "w-full" : "w-10"}`} />
+      <span className="flex items-center gap-3">
+        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${a.chip}`}>
+          <StrategyIcon name={item.icon} />
+        </span>
+        <span className="flex-1 font-bold text-slate-900">{item.label}</span>
+        <svg viewBox="0 0 24 24" className={`h-4 w-4 shrink-0 text-slate-400 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </span>
+      <span className={`grid transition-all duration-300 ease-in-out ${open ? 'mt-3 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+        <span className="overflow-hidden">
+          <span className="block space-y-1.5">
+            {item.points.map((p) => (
+              <span key={p} className="flex gap-2 text-sm text-slate-600">
+                <span className="text-sea-teal">•</span>
+                <span>{p}</span>
+              </span>
+            ))}
+          </span>
+        </span>
+      </span>
+    </button>
+  );
+}
+
+function SaveableReflection({ reflection, sessionId, user }) {
+  const [text, setText] = useState('');
+  const [status, setStatus] = useState('idle'); // idle | saving | saved
+
+  useEffect(() => {
+    if (!user) return;
+    setText(loadLocal(REFLECTION_KEY, user.id)?.[sessionId] || '');
+  }, [user, sessionId]);
+
+  const save = useCallback(async () => {
+    if (!user) return;
+    setStatus('saving');
+    const all = { ...loadLocal(REFLECTION_KEY, user.id), [sessionId]: text };
+    saveLocal(REFLECTION_KEY, user.id, all);
+    await supabase.from('assignment_submissions').upsert({
+      user_id: user.id,
+      chapter_id: reflectionChapterId(sessionId),
+      status: 'submitted',
+      explanation: JSON.stringify({ course: 'work-readiness', type: 'reflection', sessionId, text }),
+      submitted_at: new Date().toISOString(),
+    }, { onConflict: 'user_id,chapter_id' });
+    setStatus('saved');
+    window.setTimeout(() => setStatus('idle'), 2000);
+  }, [user, sessionId, text]);
+
+  return (
+    <div className="mt-5 rounded-2xl border-2 border-dashed border-violet-300 bg-violet-50 p-5">
+      <p className="text-xs font-bold uppercase tracking-wide text-violet-700">{reflection.title}</p>
+      <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-sm text-violet-900">
+        {reflection.questions.map((q) => <li key={q}>{q}</li>)}
+      </ol>
+      <textarea
+        value={text}
+        onChange={(e) => { setText(e.target.value); setStatus('idle'); }}
+        rows={4}
+        placeholder={reflection.placeholder || 'Write your reflection…'}
+        className="mt-3 w-full rounded-xl border border-violet-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-violet-400"
+      />
+      <div className="mt-2 flex items-center gap-3">
+        <button
+          type="button"
+          onClick={save}
+          disabled={!user || status === 'saving' || !text.trim()}
+          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-500 disabled:opacity-50"
+        >
+          {status === 'saving' ? 'Saving…' : 'Save reflection'}
+        </button>
+        {status === 'saved' && <span className="text-sm font-semibold text-violet-700">✓ Saved</span>}
+        {!user && <span className="text-xs text-violet-700">Log in to save your reflection.</span>}
+      </div>
+    </div>
+  );
+}
+
 function SessionVideo({ video, placeholder }) {
   if (video?.id) {
     return (
@@ -146,7 +270,7 @@ function Quiz({ quiz, onScore, savedScore }) {
   );
 }
 
-function SessionBody({ session }) {
+function SessionBody({ session, user }) {
   return (
     <div className="space-y-8">
       <div className="rounded-2xl border border-sea-teal/30 bg-teal-50/60 p-6">
@@ -159,9 +283,30 @@ function SessionBody({ session }) {
       {session.sections.map((sec) => (
         <div key={sec.heading}>
           <h3 className="mb-3 text-xl font-bold text-slate-900">{sec.heading}</h3>
+          {sec.contrast && (
+            <div className="mb-5">
+              <p className="text-lg font-bold text-slate-900">{sec.contrast.title}</p>
+              <p className="mt-1 leading-relaxed text-slate-700">{sec.contrast.lead}</p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 transition hover:shadow-md">
+                  <p className="text-xs font-bold uppercase tracking-wide text-rose-700">{sec.contrast.myth.label}</p>
+                  <p className="mt-1 text-sm text-rose-900 line-through decoration-rose-400 decoration-2">{sec.contrast.myth.text}</p>
+                </div>
+                <div className="rounded-xl border-2 border-teal-300 bg-teal-50 p-4 shadow-sm transition hover:shadow-md">
+                  <p className="text-xs font-bold uppercase tracking-wide text-teal-700">{sec.contrast.truth.label}</p>
+                  <p className="mt-1 text-sm font-semibold text-teal-900">{sec.contrast.truth.text}</p>
+                </div>
+              </div>
+            </div>
+          )}
           {sec.paragraphs?.map((p) => (
             <p key={p} className="mb-3 leading-relaxed text-slate-700">{p}</p>
           ))}
+          {sec.strategies && (
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {sec.strategies.map((s) => <StrategyCard key={s.label} item={s} />)}
+            </div>
+          )}
           {sec.bullets && (
             <ul className="mt-3 space-y-2">
               {sec.bullets.map((b) => (
@@ -203,13 +348,25 @@ function SessionBody({ session }) {
               {sec.quote}
             </blockquote>
           )}
-          {sec.reflection && (
-            <div className="mt-5 rounded-2xl border-2 border-dashed border-violet-300 bg-violet-50 p-5">
-              <p className="text-xs font-bold uppercase tracking-wide text-violet-700">{sec.reflection.title}</p>
-              <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-sm text-violet-900">
-                {sec.reflection.questions.map((q) => <li key={q}>{q}</li>)}
-              </ol>
+          {sec.remember && (
+            <div className="mt-5 overflow-hidden rounded-2xl bg-gradient-to-r from-sea-teal to-teal-600 p-[2px] shadow-lg">
+              <div className="rounded-[14px] bg-white px-5 py-4">
+                <p className="text-xs font-bold uppercase tracking-widest text-sea-teal">Remember</p>
+                <p className="mt-1 text-lg font-bold italic leading-snug text-slate-900">{sec.remember}</p>
+              </div>
             </div>
+          )}
+          {sec.reflection && (
+            sec.reflection.saveable
+              ? <SaveableReflection reflection={sec.reflection} sessionId={session.id} user={user} />
+              : (
+                <div className="mt-5 rounded-2xl border-2 border-dashed border-violet-300 bg-violet-50 p-5">
+                  <p className="text-xs font-bold uppercase tracking-wide text-violet-700">{sec.reflection.title}</p>
+                  <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-sm text-violet-900">
+                    {sec.reflection.questions.map((q) => <li key={q}>{q}</li>)}
+                  </ol>
+                </div>
+              )
           )}
         </div>
       ))}
@@ -386,7 +543,7 @@ export default function WorkReadinessCourse() {
         <>
           <Link to="/work-readiness" className="mb-6 inline-block text-sm font-semibold text-sea-teal">← All sessions</Link>
           <h2 className="mb-6 text-2xl font-bold text-slate-900">Session {active.id}: {active.title}</h2>
-          <SessionBody session={active} />
+          <SessionBody session={active} user={user} />
           <div className="mt-10">
             <Quiz quiz={active.quiz} onScore={saveQuizScore} savedScore={quizScores[active.quiz.key]} />
           </div>
