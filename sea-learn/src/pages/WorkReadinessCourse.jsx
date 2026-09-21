@@ -329,9 +329,9 @@ export default function WorkReadinessCourse() {
 
       {!active && (
         <>
-          <div className="mb-8 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-6">
-            <p className="text-xs font-bold uppercase tracking-wide text-slate-600">Programme intro video</p>
-            <p className="mt-2 text-sm text-slate-700">{workReadinessMeta.introVideoNote}</p>
+          <div className="mb-8">
+            <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-600">Programme intro video</p>
+            <SessionVideo video={workReadinessMeta.introVideo} />
           </div>
 
           <div className="space-y-3">
