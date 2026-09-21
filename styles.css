@@ -1296,7 +1296,18 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
   .dd-menu a:hover { background: rgba(255,255,255,.12); color: #fff; }
 }
 @media (max-width: 600px) {
-  .top-bar { padding: 0 1rem; }
+  /* The logo plus the three top controls are wider than a phone screen, which
+     pushed the whole page sideways. Let the bar wrap instead of overflowing. */
+  .top-bar {
+    height: auto;
+    padding: .6rem 1rem;
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+  .logo-icon { height: 42px; }
+  .top-actions { gap: .4rem; flex-wrap: wrap; }
+  .top-select { font-size: .7rem; padding: .45rem 1.15rem .45rem .5rem; }
+
   .prog-grid, .findout-grid, .news-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
 }
