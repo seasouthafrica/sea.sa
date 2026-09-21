@@ -208,12 +208,6 @@ export const workReadinessSessions = [
       },
     ],
     proTip: 'If load-shedding is scheduled for the morning, iron your clothes the night before!',
-    video: {
-      id: '_KZJ69AHXZQ',
-      title: 'Updating a business casual wardrobe on a limited budget',
-      channel: 'Age With Style Coach',
-      duration: '3:46',
-    },
     actionItem: 'Use a map app (or local knowledge) to calculate the travel time to your nearest central business district during peak traffic (07:00 AM). Add 45 minutes to that time. That is your actual commute budget.',
     quiz: {
       key: 'Quiz 2 — Time Management & Professional Grooming',
