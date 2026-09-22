@@ -325,7 +325,9 @@ ul   { list-style: none; }
 .btn-red:hover { background: #c62828; }
 
 .btn-outline {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
   background: white;
   color: #333;
   font-weight: 700;
