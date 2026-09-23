@@ -25,13 +25,24 @@ function escapeCsv(value) {
   return `"${String(value ?? '').replaceAll('"', '""')}"`;
 }
 
+// Stored lowercase ('female' / 'male'); older rows may hold anything or nothing.
+function formatGender(value) {
+  const v = String(value ?? '').trim();
+  if (!v) return 'Not specified';
+  return v.charAt(0).toUpperCase() + v.slice(1).toLowerCase();
+}
+
 function exportCsv(rows, progressByUser) {
   if (!rows.length) return;
-  const headers = ['Learner name', 'Age range', 'Province', 'Country', 'Access status', 'Uplift status', 'Uplift completion', 'Registered'];
+  const headers = ['Learner name', 'Gender', 'ID / passport number', 'Age range', 'Province', 'Country', 'Access status', 'Uplift status', 'Uplift completion', 'Registered'];
   const reportRows = rows.map((learner) => {
     const progress = progressByUser[learner.id] || 0;
     return [
       `${learner.first_name} ${learner.last_name}`.trim(),
+      formatGender(learner.gender),
+      // Leading apostrophe stops spreadsheets turning a long numeric ID into
+      // scientific notation and dropping its leading zero.
+      learner.id_number ? `'${learner.id_number}` : '',
       learner.age_range,
       learner.province || learner.location || '',
       learner.country || '',
