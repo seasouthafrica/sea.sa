@@ -278,6 +278,11 @@ function SessionBody({ session, user }) {
         <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm text-slate-700">
           {session.learningOutcomes.map((o) => <li key={o}>{o}</li>)}
         </ol>
+        {session.outcomesVideo && (
+          <div className="mt-5">
+            <SessionVideo video={session.outcomesVideo} />
+          </div>
+        )}
       </div>
 
       {session.sections.map((sec) => (

@@ -23,6 +23,12 @@ export const workReadinessSessions = [
       'Navigate job hunt fatigue and rejection without losing momentum.',
       'Identify and lean on community and professional support structures.',
     ],
+    // Plays directly beneath the learning outcomes, ahead of the written content.
+    outcomesVideo: {
+      id: 'dIWDTrLXZBQ',
+      title: 'The Reality of the Job Market in South Africa',
+      channel: 'Grind With Mangi',
+    },
     sections: [
       {
         heading: 'The Reality of the Hustle',
