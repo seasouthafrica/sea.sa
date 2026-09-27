@@ -373,6 +373,11 @@ function SessionBody({ session, user }) {
                 </div>
               )
           )}
+          {sec.video && (
+            <div className="mt-5">
+              <SessionVideo video={sec.video} />
+            </div>
+          )}
         </div>
       ))}
 

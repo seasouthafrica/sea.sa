@@ -41,6 +41,11 @@ export const workReadinessSessions = [
         paragraphs: [
           'Rejection is rarely personal. Often, a company has internal candidates, the budget got cut, or you simply didn’t match the exact algorithm of their hiring software. Treat every "no" as data. If you get rejected after an interview, you have proven your CV works—now you just need to practice your interview skills. Protect your mental health by setting boundaries: allocate specific hours for job hunting, and use the rest of your day to upskill, volunteer, or rest.',
         ],
+        video: {
+          id: 'OplQbxTYh44',
+          title: 'Professional Conduct',
+          channel: 'Grind With Mangi',
+        },
       },
       {
         heading: 'Professional Conduct Practices',
