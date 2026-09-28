@@ -26,22 +26,29 @@ function escapeCsv(value) {
 }
 
 // Signup stores these snake_cased — 'female', 'prefer_not_to_say' — so turn
-// them back into a readable label for the download.
+// them back into a readable label for the download. Values whose original
+// label was not simply space-separated are spelled out, so the report reads
+// the same as the form the learner filled in.
+const CHOICE_LABELS = { self_employed: 'Self-employed' };
+
 function formatChoice(value) {
-  const v = String(value ?? '').trim().toLowerCase().replace(/_+/g, ' ');
-  if (!v) return 'Not specified';
+  const raw = String(value ?? '').trim().toLowerCase();
+  if (!raw) return 'Not specified';
+  if (CHOICE_LABELS[raw]) return CHOICE_LABELS[raw];
+  const v = raw.replace(/_+/g, ' ');
   return v.charAt(0).toUpperCase() + v.slice(1);
 }
 
 function exportCsv(rows, progressByUser) {
   if (!rows.length) return;
-  const headers = ['Learner name', 'Gender', 'Disability', 'ID / passport number', 'Age range', 'Province', 'Country', 'Access status', 'Uplift status', 'Uplift completion', 'Registered'];
+  const headers = ['Learner name', 'Gender', 'Disability', 'Employment status', 'ID / passport number', 'Age range', 'Province', 'Country', 'Access status', 'Uplift status', 'Uplift completion', 'Registered'];
   const reportRows = rows.map((learner) => {
     const progress = progressByUser[learner.id] || 0;
     return [
       `${learner.first_name} ${learner.last_name}`.trim(),
       formatChoice(learner.gender),
       formatChoice(learner.disability_status),
+      formatChoice(learner.employment_status),
       // Leading apostrophe stops spreadsheets turning a long numeric ID into
       // scientific notation and dropping its leading zero.
       learner.id_number ? `'${learner.id_number}` : '',
