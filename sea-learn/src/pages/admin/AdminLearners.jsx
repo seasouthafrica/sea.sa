@@ -69,7 +69,9 @@ function exportCsv(rows, progressByUser) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `sea-learn-learners-${new Date().toISOString().slice(0, 10)}.csv`;
+  // Date *and* time: two downloads on one day used to collide, so the browser
+  // saved the second as "…(1).csv" and it was easy to reopen the stale first one.
+  a.download = `sea-learn-learners-${new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', 'h')}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }
