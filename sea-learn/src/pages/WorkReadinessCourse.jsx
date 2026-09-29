@@ -27,8 +27,10 @@ function saveLocal(key, userId, data) {
 }
 
 const REFLECTION_KEY = 'work-readiness-reflections';
-// Namespaced away from this course's quizzes, which use +400.
-const reflectionChapterId = (sessionId) => sessionId + 500;
+// Each saveable reflection carries its own `slot` (localStorage) and
+// `chapterId` (Supabase) in the course data, because a session can now hold
+// more than one. Both are namespaced away from this course's quizzes, which
+// use +400.
 
 // Tailwind only keeps classes it can see as whole strings, so these are spelled
 // out rather than built from the accent name at runtime.
@@ -97,29 +99,30 @@ function StrategyCard({ item }) {
 }
 
 function SaveableReflection({ reflection, sessionId, user }) {
+  const { slot, chapterId } = reflection;
   const [text, setText] = useState('');
   const [status, setStatus] = useState('idle'); // idle | saving | saved
 
   useEffect(() => {
     if (!user) return;
-    setText(loadLocal(REFLECTION_KEY, user.id)?.[sessionId] || '');
-  }, [user, sessionId]);
+    setText(loadLocal(REFLECTION_KEY, user.id)?.[slot] || '');
+  }, [user, slot]);
 
   const save = useCallback(async () => {
     if (!user) return;
     setStatus('saving');
-    const all = { ...loadLocal(REFLECTION_KEY, user.id), [sessionId]: text };
+    const all = { ...loadLocal(REFLECTION_KEY, user.id), [slot]: text };
     saveLocal(REFLECTION_KEY, user.id, all);
     await supabase.from('assignment_submissions').upsert({
       user_id: user.id,
-      chapter_id: reflectionChapterId(sessionId),
+      chapter_id: chapterId,
       status: 'submitted',
-      explanation: JSON.stringify({ course: 'work-readiness', type: 'reflection', sessionId, text }),
+      explanation: JSON.stringify({ course: 'work-readiness', type: 'reflection', sessionId, slot, text }),
       submitted_at: new Date().toISOString(),
     }, { onConflict: 'user_id,chapter_id' });
     setStatus('saved');
     window.setTimeout(() => setStatus('idle'), 2000);
-  }, [user, sessionId, text]);
+  }, [user, sessionId, slot, chapterId, text]);
 
   return (
     <div className="mt-5 rounded-2xl border-2 border-dashed border-violet-300 bg-violet-50 p-5">
@@ -190,34 +193,90 @@ function SessionVideo({ video, placeholder }) {
 function Quiz({ quiz, onScore, savedScore }) {
   const questions = quiz.questions;
   const [answers, setAnswers] = useState({});
-  const [submitted, setSubmitted] = useState(!!savedScore);
+  const [submitted, setSubmitted] = useState(false);
+  // `review` means the result on screen came back from storage rather than from
+  // answers given in this sitting: we know the score but not which options were
+  // picked, so per-question right/wrong colouring has to stay neutral.
+  const [review, setReview] = useState(false);
+  // Set when the learner deliberately starts again, so the effect below does not
+  // immediately restore the stored result on top of their fresh attempt.
+  const [retaking, setRetaking] = useState(false);
 
-  const score = submitted
-    ? (savedScore?.score ?? questions.reduce((acc, q, i) => acc + (answers[i] === q.correct ? 1 : 0), 0))
-    : 0;
+  // savedScore is loaded asynchronously and so is undefined on first render —
+  // adopting it in an effect is what makes a returning learner see their result
+  // instead of a blank quiz.
+  useEffect(() => {
+    if (savedScore && !submitted && !retaking) {
+      setSubmitted(true);
+      setReview(true);
+    }
+  }, [savedScore, submitted, retaking]);
+
+  const liveScore = questions.reduce((acc, q, i) => acc + (answers[i] === q.correct ? 1 : 0), 0);
+  // A stored result keeps its own total, so an older 2/3 attempt is never
+  // redisplayed as 2/5 just because the quiz has since grown.
+  const score = review ? (savedScore?.score ?? 0) : liveScore;
+  const total = review ? (savedScore?.total ?? questions.length) : questions.length;
+  const pct = total ? Math.round((score / total) * 100) : 0;
+  // Only the best attempt is recorded, so a weaker retake never reads as a fail.
+  const recordedPct = review ? pct : Math.max(pct, savedScore?.pct ?? 0);
+  const passed = recordedPct >= PASS_PCT;
+  const beatenByBest = !review && (savedScore?.pct ?? 0) > pct;
 
   const allAnswered = questions.every((_, i) => answers[i] !== undefined);
 
   const handleSubmit = () => {
     setSubmitted(true);
+    setReview(false);
+    setRetaking(false);
     const s = questions.reduce((acc, q, i) => acc + (answers[i] === q.correct ? 1 : 0), 0);
     onScore?.(quiz.key, s, questions.length);
   };
 
+  const handleRetake = () => {
+    setAnswers({});
+    setSubmitted(false);
+    setReview(false);
+    setRetaking(true);
+  };
+
   return (
     <div className="rounded-2xl border-2 border-violet-200 bg-violet-50 p-6">
-      <h3 className="mb-1 text-lg font-bold text-violet-900">{quiz.key}</h3>
+      <h3 className="mb-1 text-lg font-bold text-violet-900">{quiz.title || quiz.key}</h3>
       <p className="mb-6 text-sm text-violet-700">
         {submitted
-          ? `You scored ${score} out of ${questions.length} (${Math.round((score / questions.length) * 100)}%)`
-          : `${questions.length} questions — select the best answer for each.`}
+          ? `You scored ${score} out of ${total} (${pct}%)`
+          : `${questions.length} questions — select the best answer for each. You need ${PASS_PCT}% to pass, and you can retake this quiz as many times as you need.`}
       </p>
+
+      {submitted && (
+        <div className={`mb-6 rounded-xl border p-4 ${passed ? 'border-emerald-200 bg-emerald-50' : 'border-amber-200 bg-amber-50'}`}>
+          <p className={`text-sm font-bold ${passed ? 'text-emerald-800' : 'text-amber-800'}`}>
+            {passed ? '✓ Passed' : `Not passed yet — ${PASS_PCT}% needed`}
+          </p>
+          <p className={`mt-1 text-sm ${passed ? 'text-emerald-700' : 'text-amber-700'}`}>
+            {passed
+              ? 'Read the explanations below to lock it in, then move on to the next session.'
+              : 'Read the explanation under each question, then take the quiz again — there is no limit on attempts.'}
+          </p>
+          {review && (
+            <p className="mt-2 text-xs text-slate-500">
+              Showing your saved result. Retake the quiz to see which answers you would choose now.
+            </p>
+          )}
+          {beatenByBest && (
+            <p className="mt-2 text-xs text-slate-500">
+              Your best recorded result is still {savedScore.score}/{savedScore.total} ({savedScore.pct}%) — that is the one that counts towards your certificate.
+            </p>
+          )}
+        </div>
+      )}
       <div className="space-y-6">
         {questions.map((q, qi) => (
           <div
             key={qi}
             className={`rounded-xl p-4 ${
-              submitted
+              submitted && !review
                 ? answers[qi] === q.correct
                   ? 'bg-emerald-50 border border-emerald-200'
                   : 'bg-red-50 border border-red-200'
@@ -253,6 +312,12 @@ function Quiz({ quiz, onScore, savedScore }) {
                 </label>
               ))}
             </div>
+            {submitted && q.explanation && (
+              <div className="mt-3 rounded-lg border-l-4 border-sea-teal bg-teal-50/70 px-4 py-3">
+                <p className="text-xs font-bold uppercase tracking-wide text-sea-teal">Why</p>
+                <p className="mt-1 text-sm leading-relaxed text-slate-700">{q.explanation}</p>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -266,6 +331,15 @@ function Quiz({ quiz, onScore, savedScore }) {
           Submit answers
         </button>
       )}
+      {submitted && (
+        <button
+          type="button"
+          onClick={handleRetake}
+          className="mt-6 rounded-xl border-2 border-violet-300 bg-white px-6 py-3 text-sm font-bold text-violet-700 transition hover:bg-violet-100"
+        >
+          {passed ? 'Take the quiz again' : 'Try again'}
+        </button>
+      )}
     </div>
   );
 }
@@ -274,7 +348,14 @@ function SessionBody({ session, user }) {
   return (
     <div className="space-y-8">
       <div className="rounded-2xl border border-sea-teal/30 bg-teal-50/60 p-6">
-        <h3 className="text-sm font-bold uppercase tracking-wide text-sea-teal">Learning Outcomes</h3>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h3 className="text-sm font-bold uppercase tracking-wide text-sea-teal">Learning Outcomes</h3>
+          {session.duration && (
+            <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-sm">
+              ≈ {session.duration}
+            </span>
+          )}
+        </div>
         <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm text-slate-700">
           {session.learningOutcomes.map((o) => <li key={o}>{o}</li>)}
         </ol>
@@ -419,6 +500,20 @@ function SessionBody({ session, user }) {
         <p className="text-sm text-slate-800"><strong>Practical Action Item:</strong> {session.actionItem}</p>
       </div>
 
+      {session.takeaways && (
+        <div className="rounded-2xl border border-sea-teal/30 bg-teal-50/60 p-6">
+          <h3 className="text-sm font-bold uppercase tracking-wide text-sea-teal">Key takeaways</h3>
+          <ul className="mt-3 space-y-2">
+            {session.takeaways.map((t) => (
+              <li key={t} className="flex gap-2.5 text-sm text-slate-700">
+                <span className="font-bold text-sea-teal">✓</span>
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {session.source && (
         <p className="text-xs italic text-slate-400">{session.source}</p>
       )}
@@ -440,6 +535,10 @@ export default function WorkReadinessCourse() {
   const saveQuizScore = useCallback((quizKey, score, total) => {
     const pct = Math.round((score / total) * 100);
     setQuizScores((prev) => {
+      // Retakes keep the learner's best attempt. Without this, someone who
+      // passed and then retook the quiz out of interest could score lower and
+      // lose the pass — and with it the certificate they had already earned.
+      if ((prev[quizKey]?.pct ?? -1) >= pct) return prev;
       const next = { ...prev, [quizKey]: { score, total, pct } };
       if (user) {
         saveLocal(QUIZ_KEY, user.id, next);
@@ -517,7 +616,9 @@ export default function WorkReadinessCourse() {
                   <span className="min-w-0 flex-1">
                     <span className="block font-bold text-slate-900">Session {s.id}: {s.title}</span>
                     <span className="mt-0.5 block text-sm text-slate-500">
-                      {sc ? `Quiz: ${sc.score}/${sc.total} (${sc.pct}%)` : `${s.learningOutcomes.length} learning outcomes`}
+                      {sc
+                        ? `Quiz: ${sc.score}/${sc.total} (${sc.pct}%)`
+                        : [s.duration && `≈ ${s.duration}`, `${s.learningOutcomes.length} learning outcomes`].filter(Boolean).join(' · ')}
                     </span>
                   </span>
                   <span className="text-slate-400">→</span>

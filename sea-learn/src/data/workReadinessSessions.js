@@ -1,6 +1,12 @@
 // Quarter 2 of the Uplift Programme — Work Readiness & Professional Skills.
 // Kept separate from `upliftSessions` (Quarter 1) so each quarter keeps its own
 // completion criteria and certificate.
+//
+// IMPORTANT: `quiz.key` strings are storage keys. Learner scores are saved
+// against them in localStorage and in `assignment_submissions`, so renaming one
+// silently wipes that learner's pass — and their certificate with it. Change
+// `quiz.title` (what the learner reads) and leave `quiz.key` frozen. The same
+// applies to `reflection.slot` and `reflection.chapterId`.
 
 export const workReadinessMeta = {
   quarter: 'Quarter 2',
@@ -18,10 +24,15 @@ export const workReadinessSessions = [
   {
     id: 1,
     slug: 'building-career-resilience-in-sa',
-    title: 'Building Career Resilience in SA',
+    // Retitled to match what the session actually teaches: professional conduct
+    // is half the content and was invisible in the old title.
+    title: 'Career Resilience & Professional Conduct',
+    duration: '45 min',
     learningOutcomes: [
       'Navigate job hunt fatigue and rejection without losing momentum.',
       'Identify and lean on community and professional support structures.',
+      'Apply the professional conduct employers expect — punctuality, accountability, confidentiality and respect — from your first day.',
+      'Practise resilience as a daily habit rather than treating it as a personality trait.',
     ],
     // Plays directly beneath the learning outcomes, ahead of the written content.
     outcomesVideo: {
@@ -69,10 +80,14 @@ export const workReadinessSessions = [
         ],
         reflection: {
           title: 'Reflection',
+          saveable: true,
+          slot: '1:conduct',
+          chapterId: 511,
           questions: [
             'Of the professional conduct practices, which ones do you already apply? Identify how you can apply them better.',
             'Identify which of these practices you haven’t applied or applied poorly. Identify how you can apply them.',
           ],
+          placeholder: 'Which practices are already strong, and which two will you work on?',
         },
       },
       {
@@ -99,33 +114,16 @@ export const workReadinessSessions = [
         reflection: {
           title: 'Reflection',
           saveable: true,
+          // Legacy identifiers. This was the first saveable reflection to ship,
+          // so its storage keys stay exactly as they were.
+          slot: '1',
+          chapterId: 501,
           questions: ['Identify one aspect of bouncing back you can practice daily.'],
           placeholder: 'Which one will you practise daily, and how?',
         },
       },
-      {
-        heading: 'Dress Code — Smart Casual',
-        groups: [
-          {
-            label: 'Men',
-            points: [
-              'Neutral button-down shirt (no jacket or tie needed)',
-              'Neutral coloured pants, chinos or corduroys — no need to get too fancy, stay away from blue jeans',
-              'Casual leather or suede shoes (anything you’d wear to the gym is a no-go)',
-            ],
-          },
-          {
-            label: 'Women',
-            points: [
-              'Neutral blouse or top (mild patterns are good too)',
-              'Neutral coloured pants — while jeans look good, some companies frown upon them for interviews, better safe than sorry',
-              'Casual flats/ballet flats',
-            ],
-          },
-        ],
-      },
     ],
-    source: 'Professional conduct, bouncing back and dress code material adapted from the SK Online Academy Work Readiness workbook, 2025.',
+    source: 'Professional conduct and bouncing back material adapted from the SK Online Academy Work Readiness workbook, 2025.',
     proTip: 'Lean on platforms like SA Youth and Harambee. They are specifically designed to support young South Africans and often provide data-free resources and micro-learning opportunities.',
     video: {
       id: 'af9Emi4PRCc',
@@ -134,17 +132,25 @@ export const workReadinessSessions = [
       duration: '3:54',
     },
     actionItem: 'Write down three major challenges you’ve overcome in the past five years. Review this list whenever job hunting feels overwhelming to remind yourself of your inherent resilience.',
+    takeaways: [
+      'Rejection is data, not a verdict — ask for feedback and treat every interview as practice for the next one.',
+      'Resilience is a habit you build by repetition, not a trait you are born with.',
+      'Professional conduct is judged from your first day, not after probation.',
+    ],
     quiz: {
       key: 'Quiz 1 — Building Career Resilience in SA',
+      title: 'Quiz 1 — Career Resilience & Professional Conduct',
       questions: [
         {
           question: 'You’ve applied to 15 jobs this month on Harambee and haven’t heard back. What is the most resilient response?',
           options: [
             'Stop applying for a few months until the economy improves.',
+            'Apply to another 50 adverts tonight without changing anything on your profile.',
             'Call the platform’s support line every day until they give you a job.',
             'Take a short break to rest, review and update your digital profile, and set a daily schedule for continuing the search.',
           ],
-          correct: 2,
+          correct: 3,
+          explanation: 'Resilience is not stopping, and it is not applying harder at the same thing. Fifteen applications with no reply is information: usually the profile or the targeting needs work. Rest, adjust, then continue on a schedule you can sustain.',
         },
         {
           question: 'A recruiter tells you they decided to go with someone who had more experience. What is the best mindset?',
@@ -152,17 +158,43 @@ export const workReadinessSessions = [
             'Conclude that the system is rigged against young people.',
             'Politely ask for feedback on your interview and view the experience as practice for the next one.',
             'Argue with them over email to prove you are the better choice.',
+            'Accept it quietly and avoid ever applying to that company again.',
           ],
           correct: 1,
+          explanation: 'Asking for feedback turns a rejection into something you can use, and it keeps the door open. Plenty of people are eventually hired by a company that turned them down the first time.',
         },
         {
           question: 'Why is it important to set boundaries around your job hunting?',
           options: [
-            'So you have more time to watch TV.',
             'Because overworking leads to burnout, and a stressed mind performs poorly in interviews.',
-            'Recruiters only read emails sent at exactly 9:00 AM.',
+            'Because applying to more than five jobs a week makes you look desperate.',
+            'Because job hunting should only ever be done in the mornings.',
+            'Because recruiters only respond to applications sent during office hours.',
+          ],
+          correct: 0,
+          explanation: 'Job hunting has no natural finishing line, so without boundaries it expands to fill every hour. Protecting time to rest, upskill or volunteer is exactly what keeps you sharp when an interview finally comes.',
+        },
+        {
+          question: 'Your manager points out that a report you submitted had several errors. You acknowledge the mistake and ask how to correct it. Which professional conduct practice is this?',
+          options: [
+            'Adaptability',
+            'Accountability',
+            'Confidentiality',
+            'Punctuality',
           ],
           correct: 1,
+          explanation: 'Accountability means owning your actions, including mistakes, and learning from feedback. Managers notice defensiveness; they promote people who take responsibility and fix things.',
+        },
+        {
+          question: 'A friend asks you to send them a client list from the company you have just joined, "just to look at". What should you do?',
+          options: [
+            'Send it, since you are not selling it to anyone.',
+            'Send it, but ask them to delete it afterwards.',
+            'Decline — client information is confidential and may not be shared without permission.',
+            'Ask a colleague to send it instead, so it does not come from you.',
+          ],
+          correct: 2,
+          explanation: 'Confidentiality means company and client details stay inside the company unless you have permission to share them. Good intentions do not change that, and a breach is one of the fastest ways to lose a job.',
         },
       ],
     },
@@ -171,8 +203,10 @@ export const workReadinessSessions = [
     id: 2,
     slug: 'time-management-and-professional-grooming',
     title: 'Time Management & Professional Grooming on a Budget',
+    duration: '40 min',
     learningOutcomes: [
       'Master "Taxi Math" to ensure consistent punctuality despite infrastructure challenges.',
+      'Apply time management principles — priorities, interruptions and procrastination — to a real week.',
       'Build a professional wardrobe using affordable local retailers.',
     ],
     sections: [
@@ -200,10 +234,14 @@ export const workReadinessSessions = [
         ],
         reflection: {
           title: 'Reflection',
+          saveable: true,
+          slot: '2:time-management',
+          chapterId: 512,
           questions: [
             'Identify which time management principles you struggle with.',
             'Select a minimum of 2 per week and apply them daily.',
           ],
+          placeholder: 'Which two will you apply this week, and what will you do differently each day?',
         },
       },
       {
@@ -211,22 +249,50 @@ export const workReadinessSessions = [
         paragraphs: [
           '"Business casual" does not mean expensive designer labels. It means clean, neat, and unbranded. You can build a highly effective capsule wardrobe at affordable local retailers like Mr Price, Pep, or by thrifting in the CBD.',
         ],
-        bullets: [
-          { label: 'Men', text: 'A crisp white or blue button-down shirt from Pep, dark chinos, and clean, dark shoes.' },
-          { label: 'Women', text: 'Dark tailored pants or a knee-length skirt, a modest blouse, and neat closed shoes.' },
-          { label: 'The Golden Rule', text: 'Your clothes must be washed and properly ironed. Wrinkled clothes instantly look unprofessional, regardless of how much they cost.' },
+        groups: [
+          {
+            label: 'Men — smart casual',
+            points: [
+              'A crisp white or blue button-down shirt — no jacket or tie needed.',
+              'Dark chinos, neutral coloured pants or corduroys. Stay away from blue jeans for interviews.',
+              'Clean, dark leather or suede shoes — anything you would wear to the gym is a no-go.',
+            ],
+          },
+          {
+            label: 'Women — smart casual',
+            points: [
+              'A neutral blouse or top; mild patterns work well too.',
+              'Dark tailored pants or a knee-length skirt. Jeans look good, but some companies frown on them for interviews — better safe than sorry.',
+              'Neat closed shoes or ballet flats.',
+            ],
+          },
+          {
+            label: 'The Golden Rule',
+            points: [
+              'Your clothes must be washed and properly ironed.',
+              'Wrinkled clothes instantly look unprofessional, regardless of how much they cost.',
+            ],
+          },
         ],
       },
     ],
+    source: 'Time management and dress code material adapted from the SK Online Academy Work Readiness workbook, 2025.',
     proTip: 'If load-shedding is scheduled for the morning, iron your clothes the night before!',
     actionItem: 'Use a map app (or local knowledge) to calculate the travel time to your nearest central business district during peak traffic (07:00 AM). Add 45 minutes to that time. That is your actual commute budget.',
+    takeaways: [
+      'Budget double your usual commute, then add 20 minutes so you arrive settled rather than breathless.',
+      'Most "I have no time" problems are really priority and interruption problems.',
+      'Neat, clean and unbranded beats expensive every time — and ironing costs nothing.',
+    ],
     quiz: {
       key: 'Quiz 2 — Time Management & Professional Grooming',
+      title: 'Quiz 2 — Time Management & Professional Grooming',
       questions: [
         {
           question: 'You have an interview at 08:30 AM in the city center. It usually takes 40 minutes by taxi. When should you leave your house?',
-          options: ['07:50 AM', '07:15 AM', '08:00 AM'],
+          options: ['07:50 AM', '07:15 AM', '08:00 AM', '07:40 AM'],
           correct: 1,
+          explanation: 'Taxi Math doubles the usual trip and then adds buffer: 40 minutes becomes roughly 80, plus time to arrive about 20 minutes early. Leaving at 07:15 protects you against a strike, wet weather, or waiting for a taxi to fill.',
         },
         {
           question: 'You wake up for your first day of work and realize there is Stage 4 load-shedding and you can’t iron your shirt. What should you have done?',
@@ -234,8 +300,10 @@ export const workReadinessSessions = [
             'Called your boss to say you’ll be late because of Eskom.',
             'Worn the wrinkled shirt and apologized all day.',
             'Checked the EskomSePush app the night before and ironed your clothes in advance.',
+            'Asked a neighbour with a generator to iron it that morning.',
           ],
           correct: 2,
+          explanation: 'Load-shedding is scheduled and published in advance, which makes it a predictable problem rather than an emergency. Planning around the schedule is what separates a reliable employee from one who is always explaining.',
         },
         {
           question: 'Which of the following is an acceptable "business casual" outfit?',
@@ -243,8 +311,32 @@ export const workReadinessSessions = [
             'A neat, plain button-down shirt and dark, unripped chinos from Mr Price.',
             'Expensive designer trackpants and highly polished sneakers.',
             'A branded t-shirt and clean shorts.',
+            'A full three-piece suit with a tie.',
           ],
           correct: 0,
+          explanation: 'Business casual is about being clean, neat and unbranded — not about spending money. Price tags are invisible; creases are not. A three-piece suit is not wrong so much as over-dressed for most smart-casual workplaces.',
+        },
+        {
+          question: 'You have a report due on Friday, and your phone keeps buzzing with group-chat messages. Which two time management principles are most directly at work here?',
+          options: [
+            'Delegation and Teamwork',
+            'Priorities and Interruptions',
+            'Meetings and Paperwork',
+            'Attitude and Goals',
+          ],
+          correct: 1,
+          explanation: 'The report is important but not yet urgent; the group chat feels urgent but is not important. Telling those apart is the "urgent vs. important" rule, and silencing the chat is managing Interruptions.',
+        },
+        {
+          question: 'You keep putting off replying to a short email that would take about 90 seconds. What does the "2-minute rule" say you should do?',
+          options: [
+            'Schedule it for tomorrow morning when you are fresh.',
+            'Delegate it to someone else on your team.',
+            'Do it now, because it takes less than two minutes.',
+            'Add it to a weekly batch of admin tasks.',
+          ],
+          correct: 2,
+          explanation: 'A task under two minutes costs more to track, postpone and remember than it costs to simply finish. Clearing these immediately is what stops a short list turning into a heavy one.',
         },
       ],
     },
@@ -253,9 +345,11 @@ export const workReadinessSessions = [
     id: 3,
     slug: 'professional-communication-and-digital-etiquette',
     title: 'Professional Communication & Digital Etiquette',
+    duration: '30 min',
     learningOutcomes: [
       'Code-switch between casual vernacular and professional business English.',
       'Establish boundaries and professionalism on WhatsApp and phone calls.',
+      'Audit your own digital presence the way a recruiter would see it.',
     ],
     sections: [
       {
@@ -274,6 +368,17 @@ export const workReadinessSessions = [
           { label: 'Profile Audit', text: 'Ensure your WhatsApp profile picture is neat and your status is professional.' },
           { label: 'Boundaries', text: 'Respect office hours. Do not WhatsApp a recruiter at 9:00 PM on a Saturday.' },
         ],
+        reflection: {
+          title: 'Reflection',
+          saveable: true,
+          slot: '3:digital-presence',
+          chapterId: 513,
+          questions: [
+            'Open your WhatsApp profile now. What do your picture, status and display name say to a recruiter who has never met you?',
+            'Write down one change you will make today.',
+          ],
+          placeholder: 'What does your profile say right now, and what will you change?',
+        },
       },
     ],
     template: {
@@ -287,8 +392,14 @@ export const workReadinessSessions = [
       duration: '3:40',
     },
     actionItem: 'Audit your WhatsApp profile right now. Change your profile picture to a clear, friendly headshot (against a plain wall) and update your bio to something professional.',
+    takeaways: [
+      'Every unknown number is a possible recruiter — answer it the way you want to be remembered.',
+      'Code-switching adds a register for work; it does not replace who you are.',
+      'Your WhatsApp picture and status are part of your application.',
+    ],
     quiz: {
       key: 'Quiz 3 — Professional Communication & Digital Etiquette',
+      title: 'Quiz 3 — Professional Communication & Digital Etiquette',
       questions: [
         {
           question: 'Your phone rings from an unknown 011 number while you are buying groceries in a noisy supermarket. How do you answer?',
@@ -296,8 +407,10 @@ export const workReadinessSessions = [
             '"Yebo, who is this?"',
             'Answer, listen, and shout over the background noise so they can hear you.',
             '"Hello, this is [Your Name]. I am in a noisy area—may I call you back in 5 minutes when I step outside?"',
+            'Let it ring and wait to see whether they leave a voicemail.',
           ],
           correct: 2,
+          explanation: 'Answering identifies you and shows you are reachable; asking to call back protects the quality of the conversation. Ignoring unknown numbers during a job hunt quietly costs you opportunities.',
         },
         {
           question: 'A recruiter WhatsApps you to ask if you are available for an interview tomorrow. How do you reply?',
@@ -305,17 +418,43 @@ export const workReadinessSessions = [
             '"Awe chief, 100% I’ll be there."',
             '"Good day. Yes, I am available tomorrow. Please let me know the time and platform. Thank you."',
             'Respond with a thumbs-up emoji.',
+            '"Yes" — sent as six separate one-word messages.',
           ],
           correct: 1,
+          explanation: 'A complete reply answers the question and asks for the detail you still need, which saves a whole round of messages and reads as organised.',
         },
         {
           question: 'Why is it important to code-switch in professional environments?',
           options: [
             'Because casual slang can be misinterpreted and lacks the formal respect expected in a corporate setting.',
-            'Because you should hide your true culture.',
+            'Because employers prefer candidates who speak only one language.',
             'So that you can type messages faster to save data.',
+            'Because slang is grammatically incorrect in every situation.',
           ],
           correct: 0,
+          explanation: 'Code-switching means adding a register, not erasing who you are. Professional English is the shared language of the workplace, and your home language stays an asset — many employers actively look for it.',
+        },
+        {
+          question: 'It is 21:00 on a Saturday and you have just thought of a great question for the recruiter. What is the professional move?',
+          options: [
+            'Send it now while it is fresh — recruiters appreciate enthusiasm.',
+            'Draft it now and send it on Monday morning during office hours.',
+            'Send it now, but apologise for the time in the message.',
+            'Phone instead, since a call is more personal than a message.',
+          ],
+          correct: 1,
+          explanation: 'Respecting office hours signals that you will respect boundaries as an employee too. Drafting it immediately means you keep the thought without intruding on someone’s weekend.',
+        },
+        {
+          question: 'Why does this session ask you to audit your WhatsApp profile picture and status while job hunting?',
+          options: [
+            'Because recruiters are required by law to check your social media.',
+            'Because a professional picture improves your connection speed.',
+            'Because a recruiter who saves your number sees your picture and status before they ever meet you.',
+            'Because WhatsApp ranks professional profiles higher in search results.',
+          ],
+          correct: 2,
+          explanation: 'The moment a recruiter saves your number, your profile becomes part of their first impression — often before your CV is opened. It is the cheapest professional upgrade available to you.',
         },
       ],
     },
@@ -324,9 +463,11 @@ export const workReadinessSessions = [
     id: 4,
     slug: 'modern-cvs-and-beating-the-ats-with-ai',
     title: 'Modern CVs & Beating the ATS with AI',
+    duration: '35 min',
     learningOutcomes: [
       'Transition to a modern, 1-2 page digital CV format.',
       'Use AI tools ethically to tailor applications to Applicant Tracking Systems (ATS).',
+      'Tailor a CV to a specific advert so that it survives keyword filtering.',
     ],
     sections: [
       {
@@ -340,6 +481,17 @@ export const workReadinessSessions = [
         paragraphs: [
           'You can use free tools like ChatGPT or Google Gemini to help format your CV and match the job description. The goal is not to lie or let the AI make up experience. The goal is to let the AI help you frame your actual skills using the employer’s vocabulary.',
         ],
+        reflection: {
+          title: 'Reflection',
+          saveable: true,
+          slot: '4:hidden-experience',
+          chapterId: 514,
+          questions: [
+            'Name one real thing you have done — paid, unpaid, at home, at church or at school — that has never appeared on your CV.',
+            'Write it as one professional bullet point, using an action verb and a result.',
+          ],
+          placeholder: 'e.g. "Coordinated weekly stock counts for a family spaza shop, cutting shortages by tracking fast-selling lines."',
+        },
       },
     ],
     prompt: {
@@ -354,17 +506,25 @@ export const workReadinessSessions = [
       duration: '11:06',
     },
     actionItem: 'Create a free account on ChatGPT or Gemini. Paste the prompt above using a job advert from Harambee or LinkedIn, and update your CV with the generated bullet points.',
+    takeaways: [
+      'An ATS reads your CV before a human does — use the employer’s own words.',
+      'One to two pages, simple single-column layout, saved as a PDF.',
+      'Use AI to translate real experience into professional language, never to invent it.',
+    ],
     quiz: {
       key: 'Quiz 4 — Modern CVs & Beating the ATS with AI',
+      title: 'Quiz 4 — Modern CVs & Beating the ATS with AI',
       questions: [
         {
           question: 'What is the primary purpose of an Applicant Tracking System (ATS)?',
           options: [
             'To check your credit score and criminal record.',
-            'To scan CVs for specific keywords and filter out unqualified applicants before a human reads them.',
             'To design a pretty layout for your CV.',
+            'To automatically schedule interviews with every applicant.',
+            'To scan CVs for specific keywords and filter out unqualified applicants before a human reads them.',
           ],
-          correct: 1,
+          correct: 3,
+          explanation: 'An ATS is a filter, not a reader. If your CV does not contain the words the employer used in their advert, a person may never see it — however strong your actual experience is.',
         },
         {
           question: 'Which of the following should you REMOVE from a modern CV?',
@@ -372,8 +532,10 @@ export const workReadinessSessions = [
             'Your contact number and email address.',
             'Bullet points detailing your responsibilities.',
             'A cover page, a photo of yourself, and your marital status.',
+            'The names of the companies you have worked for.',
           ],
           correct: 2,
+          explanation: 'Cover pages, photos and personal details add pages without adding evidence, and they can introduce bias before anyone has read your experience. Keep to one or two pages of what you have actually done.',
         },
         {
           question: 'When using AI (like ChatGPT) to help with your CV, what is the golden rule?',
@@ -381,8 +543,32 @@ export const workReadinessSessions = [
             'Tell the AI to make up 3 years of experience so you get the job.',
             'Only use the AI to format and translate your real experiences into the vocabulary of the job description.',
             'Copy and paste whatever the AI generates without reading it.',
+            'Ask the AI to write your CV before you decide which job to apply for.',
           ],
           correct: 1,
+          explanation: 'AI is a translator, not a source of experience. Invented experience collapses in the interview — and the interview is exactly where you have to defend every line on the page.',
+        },
+        {
+          question: 'Which formatting choice is most likely to cause an ATS to misread your CV?',
+          options: [
+            'Simple headings such as "Work Experience" and "Education".',
+            'Saving the document as a PDF.',
+            'Laying out your history inside a multi-column table with graphics.',
+            'Listing your achievements as short bullet points.',
+          ],
+          correct: 2,
+          explanation: 'Tables, columns and images often scramble when the software flattens your CV to plain text — dates vanish, job titles merge into company names. Simple single-column layouts survive that conversion.',
+        },
+        {
+          question: 'You are applying for five different junior admin roles. What does this session recommend?',
+          options: [
+            'Send the same CV to all five so your message stays consistent.',
+            'Tailor the wording of each CV to the keywords in each advert.',
+            'Apply only to the one you like most, to save effort.',
+            'Write one very long CV covering every possible skill so it matches everything.',
+          ],
+          correct: 1,
+          explanation: 'Each advert is its own keyword list. Tailoring is usually a ten-minute edit to your summary and bullet points — the cheapest way to move from filtered-out to shortlisted.',
         },
       ],
     },
@@ -391,9 +577,11 @@ export const workReadinessSessions = [
     id: 5,
     slug: 'interview-preparation-and-execution',
     title: 'Interview Preparation & Execution',
+    duration: '35 min',
     learningOutcomes: [
       'Master the STAR method for behavioral interview questions.',
       'Successfully navigate virtual interviews despite local infrastructure challenges.',
+      'Plan around predictable local risks — load-shedding, data and noise — before an interview begins.',
     ],
     sections: [
       {
@@ -415,6 +603,17 @@ export const workReadinessSessions = [
           { label: 'Data & Power', text: 'Buy a dedicated 1-day data bundle just for the interview. Check your load-shedding schedule (EskomSePush). If your area goes dark, email the recruiter the day before to warn them or ask to reschedule slightly.' },
           { label: 'Lighting & Sound', text: 'Sit facing a window so natural light hits your face. Find the quietest room possible and blur your background in the app settings to hide any domestic clutter.' },
         ],
+        reflection: {
+          title: 'Reflection',
+          saveable: true,
+          slot: '5:star-story',
+          chapterId: 515,
+          questions: [
+            'Write a full STAR answer to: "Tell me about a time you had to overcome a sudden problem."',
+            'Keep the Result specific — say what actually changed because of what you did.',
+          ],
+          placeholder: 'Situation… Task… Action… Result…',
+        },
       },
     ],
     video: {
@@ -424,17 +623,25 @@ export const workReadinessSessions = [
       duration: '2:40',
     },
     actionItem: 'Use your phone’s front camera to record a 1-minute video of yourself answering: "Tell me about a time you had to overcome a sudden problem." Watch it back to check your eye contact, lighting, and use of the STAR method.',
+    takeaways: [
+      'STAR is a structure for stories — and the Result is the proof that your actions worked.',
+      'Front-lit, eye-level and steady beats an expensive camera every time.',
+      'Name predictable risks in advance; how you recover is itself being assessed.',
+    ],
     quiz: {
       key: 'Quiz 5 — Interview Preparation & Execution',
+      title: 'Quiz 5 — Interview Preparation & Execution',
       questions: [
         {
           question: 'During a Zoom interview, your power suddenly trips due to unscheduled load-shedding, and your Wi-Fi dies. What is the best recovery?',
           options: [
             'Panic, assume you lost the job, and do nothing.',
-            'Quickly switch to your mobile data, rejoin the call, apologize briefly for the SA grid, and smoothly pick up where you left off.',
+            'Quickly switch to your mobile data, rejoin the call, apologize briefly, and smoothly pick up where you left off.',
             'Wait for the power to return in 2 hours and email them.',
+            'Message afterwards to ask whether the whole interview can be restarted another day.',
           ],
           correct: 1,
+          explanation: 'Interviewers in South Africa expect grid problems. What they are actually assessing is how you recover, so a calm, fast reconnection is itself evidence that you handle disruption well.',
         },
         {
           question: 'What does the "A" in the STAR method stand for, and why is it important?',
@@ -442,8 +649,10 @@ export const workReadinessSessions = [
             '"Action" - it explains exactly what steps YOU took to solve the problem.',
             '"Attitude" - it shows you are a positive person.',
             '"Apology" - it shows you take blame well.',
+            '"Analysis" - it shows how carefully you studied the problem before acting.',
           ],
           correct: 0,
+          explanation: 'Action is the part interviewers listen hardest for, and the part candidates rush through. Say "I" rather than "we" here — they are hiring you, not your old team.',
         },
         {
           question: 'Where is the best place to position your laptop/phone during a virtual interview?',
@@ -451,8 +660,32 @@ export const workReadinessSessions = [
             'On your lap while sitting on a couch.',
             'At eye-level, on a steady table, directly facing a window for natural light.',
             'In a dark room so you don’t get distracted.',
+            'Below your face, angled upwards, so the interviewer can see your whole room.',
           ],
           correct: 1,
+          explanation: 'Eye-level and front-lit is the difference between looking present and looking like a silhouette. A steady surface also spares the interviewer the motion of a handheld phone.',
+        },
+        {
+          question: 'A candidate describes the situation, their task, and everything they did — then stops. Which part of STAR is missing, and why does it matter?',
+          options: [
+            'Situation — without it the story has no context.',
+            'Task — without it nobody knows what was expected of them.',
+            'Result — without it the interviewer never learns whether any of it worked.',
+            'Nothing is missing; three parts are enough.',
+          ],
+          correct: 2,
+          explanation: 'The Result is the proof. Quantify it wherever you can — "we submitted an hour early", "complaints halved" — because that is the line the interviewer repeats when the panel discusses you afterwards.',
+        },
+        {
+          question: 'Your virtual interview is at 10:00 tomorrow, and load-shedding is scheduled for your area from 09:00 to 11:30. What is the best preparation?',
+          options: [
+            'Hope the schedule changes and proceed as normal.',
+            'Say nothing, and join late once the power comes back.',
+            'Email the recruiter today to explain, and either propose a slightly different time or confirm you have a data and power backup.',
+            'Cancel and ask to be considered for a later intake.',
+          ],
+          correct: 2,
+          explanation: 'Flagging a known risk in advance reads as planning, not as an excuse. Doing it the day before also gives the recruiter time to respond — doing it at 10:05 does not.',
         },
       ],
     },
