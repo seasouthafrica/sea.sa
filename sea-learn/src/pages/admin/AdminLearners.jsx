@@ -49,11 +49,17 @@ function formatText(value) {
 
 function exportCsv(rows, progressByUser) {
   if (!rows.length) return;
-  const headers = ['Learner name', 'Gender', 'Ethnicity', 'Disability', 'Employment status', 'ID / passport number', 'Age range', 'Province', 'Country', 'Access status', 'Uplift status', 'Uplift completion', 'Registered'];
+  const headers = ['Learner name', 'Email', 'Phone', 'Gender', 'Ethnicity', 'Disability', 'Employment status', 'ID / passport number', 'Age range', 'Province', 'Country', 'Access status', 'Uplift status', 'Uplift completion', 'Registered'];
   const reportRows = rows.map((learner) => {
     const progress = progressByUser[learner.id] || 0;
     return [
       `${learner.first_name} ${learner.last_name}`.trim(),
+      // `email` is mirrored onto profiles by the handle_new_user trigger —
+      // auth.users is not readable from the browser at any role. Until that
+      // migration has run, this column reads "Not specified" for everyone.
+      formatText(learner.email),
+      // Leading apostrophe keeps a 0-prefixed mobile number intact in Excel.
+      learner.phone ? `'${learner.phone}` : 'Not specified',
       formatChoice(learner.gender),
       formatText(learner.ethnicity),
       formatChoice(learner.disability_status),
