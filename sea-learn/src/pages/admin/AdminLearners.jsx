@@ -39,14 +39,23 @@ function formatChoice(value) {
   return v.charAt(0).toUpperCase() + v.slice(1);
 }
 
+// Ethnicity is stored exactly as the signup form offers it ("Black African",
+// "Indian / Asian") rather than snake_cased, so it keeps its own casing —
+// formatChoice would flatten it to "Black african".
+function formatText(value) {
+  const raw = String(value ?? '').trim();
+  return raw || 'Not specified';
+}
+
 function exportCsv(rows, progressByUser) {
   if (!rows.length) return;
-  const headers = ['Learner name', 'Gender', 'Disability', 'Employment status', 'ID / passport number', 'Age range', 'Province', 'Country', 'Access status', 'Uplift status', 'Uplift completion', 'Registered'];
+  const headers = ['Learner name', 'Gender', 'Ethnicity', 'Disability', 'Employment status', 'ID / passport number', 'Age range', 'Province', 'Country', 'Access status', 'Uplift status', 'Uplift completion', 'Registered'];
   const reportRows = rows.map((learner) => {
     const progress = progressByUser[learner.id] || 0;
     return [
       `${learner.first_name} ${learner.last_name}`.trim(),
       formatChoice(learner.gender),
+      formatText(learner.ethnicity),
       formatChoice(learner.disability_status),
       formatChoice(learner.employment_status),
       // Leading apostrophe stops spreadsheets turning a long numeric ID into
