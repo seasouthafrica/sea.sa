@@ -14,9 +14,10 @@ export const workReadinessMeta = {
   fullTitle: 'Quarter 2 of the Uplift Programme: Work Readiness & Professional Skills',
   partners: ['Social Enterprise Academy', 'Africa Forward'],
   introVideo: {
-    id: 'haJKpNYjtGk',
-    title: 'Work Readiness Intro',
+    id: 'qMByLIiwq3o',
+    title: 'Work Readiness Intro (reloaded)',
     channel: 'Grind With Mangi',
+    duration: '1:43',
   },
 };
 
