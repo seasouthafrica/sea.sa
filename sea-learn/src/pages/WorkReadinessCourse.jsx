@@ -496,6 +496,8 @@ function SessionBody({ session, user }) {
 
       <SessionVideo video={session.video} placeholder={session.videoPlaceholder} />
 
+      {session.extraVideos?.map((v) => <SessionVideo key={v.id} video={v} />)}
+
       <div className="rounded-2xl border-l-4 border-sea-teal bg-white p-5 shadow-sm">
         <p className="text-sm text-slate-800"><strong>Practical Action Item:</strong> {session.actionItem}</p>
       </div>

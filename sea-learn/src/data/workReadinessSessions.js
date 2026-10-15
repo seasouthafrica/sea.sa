@@ -37,9 +37,10 @@ export const workReadinessSessions = [
     ],
     // Plays directly beneath the learning outcomes, ahead of the written content.
     outcomesVideo: {
-      id: 'dIWDTrLXZBQ',
-      title: 'The Reality of the Job Market in South Africa',
+      id: '9eLdVL6wt2w',
+      title: 'The Reality of The Job Market (reloaded)',
       channel: 'Grind With Mangi',
+      duration: '4:48',
     },
     sections: [
       {
@@ -54,9 +55,10 @@ export const workReadinessSessions = [
           'Rejection is rarely personal. Often, a company has internal candidates, the budget got cut, or you simply didn’t match the exact algorithm of their hiring software. Treat every "no" as data. If you get rejected after an interview, you have proven your CV works—now you just need to practice your interview skills. Protect your mental health by setting boundaries: allocate specific hours for job hunting, and use the rest of your day to upskill, volunteer, or rest.',
         ],
         video: {
-          id: 'OplQbxTYh44',
-          title: 'Professional Conduct',
+          id: '9S41uPp8yMw',
+          title: 'Professional Conduct Practices (reloaded)',
           channel: 'Grind With Mangi',
+          duration: '11:52',
         },
       },
       {
@@ -387,10 +389,10 @@ export const workReadinessSessions = [
       body: 'Good morning Mr. Ndlovu. My name is [Your Name]. I am following up on the junior admin position I applied for on SA Youth. Please let me know if you require any further information from me. Thank you.',
     },
     video: {
-      id: 'qkNWTW3raGE',
-      title: 'How to Answer the Phone At Work (Like a Pro)',
-      channel: 'Adriana Girdler',
-      duration: '3:40',
+      id: 'C6aj5To9jHk',
+      title: 'How To Answer The Phone at Work',
+      channel: 'Grind With Mangi',
+      duration: '3:37',
     },
     actionItem: 'Audit your WhatsApp profile right now. Change your profile picture to a clear, friendly headshot (against a plain wall) and update your bio to something professional.',
     takeaways: [
@@ -501,11 +503,19 @@ export const workReadinessSessions = [
       body: 'I am applying for a [Insert Job Title] role. Here is the job description: [Paste Description]. Here are my skills and past experiences: [Type your real experience here, even informal work]. Please rewrite my experience into 5 professional bullet points that highlight how my skills match the keywords in this job description. Keep the tone professional but realistic. Do not invent any experience I haven’t mentioned.',
     },
     video: {
-      id: '-0ZHoBZ_BzM',
-      title: 'Build a Job-Winning Resume Using AI the Right Way',
-      channel: 'Real Demo',
-      duration: '11:06',
+      id: 'Asl4lMPm8XY',
+      title: 'Modern CV and Beating the ATS System',
+      channel: 'Grind With Mangi',
+      duration: '5:42',
     },
+    extraVideos: [
+      {
+        id: '708l4QdlGk0',
+        title: 'How to use AI to Improve Your CV',
+        channel: 'Grind With Mangi',
+        duration: '7:44',
+      },
+    ],
     actionItem: 'Create a free account on ChatGPT or Gemini. Paste the prompt above using a job advert from Harambee or LinkedIn, and update your CV with the generated bullet points.',
     takeaways: [
       'An ATS reads your CV before a human does — use the employer’s own words.',
