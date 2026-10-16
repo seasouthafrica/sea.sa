@@ -6,6 +6,8 @@ import {
   workReadinessSessions,
   workReadinessMeta,
   REQUIRED_WORK_READINESS_QUIZ_KEYS,
+  workReadinessConclusion,
+  workReadinessResources,
 } from '../data/workReadinessSessions';
 import WorkReadinessCertificate from '../components/WorkReadinessCertificate';
 
@@ -629,7 +631,52 @@ export default function WorkReadinessCourse() {
             })}
           </div>
 
-          <div className="mt-10">
+          <section className="mt-12">
+            <p className="programme-eyebrow text-xs font-bold uppercase tracking-widest text-sea-teal">In closing</p>
+            <h2 className="mt-1 text-2xl font-bold text-slate-900">{workReadinessConclusion.heading}</h2>
+            {workReadinessConclusion.paragraphs.map((p) => (
+              <p key={p} className="mt-3 leading-relaxed text-slate-700">{p}</p>
+            ))}
+
+            <h3 className="mt-7 text-lg font-bold text-slate-900">{workReadinessConclusion.benefitsHeading}</h3>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {workReadinessConclusion.benefits.map((b) => (
+                <div key={b.label} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <p className="font-bold text-slate-900">{b.label}</p>
+                  <p className="mt-1 text-sm text-slate-600">{b.text}</p>
+                </div>
+              ))}
+            </div>
+
+            <blockquote className="mt-6 rounded-2xl border-l-4 border-sea-teal bg-teal-50/70 p-5 font-semibold italic text-slate-800">
+              {workReadinessConclusion.closing}
+            </blockquote>
+          </section>
+
+          <section className="mt-12">
+            <p className="text-xs font-bold uppercase tracking-widest text-sea-teal">Keep going</p>
+            <h2 className="mt-1 text-2xl font-bold text-slate-900">Where to learn more about preparing for a job</h2>
+            <p className="mt-2 text-sm text-slate-600">
+              Free and low-cost South African services for finding work, preparing applications and practising interviews.
+            </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {workReadinessResources.map((r) => (
+                <a
+                  key={r.url}
+                  href={r.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-sea-teal hover:shadow-md"
+                >
+                  <span className="font-bold text-sea-teal">{r.title}</span>
+                  <span className="ml-1 text-xs text-slate-400">↗</span>
+                  <p className="mt-1 text-sm text-slate-600">{r.description}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          <div className="mt-12">
             {allPassed ? (
               <div>
                 <h2 className="text-2xl font-bold text-slate-900">Certificate of Completion</h2>

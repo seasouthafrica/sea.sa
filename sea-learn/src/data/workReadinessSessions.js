@@ -628,10 +628,10 @@ export const workReadinessSessions = [
       },
     ],
     video: {
-      id: 'resCGEf0cMU',
-      title: '4 Tips for a Great Zoom Interview',
-      channel: 'MherMardoyan Career Coach',
-      duration: '2:40',
+      id: 'LCWr-TJrc0k',
+      title: 'How to Prepare for a Job Interview in Under 10 Minutes',
+      channel: 'CareerVidz',
+      duration: '7:37',
     },
     actionItem: 'Use your phone’s front camera to record a 1-minute video of yourself answering: "Tell me about a time you had to overcome a sudden problem." Watch it back to check your eye contact, lighting, and use of the STAR method.',
     takeaways: [
@@ -704,3 +704,28 @@ export const workReadinessSessions = [
 ];
 
 export const REQUIRED_WORK_READINESS_QUIZ_KEYS = workReadinessSessions.map((s) => s.quiz.key);
+
+export const workReadinessConclusion = {
+  heading: 'Where this leaves you',
+  paragraphs: [
+    'Across these five sessions you have built something more durable than a stack of job applications. You started by learning to treat rejection as data rather than a verdict, and to protect your energy for a search that is, realistically, a long one. You then worked through the things that quietly decide whether an employer takes you seriously: arriving on time in a country where the commute fights you, dressing the part without spending money you do not have, and speaking and writing in a register that earns trust on a phone call or a WhatsApp message.',
+    'From there you moved to the mechanics. You know why a modern CV is one or two pages built for a machine to read first and a person second, and how to use AI to translate real experience into an employer’s vocabulary without inventing anything. And you know how to walk into an interview — in person or on a patchy video call — with structured answers and a plan for when the power goes out.',
+  ],
+  benefitsHeading: 'What this is worth to you',
+  benefits: [
+    { label: 'You get past the first filter', text: 'An ATS-ready CV and tailored keywords mean a human actually sees your application instead of it being screened out automatically.' },
+    { label: 'You compete on preparation, not luck', text: 'STAR answers and a tested video-call setup turn the interview into something you have rehearsed rather than something that happens to you.' },
+    { label: 'You keep going longer', text: 'Resilience and boundaries are what separate candidates who are still applying in month six from those who stopped in month two.' },
+    { label: 'You are trusted faster once hired', text: 'Punctuality, clear communication, accountability and discretion are what earn responsibility early — the habits that turn a first job into a career.' },
+  ],
+  closing: 'Work readiness is not a certificate you earn once. It is a set of habits you keep practising — and every application, every interview and every week in a job makes them sharper.',
+};
+
+export const workReadinessResources = [
+  { title: 'SA Youth', url: 'https://sayouth.mobi', description: 'Free, data-free platform for young South Africans — job and learning opportunities, no airtime needed to browse.' },
+  { title: 'Harambee Youth Employment Accelerator', url: 'https://www.harambee.co.za', description: 'Connects first-time work seekers to employers, with free preparation and assessment support.' },
+  { title: 'Indeed South Africa', url: 'https://za.indeed.com', description: 'One of the largest SA job boards. Useful for studying real job adverts and the keywords employers use.' },
+  { title: 'Pnet', url: 'https://www.pnet.co.za', description: 'Established South African job portal with CV hosting and alerts for roles matching your profile.' },
+  { title: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/', description: 'Search roles and research the people and companies interviewing you before you walk in.' },
+  { title: 'National Youth Development Agency', url: 'https://www.nyda.gov.za', description: 'Government agency offering youth job preparedness, training and enterprise support across all provinces.' },
+];
