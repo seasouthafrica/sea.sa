@@ -6,7 +6,7 @@ import {
   ecommerceSessions,
   ecommerceMeta,
   ecommerceConclusion,
-  ecommerceResources,
+  ecommerceResourceGroups,
   REQUIRED_ECOMMERCE_QUIZ_KEYS,
 } from '../data/ecommerceSessions';
 import FacebookAdSimulator from '../components/FacebookAdSimulator';
@@ -375,19 +375,29 @@ export default function EcommerceCourse() {
           <section className="mt-12">
             <p className="text-xs font-bold uppercase tracking-widest text-sea-teal">Keep going</p>
             <h2 className="mt-1 text-2xl font-bold text-slate-900">Tools and resources</h2>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              {ecommerceResources.map((r) => (
-                <a
-                  key={r.url}
-                  href={r.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-sea-teal hover:shadow-md"
-                >
-                  <span className="font-bold text-sea-teal">{r.title}</span>
-                  <span className="ml-1 text-xs text-slate-400">↗</span>
-                  <p className="mt-1 text-sm text-slate-600">{r.description}</p>
-                </a>
+            <p className="mt-2 text-sm text-slate-600">
+              Everything here is free to start with, and chosen because it works in South Africa.
+            </p>
+            <div className="mt-5 space-y-7">
+              {ecommerceResourceGroups.map((g) => (
+                <div key={g.group}>
+                  <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-slate-500">{g.group}</h3>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {g.items.map((r) => (
+                      <a
+                        key={r.url}
+                        href={r.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-sea-teal hover:shadow-md"
+                      >
+                        <span className="font-bold text-sea-teal">{r.title}</span>
+                        <span className="ml-1 text-xs text-slate-400">↗</span>
+                        <p className="mt-1 text-sm text-slate-600">{r.description}</p>
+                      </a>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </section>

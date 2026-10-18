@@ -435,10 +435,10 @@ export const ecommerceSessions = [
       },
     ],
     video: {
-      id: 'Qs_p21vLp1A',
-      title: 'How to Get Traffic to a New Website',
-      channel: 'Ahrefs',
-      duration: '9:37',
+      id: 't-6c16BH-0U',
+      title: 'How to Run Meta Ads For Beginners',
+      channel: 'Hostinger Academy',
+      duration: '24:31',
     },
     simulator: {
       id: 'meta-ads',
@@ -468,11 +468,50 @@ export const ecommerceConclusion = {
   ],
 };
 
-export const ecommerceResources = [
-  { title: 'Google Trends', url: 'https://trends.google.com', description: 'Compare search interest for a product over time and filter it to South Africa.' },
-  { title: 'WooCommerce Documentation', url: 'https://woocommerce.com/documentation/', description: 'Official guides for setting up products, payments, shipping and tax.' },
-  { title: 'Takealot', url: 'https://www.takealot.com', description: 'South Africa\'s largest marketplace — useful for researching competitors, pricing and reviews.' },
-  { title: 'Meta Business Help Centre', url: 'https://www.facebook.com/business/help', description: 'Official guidance on setting up and running Facebook and Instagram ad campaigns.' },
-  { title: 'Payfast', url: 'https://payfast.io', description: 'Widely used South African payment gateway — card, instant EFT and more.' },
-  { title: 'Ozow', url: 'https://ozow.com', description: 'Instant EFT payments, letting buyers pay straight from their bank without a card.' },
+export const ecommerceResourceGroups = [
+  {
+    group: 'Watch again',
+    items: [
+      { title: 'How to Run Meta Ads For Beginners', url: 'https://youtu.be/t-6c16BH-0U', description: 'The full Meta Ads walkthrough from Session 4 — worth returning to when you set up your first real campaign. (24:31)' },
+    ],
+  },
+  {
+    group: 'Research your market',
+    items: [
+      { title: 'Google Trends', url: 'https://trends.google.com', description: 'Compare search interest for a product over time and filter it to South Africa.' },
+      { title: 'Takealot', url: 'https://www.takealot.com', description: 'South Africa\'s largest marketplace — research competitors, pricing and review counts.' },
+    ],
+  },
+  {
+    group: 'Build your store',
+    items: [
+      { title: 'WooCommerce Documentation', url: 'https://woocommerce.com/documentation/', description: 'Official guides for setting up products, payments, shipping and tax.' },
+      { title: 'Canva', url: 'https://www.canva.com', description: 'Free tier covers product images, banners and ad creative without design software.' },
+    ],
+  },
+  {
+    group: 'Get paid',
+    items: [
+      { title: 'Payfast', url: 'https://payfast.io', description: 'Widely used South African gateway — card, instant EFT and more.' },
+      { title: 'Ozow', url: 'https://ozow.com', description: 'Instant EFT, letting buyers pay straight from their bank without a card.' },
+      { title: 'Yoco', url: 'https://www.yoco.com', description: 'South African card payments and point of sale, useful if you sell both online and in person.' },
+    ],
+  },
+  {
+    group: 'Deliver it',
+    items: [
+      { title: 'Pargo', url: 'https://pargo.co.za', description: 'Click-and-collect pick-up points nationwide — the practical answer to customers without a street address.' },
+    ],
+  },
+  {
+    group: 'Market and measure',
+    items: [
+      { title: 'Meta Business Help Centre', url: 'https://www.facebook.com/business/help', description: 'Official guidance on setting up and running Facebook and Instagram campaigns.' },
+      { title: 'Google Search Console', url: 'https://search.google.com/search-console/about', description: 'See which searches bring people to your store, and fix what stops Google indexing it. Free.' },
+      { title: 'Google Analytics', url: 'https://marketingplatform.google.com/about/analytics/', description: 'Track where visitors come from and where they drop out before buying. Free.' },
+    ],
+  },
 ];
+
+// Flat list kept for anything that just wants every resource.
+export const ecommerceResources = ecommerceResourceGroups.flatMap((g) => g.items);
