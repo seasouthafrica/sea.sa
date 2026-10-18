@@ -9,6 +9,25 @@ export default function WorkReadinessCertificate({ name, date }) {
 
   return (
     <div className="overflow-x-auto">
+      {/* Printing the page would otherwise carry the nav, session list and
+          resources onto the certificate PDF. */}
+      <style>{`
+        @media print {
+          body * { visibility: hidden !important; }
+          #work-readiness-certificate,
+          #work-readiness-certificate * { visibility: visible !important; }
+          #work-readiness-certificate {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            margin: 0 !important;
+            box-shadow: none !important;
+          }
+          .cert-print-hide { display: none !important; }
+          @page { size: landscape; margin: 12mm; }
+        }
+      `}</style>
       <div
         id="work-readiness-certificate"
         style={{
@@ -24,6 +43,12 @@ export default function WorkReadinessCertificate({ name, date }) {
         }}
       >
         <div style={{ border: '2px solid #E5E7E9', padding: 40, backgroundColor: 'white' }}>
+          <img
+            src="/images/sea-logo.png"
+            alt="Social Enterprise Academy — One becomes many"
+            style={{ display: 'block', width: 260, maxWidth: '70%', height: 'auto', margin: '0 auto 22px' }}
+          />
+
           <div style={{ display: 'flex', justifyContent: 'center', gap: 30, marginBottom: 30, flexWrap: 'wrap' }}>
             <h3 style={{ color: '#27AE60', margin: 0 }}>Social Enterprise Academy</h3>
             <h3 style={{ color: '#2980B9', margin: 0 }}>Africa Forward</h3>
@@ -73,7 +98,7 @@ export default function WorkReadinessCertificate({ name, date }) {
         </div>
       </div>
 
-      <div className="mt-4 text-center">
+      <div className="cert-print-hide mt-4 text-center">
         <button
           type="button"
           onClick={() => window.print()}
