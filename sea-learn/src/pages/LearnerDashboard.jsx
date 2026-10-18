@@ -140,6 +140,24 @@ export default function LearnerDashboard() {
           </div>
         </Link>
 
+        {/* Quarter 3 — E-commerce Basics Course Card */}
+        <Link
+          to="/ecommerce"
+          className="block rounded-2xl border border-sea-teal/30 bg-gradient-to-br from-white to-cyan-50 p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-sea-teal hover:shadow-md"
+        >
+          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-sea-teal">Quarter 3 · Final course</p>
+          <h2 className="text-xl font-bold text-gray-950">Uplift: E-commerce Basics</h2>
+          <p className="mt-1 text-sm text-gray-500">By Social Enterprise Academy and Africa Forward</p>
+          <p className="mt-4 text-sm text-gray-600">
+            What e-commerce is and how it works in South Africa, researching demand before you buy
+            stock, building your own store with WordPress and WooCommerce, and driving traffic that
+            turns into sales.
+          </p>
+          <div className="mt-5 inline-flex rounded-full bg-sea-teal px-5 py-2 text-sm font-bold text-white">
+            Open Course
+          </div>
+        </Link>
+
         {/* Quarter 2 — Work Readiness Course Card */}
         <Link
           to="/work-readiness"

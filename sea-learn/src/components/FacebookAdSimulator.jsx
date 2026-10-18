@@ -49,7 +49,9 @@ const AD_TIPS = {
   ],
 };
 
-export default function FacebookAdSimulator({ userId }) {
+// simId keeps each course's saved run separate — reusing one id would let a
+// learner's e-commerce run overwrite their Quarter 1 run.
+export default function FacebookAdSimulator({ userId, simId = 41, label = 'Facebook Ad Simulator' }) {
   const [screen, setScreen] = useState('build');
   const [objective, setObjective] = useState('');
   const [audience, setAudience] = useState('');
@@ -230,8 +232,8 @@ export default function FacebookAdSimulator({ userId }) {
           {userId && (
             <SimulatorSaveBar
               userId={userId}
-              simId={41}
-              label="Facebook Ad Simulator"
+              simId={simId}
+              label={label}
               snapshotData={{ objective, audience, dailyBudget, duration, brandName, headline, bodyText, ctaButton }}
               onReset={() => {
                 setObjective(''); setAudience(''); setBrandName(''); setHeadline(''); setBodyText('');

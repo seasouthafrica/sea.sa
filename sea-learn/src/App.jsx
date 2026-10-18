@@ -11,6 +11,7 @@ const LearnerDashboard = lazy(() => import('./pages/LearnerDashboard.jsx'));
 const CoursePlayer = lazy(() => import('./pages/CoursePlayer.jsx'));
 const UpliftCourse = lazy(() => import('./pages/UpliftCourse.jsx'));
 const WorkReadinessCourse = lazy(() => import('./pages/WorkReadinessCourse.jsx'));
+const EcommerceCourse = lazy(() => import('./pages/EcommerceCourse.jsx'));
 const AdminOverview = lazy(() => import('./pages/admin/AdminOverview.jsx'));
 const AdminLearners = lazy(() => import('./pages/admin/AdminLearners.jsx'));
 const AdminLearnerDetail = lazy(() => import('./pages/admin/AdminLearnerDetail.jsx'));
@@ -95,6 +96,24 @@ export default function App() {
             element={
               <RequireAuth>
                 <WorkReadinessCourse />
+              </RequireAuth>
+            }
+          />
+
+          {/* Quarter 3 — E-commerce Basics */}
+          <Route
+            path="/ecommerce"
+            element={
+              <RequireAuth>
+                <EcommerceCourse />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/ecommerce/session/:sessionId"
+            element={
+              <RequireAuth>
+                <EcommerceCourse />
               </RequireAuth>
             }
           />
