@@ -4,18 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Social Enterprise Manifesto South Africa | Social Enterprise Academy</title>
-  <meta name="description" content="Discover the Social Enterprise Academy South Africa manifesto and learn how social enterprise can create lasting change, economic opportunity and community impact in South Africa." />
+  <meta name="description" content="Read the Social Enterprise Academy South Africa manifesto — why we back the changemakers in communities, how transformational learning creates lasting impact, and how to partner with us." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="theme-color" content="#5a2d84" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Social Enterprise Manifesto South Africa | Social Enterprise Academy" />
-  <meta property="og:description" content="Discover the Social Enterprise Academy South Africa manifesto and learn how social enterprise can create lasting change, economic opportunity and community impact in South Africa." />
+  <meta property="og:description" content="Read the Social Enterprise Academy South Africa manifesto — why we back the changemakers in communities, how transformational learning creates lasting impact, and how to partner with us." />
   <meta property="og:url" content="https://socialenterprise.academy/za/manifesto.html" />
   <meta property="og:image" content="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/public/Creatives/SEA%20Logo.png" />
   <meta property="og:site_name" content="Social Enterprise Academy South Africa" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Social Enterprise Manifesto South Africa | Social Enterprise Academy" />
-  <meta name="twitter:description" content="Discover the Social Enterprise Academy South Africa manifesto and learn how social enterprise can create lasting change, economic opportunity and community impact in South Africa." />
+  <meta name="twitter:description" content="Read the Social Enterprise Academy South Africa manifesto — why we back the changemakers in communities, how transformational learning creates lasting impact, and how to partner with us." />
   <meta name="twitter:image" content="https://xwbzjpppwuibyocmmmlc.supabase.co/storage/v1/object/public/Creatives/SEA%20Logo.png" />
   <script type="application/ld+json">
   {
@@ -30,179 +30,301 @@
   }
   </script>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@700&family=Montserrat:wght@400;500;800&family=Open+Sans:wght@300;400;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ── Manifesto-specific styles ───────────────────────── */
-    .page-hero {
-      background: linear-gradient(135deg, var(--magenta) 0%, #8e1550 100%);
-      padding: 5rem 2rem 4rem;
+    /* ── Manifesto page — SEA About Us design ─────────────────── */
+    :root {
+      --mf-ink: #222222;
+      --mf-pink: #f4c9e1;
+      --mf-plum: #a40062;
+      --mf-grey: #f6f6f6;
+      --mf-tf-teal: #009490;
+      --mf-tf-rose: #d7004c;
+      --mf-hope-teal: #00b5b0;
+      --mf-hope-rose: #b21049;
+      --mf-mute: #8f8f8f;
+      --mf-role: #03989e;
+      --mf-cta: #e40052;
+      --mf-slate: #2f3a42;
+    }
+
+    /* ── Hero ── */
+    .mf-hero {
+      background: linear-gradient(100deg, #c2185b 0%, #a4154e 55%, #8e1550 100%);
+      color: #fff;
       text-align: center;
-      color: white;
+      padding: 5rem 2rem 4.5rem;
     }
-    .page-hero h1 {
-      font-size: clamp(2.2rem, 5vw, 3.6rem);
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      margin-bottom: .8rem;
-    }
-    .breadcrumb {
-      font-size: .82rem;
-      opacity: .8;
-    }
-    .breadcrumb a { color: white; text-decoration: underline; }
-
-    .page-layout {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 3rem;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-      align-items: start;
-    }
-
-    /* Sidebar */
-    .page-sidebar {
-      position: sticky;
-      top: 170px;
-    }
-    .sidebar-title {
-      font-size: .7rem;
+    .mf-hero .breadcrumb { font-size: .8rem; opacity: .85; margin-bottom: 1rem; letter-spacing: .04em; }
+    .mf-hero .breadcrumb a { color: #fff; text-decoration: underline; }
+    .mf-hero h1 {
+      font-family: "Open Sans", var(--font);
+      font-size: clamp(2.4rem, 6vw, 4.4rem);
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: .14em;
-      color: var(--gray);
-      margin-bottom: 1rem;
-      padding-bottom: .5rem;
-      border-bottom: 2px solid var(--teal);
+      letter-spacing: .05em;
+      line-height: 1.05;
     }
-    .sidebar-nav { list-style: none; }
-    .sidebar-nav li + li { margin-top: .1rem; }
-    .sidebar-nav a {
-      display: block;
-      font-size: .85rem;
-      color: var(--dark);
-      padding: .5rem .8rem;
-      border-radius: 4px;
-      transition: background .2s, color .2s;
-      text-decoration: none;
-    }
-    .sidebar-nav a:hover { background: var(--light); color: var(--teal); }
-    .sidebar-nav a.active { background: var(--teal); color: white; font-weight: 700; }
-
-    /* Article */
-    .page-article { min-width: 0; }
-
-    .manifesto-text {
-      background: var(--light);
-      border-left: 5px solid var(--teal);
-      border-radius: 0 8px 8px 0;
-      padding: 2.5rem 2rem;
-      margin-bottom: 3rem;
-    }
-    .manifesto-text h2 {
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: var(--teal);
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-    .manifesto-text p {
-      font-size: 1.05rem;
-      line-height: 1.85;
-      color: var(--dark);
-      margin-bottom: .8rem;
-    }
-    .manifesto-text p:last-child { margin-bottom: 0; }
-    .manifesto-tagline {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: var(--magenta);
-      font-style: italic;
-      margin-top: 1.5rem;
+    .mf-hero p {
+      font-family: "Open Sans", var(--font);
+      font-size: clamp(.95rem, 1.3vw, 1.1rem);
+      line-height: 1.8;
+      max-width: 660px;
+      margin: 1.4rem auto 0;
     }
 
-    /* Media blocks */
-    .media-block {
+    /* ── Manifesto (pink) ── */
+    .mf-manifesto { background: var(--mf-pink); }
+    .mf-manifesto-inner {
+      max-width: 1240px;
+      margin: 0 auto;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 3rem;
+      align-items: start;
+      padding: 4.5rem 2rem 5rem;
+    }
+    .mf-manifesto h2 {
+      font-family: "Barlow Condensed", "Open Sans", var(--font);
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--mf-plum);
+      font-size: clamp(2.4rem, 4.4vw, 3.3rem);
+      line-height: 1;
+      margin-bottom: 1.8rem;
+    }
+    .mf-stanza {
+      font-family: "Open Sans", var(--font);
+      font-weight: 300;
+      color: var(--mf-ink);
+      font-size: clamp(1rem, 1.3vw, 1.14rem);
+      line-height: 1.75;
+    }
+    .mf-stanza p { margin-bottom: 1.1rem; }
+    .mf-stanza p:last-child { margin-bottom: 0; }
+    .mf-stanza + .mf-stanza { margin-top: 1.9rem; }
+    .mf-stanza strong { font-weight: 700; }
+    .mf-closer {
+      font-weight: 700;
+      font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+      color: var(--mf-plum);
+      line-height: 1.5;
+      margin-top: 1.4rem;
+    }
+
+    /* ── Photo stack (right column) ── */
+    .mf-collage { display: grid; gap: .9rem; }
+    .mf-collage figure {
+      overflow: hidden;
+      border-radius: 6px;
+      background: #e3b3cf;
+      aspect-ratio: 2 / 1;
+    }
+    .mf-collage img { width: 100%; height: 100%; object-fit: cover; }
+    .mf-collage figure.contain { background: #fff; }
+    .mf-collage figure.contain img { object-fit: contain; }
+
+    /* ── Transform / Hope ── */
+    .mf-media { background: var(--mf-grey); }
+    .mf-media-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
       align-items: center;
-      padding: 3.5rem 2rem;
+      padding: 4.5rem 2rem;
+    }
+    .mf-media figure { border-radius: 10px; overflow: hidden; aspect-ratio: 3 / 2; background: #dcdcdc; }
+    .mf-media figure img { width: 100%; height: 100%; object-fit: cover; }
+    .mf-media .copy h2 {
+      font-family: "Archivo Black", "Open Sans", var(--font);
+      font-size: clamp(1.9rem, 3.2vw, 2.45rem);
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: .75rem;
+    }
+    .mf-media .copy .kicker {
+      font-family: "Open Sans", var(--font);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: .95rem;
+      margin-bottom: 1.4rem;
+    }
+    .mf-media .copy p,
+    .mf-media .copy li {
+      font-family: "Poppins", var(--font);
+      font-size: .96rem;
+      line-height: 1.85;
+      color: var(--mf-ink);
+    }
+    .mf-media .copy p { margin-bottom: 1rem; }
+    .mf-media .copy ul { list-style: disc; padding-left: 1.35rem; }
+    .mf-media .copy li { margin-bottom: .55rem; }
+    .mf-transform .copy h2 { color: var(--mf-tf-teal); }
+    .mf-transform .copy .kicker { color: var(--mf-tf-rose); }
+    .mf-hope .copy h2 { color: var(--mf-hope-teal); }
+    .mf-hope .copy .kicker { color: var(--mf-hope-rose); }
+    .mf-media.flip .mf-media-inner > figure { order: 2; }
+
+    /* ── Centred section headings ── */
+    .mf-section { background: #fff; padding: 4.5rem 2rem; }
+    .mf-section-head { max-width: 900px; margin: 0 auto 2.8rem; text-align: center; }
+    .mf-section-head h2 {
+      font-family: "Open Sans", var(--font);
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--mf-mute);
+      font-size: clamp(1.7rem, 3vw, 2.15rem);
+      line-height: 1.4;
+    }
+    .mf-section-head .sub {
+      font-family: "Open Sans", var(--font);
+      color: var(--mf-mute);
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-top: .7rem;
+    }
+    .mf-section-head .lede {
+      font-family: "Montserrat", var(--font);
+      color: var(--mf-ink);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-top: 1.2rem;
+    }
+
+    /* ── Team ── */
+    .mf-team-grid {
       max-width: 1100px;
       margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      text-align: center;
     }
-    .media-block.reverse { direction: rtl; }
-    .media-block.reverse > * { direction: ltr; }
-
-    .media-block-img {
-      border-radius: 8px;
+    .mf-team-card { display: flex; flex-direction: column; color: inherit; }
+    .mf-team-photo {
+      width: 100%;
+      max-width: 220px;
+      margin: 0 auto 1.2rem;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
       overflow: hidden;
-      height: 420px;
-      background: var(--teal);
+      background: var(--mf-tf-teal);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-weight: 700;
+      color: #fff;
+      font-family: "Open Sans", var(--font);
+      font-weight: 800;
+      font-size: 2.2rem;
+      transition: transform .25s ease;
+    }
+    .mf-team-card:hover .mf-team-photo { transform: translateY(-5px); }
+    .mf-team-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .mf-team-name {
+      font-family: "Montserrat", var(--font);
+      font-weight: 800;
       font-size: 1.1rem;
+      color: var(--mf-ink);
     }
-    .media-block-img img { width: 100%; height: 100%; object-fit: cover; }
-
-    .media-block-section { background: white; }
-    .media-block-section.alt { background: var(--light); }
-
-    .media-block-content h2 {
-      font-size: 2rem;
-      font-weight: 900;
-      color: var(--teal);
-      margin-bottom: .4rem;
+    .mf-team-role {
+      font-family: "Montserrat", var(--font);
+      font-weight: 500;
+      font-size: .9rem;
+      color: var(--mf-role);
+      margin-top: .35rem;
+      line-height: 1.4;
+    }
+    .mf-team-more {
+      display: inline-block;
+      margin-top: auto;
+      padding-top: .8rem;
+      font-family: "Montserrat", var(--font);
+      font-weight: 500;
+      font-size: .85rem;
       text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-    .media-block-content h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--magenta);
-      margin-bottom: 1.2rem;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-    }
-    .media-block-content p {
-      font-size: .95rem;
-      line-height: 1.75;
-      color: var(--gray);
-      margin-bottom: .9rem;
-    }
-    .media-block-content p strong { color: var(--darker); }
-    .media-block-content ul {
-      list-style: disc;
-      padding-left: 1.4rem;
-      margin-bottom: .9rem;
-    }
-    .media-block-content ul li {
-      font-size: .95rem;
-      line-height: 1.7;
-      color: var(--gray);
-      margin-bottom: .4rem;
+      letter-spacing: .04em;
+      color: var(--mf-cta);
     }
 
-    /* Get Involved CTA */
-    .get-involved {
-      background: var(--magenta);
-      color: white;
+    /* ── Partner with us ── */
+    .mf-partner-strip {
+      max-width: 1100px;
+      margin: 0 auto 2.6rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .5rem;
+      padding: .5rem;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 14px 30px rgba(18, 20, 29, .12);
+    }
+    .mf-partner-strip figure { overflow: hidden; border-radius: 6px; aspect-ratio: 20 / 9; background: #dcdcdc; }
+    .mf-partner-strip img { width: 100%; height: 100%; object-fit: cover; }
+    .mf-partner-quote {
+      max-width: 880px;
+      margin: 0 auto 2.6rem;
       text-align: center;
-      padding: 4rem 2rem;
+      font-family: "Open Sans", var(--font);
+      font-style: italic;
+      font-size: clamp(1.02rem, 1.6vw, 1.28rem);
+      line-height: 1.65;
+      color: var(--mf-slate);
     }
-    .get-involved h2 { font-size: 2rem; font-weight: 900; margin-bottom: 1rem; }
-    .get-involved p  { font-size: 1rem; opacity: .9; max-width: 560px; margin: 0 auto 2rem; line-height: 1.65; }
+    .mf-benefits {
+      max-width: 1000px;
+      margin: 0 auto 2.6rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+    }
+    .mf-benefit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 74px;
+      padding: 1rem 1.2rem;
+      border: 1px solid #d9dde0;
+      border-radius: 40px;
+      background: #fff;
+      font-family: "Open Sans", var(--font);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--mf-slate);
+      line-height: 1.4;
+    }
+    .mf-partner-cta { text-align: center; }
+    .mf-partner-cta a {
+      display: inline-block;
+      background: var(--magenta);
+      color: #fff;
+      font-family: "Open Sans", var(--font);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: 1rem;
+      padding: 1rem 2.6rem;
+      border-radius: 40px;
+      transition: background .2s, transform .2s;
+    }
+    .mf-partner-cta a:hover { background: var(--magenta-dk); transform: translateY(-2px); }
 
-    @media (max-width: 900px) {
-      .page-layout { grid-template-columns: 1fr; }
-      .page-sidebar { position: static; }
-      .media-block { grid-template-columns: 1fr; }
-      .media-block.reverse { direction: ltr; }
+    @media (max-width: 980px) {
+      .mf-manifesto-inner,
+      .mf-media-inner { grid-template-columns: 1fr; gap: 2.4rem; }
+      .mf-media.flip .mf-media-inner > figure { order: 0; }
+      .mf-team-grid { grid-template-columns: repeat(2, 1fr); gap: 2.4rem; }
+      .mf-benefits  { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 540px) {
+      .mf-team-grid     { grid-template-columns: 1fr; }
+      .mf-benefits      { grid-template-columns: 1fr; }
+      .mf-partner-strip { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -246,17 +368,21 @@
       <ul class="dd-menu">
         <li><a href="manifesto.html" class="active">Manifesto</a></li>
         <li><a href="who-we-are.html">Who We Are</a></li>
-        <li><a href="#">Our Team</a></li>
+        <li><a href="meet-our-team.html">Our Team</a></li>
         <li><a href="index.html#partner">Partner With Us</a></li>
       </ul>
     </div>
     <div class="dd">
       <a href="index.html#programmes">Our Programmes +</a>
       <ul class="dd-menu">
-        <li><a href="index.html#programmes">Programmes</a></li>
+        <li><a href="whats-on.html#programmes">All Programmes</a></li>
+        <li><a href="leadership-development.html">Leadership Development Programme</a></li>
         <li><a href="supplier-development.html">Supplier Development Programme</a></li>
+        <li><a href="social-enterprise-education.html">Social Enterprise in Education Programme</a></li>
         <li><a href="measuring-social-impact.html">Measuring Social Impact Programme</a></li>
-        <li><a href="index.html#findout">Book a Programme</a></li>
+        <li><a href="startup-or-build.html">Start-up or Build Programme</a></li>
+        <li><a href="whats-on.html#book">Book a Programme</a></li>
+        <li><a href="whats-on.html#download">Download Prospectus</a></li>
       </ul>
     </div>
     <div class="dd">
@@ -295,70 +421,99 @@
 </nav>
 
 <!-- ── Hero ─────────────────────────────────────────────────── -->
-<section class="page-hero">
+<section class="mf-hero">
   <p class="breadcrumb"><a href="index.html">Home</a> › About us › Manifesto</p>
   <h1>Manifesto</h1>
-  <p style="opacity:.88; font-size:1rem; max-width:560px; margin:.8rem auto 0; line-height:1.6;">
-    "Never think you can't be the one to change the world. You're just where it starts."
+  <p>
+    We believe social entrepreneurs play an essential role in changing the world. We strengthen
+    their role in local communities across South Africa through transformational learning
+    programmes that will increase their community impact.
   </p>
 </section>
 
-<!-- ── Main Layout ───────────────────────────────────────────── -->
-<div class="page-layout">
+<!-- ── Manifesto ────────────────────────────────────────────── -->
+<section class="mf-manifesto" id="manifesto">
+  <div class="mf-manifesto-inner">
 
-  <!-- Sidebar -->
-  <aside class="page-sidebar">
-    <p class="sidebar-title">In this section</p>
-    <ul class="sidebar-nav">
-      <li><a href="manifesto.html" class="active">Manifesto</a></li>
-      <li><a href="who-we-are.html">Who We Are</a></li>
-      <li><a href="index.html#partner">Partner With Us</a></li>
-      <li><a href="index.html#programmes">Our Programmes</a></li>
-      <li><a href="mailto:jamy@socialenterprise.academy">Contact Us</a></li>
-    </ul>
-  </aside>
-
-  <!-- Article -->
-  <article class="page-article">
-    <div class="manifesto-text">
+    <div>
       <h2>Manifesto</h2>
-      <p>Most people think that if we want to change the world, only large companies can make big steps.</p>
-      <p>We like to disagree.</p>
-      <p>We are convinced that a better future will be fuelled by the strength of millions of communities.</p>
-      <p>Because a community is the only scale where the power of trust, commitment, and loyalty naturally comes together.</p>
-      <p>It's the world at its best.</p>
-      <p>So to turn this floating blue marble into something good, we should start with empowering the changemakers in communities.</p>
-      <p>The social entrepreneurs.</p>
-      <p>We call them: <strong>agents of change.</strong></p>
-      <p>Because a world in transformation needs transformational leaders.</p>
-      <p>We don't tell them what to do. We don't teach them.</p>
-      <p>We facilitate them to turn themselves into skillful leaders.</p>
-      <p>It's deep learning that creates deep-rooted transformation.</p>
-      <p>And once they find that, their dreams and energy don't just add up, they multiply.</p>
-      <p>Because there is nothing more powerful than a determined social entrepreneur with a warm heart, a clear goal, and buckets full of self-confidence.</p>
-      <p>Because passion and purpose are infectious. It attracts others and the momentum grows.</p>
-      <p>One person will become two. Then two becomes twenty and twenty becomes a thousand.</p>
-      <p>That is where the transformation happens.</p>
-      <p>So never think you can't be the one to change the world.</p>
-      <p class="manifesto-tagline">You're just where it starts.</p>
-    </div>
-  </article>
 
-</div>
+      <div class="mf-stanza">
+        <p>Most people think that if we want to change the world, only large companies can make big steps.</p>
+        <p>We like to disagree.</p>
+        <p>We are convinced that a better future will be fuelled by the strength of millions of communities.</p>
+        <p>Because a community is the only scale where the power of trust, commitment, and loyalty naturally comes together.</p>
+        <p>It's the world at its best.</p>
+        <p>So to turn this floating blue marble into something good, we should start with empowering the changemakers in communities.</p>
+      </div>
 
-<!-- ── Transform Section ─────────────────────────────────────── -->
-<section class="media-block-section">
-  <div class="media-block">
-    <div class="media-block-img">
-      <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/cropped-Transform-Cluster-3-scaled-1-1292x1345.jpg"
-           alt="Transform" onerror="this.style.display='none'">
+      <div class="mf-stanza">
+        <p>The social entrepreneurs.</p>
+        <p>We call them: <strong>agents of change.</strong></p>
+        <p>Because a world in transformation needs transformational leaders.</p>
+        <p>We don't tell them what to do. We don't teach them.</p>
+        <p>We facilitate them to turn themselves into skillful leaders.</p>
+        <p>It's deep learning that creates deep-rooted transformation.</p>
+        <p>And once they find that, their dreams and energy don't just add up, they multiply.</p>
+        <p>Because there is nothing more powerful than a determined social entrepreneur with a warm heart, a clear goal, and buckets full of self-confidence.</p>
+        <p>Because passion and purpose are infectious. It attracts others and the momentum grows.</p>
+      </div>
+
+      <div class="mf-stanza">
+        <p>One person will become two. Then two becomes twenty and twenty becomes a thousand.</p>
+        <p>That is where the transformation happens.</p>
+        <p>So never think you can't be the one to change the world.</p>
+        <p class="mf-closer">You're just where it starts.</p>
+      </div>
     </div>
-    <div class="media-block-content">
+
+    <div class="mf-collage">
+      <figure>
+        <img src="graphics/about-us/manifesto-1.jpg"
+             alt="Young social entrepreneurs with their prize vouchers at a Social Enterprise Academy event"
+             width="1400" height="786" loading="lazy">
+      </figure>
+      <figure class="contain">
+        <img src="graphics/about-us/manifesto-2.jpg"
+             alt="Social Enterprise Academy Programme 2026 group photograph with partner university logos"
+             width="1400" height="990" loading="lazy">
+      </figure>
+      <figure>
+        <img src="graphics/about-us/manifesto-3.jpg"
+             alt="Participants of a Social Enterprise Academy leadership programme cohort"
+             width="1400" height="933" loading="lazy">
+      </figure>
+      <figure>
+        <img src="graphics/about-us/manifesto-4.jpg"
+             alt="Young people celebrating at a Social Enterprise Academy learning session"
+             width="1400" height="788" loading="lazy">
+      </figure>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Transform ────────────────────────────────────────────── -->
+<section class="mf-media mf-transform" id="transform">
+  <div class="mf-media-inner">
+    <figure>
+      <img src="graphics/about-us/transform.jpg"
+           alt="Leadership Development Programme participants receiving their certificate"
+           width="1200" height="800" loading="lazy">
+    </figure>
+    <div class="copy">
       <h2>Transform</h2>
-      <h3>One Becomes Many</h3>
-      <p><strong>We believe social entrepreneurs play an essential role in changing the world.</strong> We strengthen their role in local communities through transformational learning that will increase their community impact.</p>
+      <p class="kicker">One becomes many</p>
+      <p>
+        We believe social entrepreneurs play an essential role in changing the world. We strengthen
+        their role in local communities through transformational learning that will increase their
+        community impact.
+      </p>
       <p><strong>Why is this essential now?</strong></p>
-      <p>Today our world is facing unprecedented challenges and is now further behind than ever to achieve the Sustainable Development Goals:</p>
+      <p>
+        Today our world is facing unprecedented challenges and is now further behind than ever to
+        achieve the Sustainable Development Goals.
+      </p>
       <ul>
         <li>Inequality has increased for women, low-wage workers, SMEs and the informal sector</li>
         <li>An estimated 70 million people are now living in poverty globally for the first time in 30 years</li>
@@ -368,27 +523,124 @@
   </div>
 </section>
 
-<!-- ── Hope Section ──────────────────────────────────────────── -->
-<section class="media-block-section alt">
-  <div class="media-block reverse">
-    <div class="media-block-img">
-      <img src="https://socialenterprise.academy/za/wp-content/uploads/sites/7/2023/08/Hope-Cluster-2-1-1292x1400.jpg"
-           alt="Hope" onerror="this.style.display='none'">
-    </div>
-    <div class="media-block-content">
+<!-- ── Hope ─────────────────────────────────────────────────── -->
+<section class="mf-media mf-hope flip" id="hope">
+  <div class="mf-media-inner">
+    <figure>
+      <img src="graphics/about-us/hope.jpg"
+           alt="International students taking part in a Social Enterprise Academy workshop"
+           width="1053" height="702" loading="lazy">
+    </figure>
+    <div class="copy">
       <h2>Hope</h2>
-      <h3>What are we going to do?</h3>
-      <p><strong>SEA Africa wants to facilitate programmes for social entrepreneurs around the African continent to step up and solve the social and environmental issues affecting their communities.</strong></p>
-      <p>We believe in the power of learning and development to transform people of all ages to be agents of change. Through our 7 global hubs, <strong>SEA have facilitated programmes to over 78 000 social entrepreneurs</strong> to help create fairer communities where people have equitable access to opportunities.</p>
+      <p class="kicker">What are we going to do?</p>
+      <p>
+        SEA Africa wants to facilitate programmes for social entrepreneurs around the African
+        continent to step up and solve the social and environmental issues affecting their
+        communities.
+      </p>
+      <p>
+        We believe in the power of learning and development to transform people of all ages to be
+        agents of change. Around the world, through our 7 global hubs, SEA have facilitated
+        programmes to over 78 000 social entrepreneurs to help create fairer communities where
+        people have equitable access to opportunities.
+      </p>
     </div>
   </div>
 </section>
 
-<!-- ── Get Involved ──────────────────────────────────────────── -->
-<section class="get-involved" id="get-involved">
-  <h2>Get Involved</h2>
-  <p>To find out how you and your organisation can support us to create fairer communities in South Africa and around the world, please get in touch.</p>
-  <a href="mailto:jamy@socialenterprise.academy" class="btn-magenta" style="background:white; color:var(--magenta);">Contact Us</a>
+<!-- ── Meet Our Team ────────────────────────────────────────── -->
+<section class="mf-section" id="team">
+  <div class="mf-section-head">
+    <h2>Meet Our Team</h2>
+    <p class="sub">The passionate people behind SEA South Africa's mission to empower social entrepreneurs.</p>
+    <p class="lede">
+      Our small but mighty team brings together expertise in programme management, marketing,
+      learning coordination, and operations — all united by a commitment to social change.
+    </p>
+  </div>
+
+  <div class="mf-team-grid">
+    <a class="mf-team-card" href="meet-our-team.html">
+      <div class="mf-team-photo" style="background:#c2185b;">
+        <img src="graphics/about-us/team-surika.jpg" alt="Surika Behrens" width="640" height="640" loading="lazy"
+             onerror="this.remove(); this.parentElement.textContent='SB';">
+      </div>
+      <p class="mf-team-name">Surika Behrens</p>
+      <p class="mf-team-role">Hub Manager</p>
+      <span class="mf-team-more">Read more +</span>
+    </a>
+
+    <a class="mf-team-card" href="meet-our-team.html">
+      <div class="mf-team-photo" style="background:#c2185b;">
+        <img src="graphics/about-us/team-jamy.png" alt="Jamy Manuel" width="320" height="320" loading="lazy"
+             onerror="this.remove(); this.parentElement.textContent='JM';">
+      </div>
+      <p class="mf-team-name">Jamy Manuel</p>
+      <p class="mf-team-role">Programme Manager</p>
+      <span class="mf-team-more">Read more +</span>
+    </a>
+
+    <a class="mf-team-card" href="meet-our-team.html">
+      <div class="mf-team-photo" style="background:#f5c500;">
+        <img src="graphics/about-us/team-nadja.jpg" alt="Nadja Watney" width="400" height="400" loading="lazy"
+             onerror="this.remove(); this.parentElement.textContent='NW';">
+      </div>
+      <p class="mf-team-name">Nadja Watney</p>
+      <p class="mf-team-role">Learning Coordinator (Intern)</p>
+      <span class="mf-team-more">Read more +</span>
+    </a>
+
+    <a class="mf-team-card" href="meet-our-team.html">
+      <div class="mf-team-photo">
+        <img src="graphics/about-us/team-sabele.jpg" alt="Sabele Ntoyanto" width="320" height="320" loading="lazy"
+             onerror="this.remove(); this.parentElement.textContent='SN';">
+      </div>
+      <p class="mf-team-name">Sabele Ntoyanto</p>
+      <p class="mf-team-role">Marketing &amp; Communications Officer</p>
+      <span class="mf-team-more">Read more +</span>
+    </a>
+  </div>
+</section>
+
+<!-- ── Partner With Us ──────────────────────────────────────── -->
+<section class="mf-section" id="get-involved" style="background:var(--mf-grey);">
+  <div class="mf-section-head">
+    <h2>Partner With Us</h2>
+    <p class="lede">Want to support the next generation of social entrepreneurs?</p>
+  </div>
+
+  <div class="mf-partner-strip">
+    <figure>
+      <img src="graphics/about-us/partner-1.png" alt="Social entrepreneurs in conversation at a Social Enterprise Academy session"
+           width="417" height="189" loading="lazy">
+    </figure>
+    <figure>
+      <img src="graphics/about-us/partner-2.png" alt="Participants collaborating during a Social Enterprise Academy programme"
+           width="416" height="189" loading="lazy">
+    </figure>
+    <figure>
+      <img src="graphics/about-us/partner-3.png" alt="Social Enterprise Academy community gathering"
+           width="416" height="189" loading="lazy">
+    </figure>
+  </div>
+
+  <p class="mf-partner-quote">
+    "Never think you can't be the one to change the world. You're just where it starts." Join us to
+    build the social enterprise ecosystem in South Africa. Partner with us so that we can change the
+    world together.
+  </p>
+
+  <div class="mf-benefits">
+    <p class="mf-benefit">Better your BEE Scorecard</p>
+    <p class="mf-benefit">Get Tax Benefits</p>
+    <p class="mf-benefit">Skills Development</p>
+    <p class="mf-benefit">CSI Benefits</p>
+  </div>
+
+  <div class="mf-partner-cta">
+    <a href="partner-with-us.html#donate">Partner with us</a>
+  </div>
 </section>
 
 <!-- ── Newsletter ────────────────────────────────────────────── -->
