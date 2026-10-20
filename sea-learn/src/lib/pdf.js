@@ -2,7 +2,7 @@
 // Text is laid out top-down on Letter-size pages; images are embedded as JPEG.
 // Every byte is written through a latin1 string, so offsets stay exact.
 
-function pdfText(value) {
+export function pdfText(value) {
   return String(value ?? '')
     .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^\x20-\x7E]/g, '?');
@@ -21,7 +21,7 @@ function wrapText(value, max = 86) {
   return lines.length ? lines : [''];
 }
 
-function pdfBytes(value) {
+export function pdfBytes(value) {
   const bytes = new Uint8Array(value.length);
   for (let i = 0; i < value.length; i += 1) bytes[i] = value.charCodeAt(i) & 0xff;
   return bytes;
@@ -120,6 +120,13 @@ export function createPdf(lines) {
   });
   objects[catalogId - 1] = `<< /Type /Catalog /Pages ${pagesId} 0 R >>`;
   objects[pagesId - 1] = `<< /Type /Pages /Kids [${pageIds.map((id) => `${id} 0 R`).join(' ')}] /Count ${pageIds.length} >>`;
+  return serialisePdf(objects, catalogId);
+}
+
+// Shared by createPdf and the CV template renderer: writes the object table,
+// the xref offsets and the trailer. Offsets are byte-exact because every
+// object is serialised as a latin1 string.
+export function serialisePdf(objects, catalogId) {
   let output = '%PDF-1.4\n';
   const offsets = [0];
   objects.forEach((object, index) => { offsets.push(output.length); output += `${index + 1} 0 obj\n${object}\nendobj\n`; });

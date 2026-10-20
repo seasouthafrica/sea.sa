@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
-import { createPdf } from '../lib/pdf';
+import { createCvPdf } from '../lib/cvPdf';
 import AssignmentFile, { getAssignmentObjectPath } from './AssignmentFile';
 
 // Namespaced clear of the Quarter 1 ids (1-5, 21-61, 101-105), the Work
@@ -39,59 +39,6 @@ function splitList(value) {
     .filter(Boolean);
 }
 
-// The CV is laid out with the same line primitives the portfolio PDF uses.
-function buildCvLines(cv) {
-  const contact = [cv.email, cv.phone, cv.location, cv.linkedin].filter(Boolean).join('  |  ');
-  const lines = [
-    { text: cv.fullName || 'Your name', heading: true },
-  ];
-  if (cv.jobTitle) lines.push({ text: cv.jobTitle });
-  if (contact) lines.push({ text: contact });
-  lines.push({ text: '', gap: true });
-
-  if (cv.summary.trim()) {
-    lines.push({ text: 'PROFESSIONAL SUMMARY', heading: true });
-    lines.push({ text: cv.summary.trim() });
-    lines.push({ text: '', gap: true });
-  }
-
-  const experience = cv.experience.filter((item) => item.role || item.employer || item.detail);
-  if (experience.length) {
-    lines.push({ text: 'WORK EXPERIENCE', heading: true });
-    experience.forEach((item) => {
-      const title = [item.role, item.employer].filter(Boolean).join(' - ');
-      if (title) lines.push({ text: title });
-      if (item.dates) lines.push({ text: item.dates });
-      splitList(item.detail).forEach((point) => lines.push({ text: `- ${point}` }));
-      lines.push({ text: '', gap: true });
-    });
-  }
-
-  const education = cv.education.filter((item) => item.qualification || item.institution);
-  if (education.length) {
-    lines.push({ text: 'EDUCATION', heading: true });
-    education.forEach((item) => {
-      lines.push({ text: [item.qualification, item.institution].filter(Boolean).join(' - ') });
-      if (item.dates) lines.push({ text: item.dates });
-    });
-    lines.push({ text: '', gap: true });
-  }
-
-  const skills = splitList(cv.skills);
-  if (skills.length) {
-    lines.push({ text: 'SKILLS', heading: true });
-    skills.forEach((skill) => lines.push({ text: `- ${skill}` }));
-    lines.push({ text: '', gap: true });
-  }
-
-  if (cv.references.trim()) {
-    lines.push({ text: 'REFERENCES', heading: true });
-    splitList(cv.references).forEach((item) => lines.push({ text: item }));
-  }
-
-  return lines;
-}
-
 function Labelled({ label, children }) {
   return (
     <label className="block">
@@ -107,6 +54,7 @@ export default function CvBuilder({ user, profile, submission, onSubmitted }) {
   const [cv, setCv] = useState(EMPTY);
   const [saveState, setSaveState] = useState('idle');
   const [file, setFile] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState('');
   const [uploadState, setUploadState] = useState('idle'); // idle | uploading | done | error
   const [uploadError, setUploadError] = useState('');
 
@@ -158,15 +106,15 @@ export default function CvBuilder({ user, profile, submission, onSubmitted }) {
     window.setTimeout(() => setSaveState('idle'), 2500);
   }, [user, cv]);
 
-  const downloadCv = useCallback(() => {
-    const blob = createPdf(buildCvLines(cv));
+  const downloadCv = useCallback(async () => {
+    const blob = await createCvPdf(cv, { photoUrl });
     const url = URL.createObjectURL(blob);
     const anchor = window.document.createElement('a');
     anchor.href = url;
     anchor.download = `cv-${(cv.fullName || 'learner').toLowerCase().replace(/[^a-z0-9]+/g, '-')}.pdf`;
     anchor.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }, [cv]);
+  }, [cv, photoUrl]);
 
   const uploadCv = useCallback(async () => {
     if (!user || !file) return;
@@ -218,6 +166,18 @@ export default function CvBuilder({ user, profile, submission, onSubmitted }) {
             </Labelled>
             <Labelled label="LinkedIn (optional)">
               <input className={inputClass} value={cv.linkedin} onChange={(e) => update({ linkedin: e.target.value })} />
+            </Labelled>
+            <Labelled label="Photo (optional)">
+              <input
+                type="file"
+                accept="image/png,image/jpeg"
+                className="mt-1 w-full text-sm"
+                onChange={(e) => {
+                  const picked = e.target.files?.[0];
+                  if (photoUrl) URL.revokeObjectURL(photoUrl);
+                  setPhotoUrl(picked ? URL.createObjectURL(picked) : '');
+                }}
+              />
             </Labelled>
           </div>
 
@@ -304,6 +264,9 @@ export default function CvBuilder({ user, profile, submission, onSubmitted }) {
         <div>
           <p className="text-xs font-bold uppercase tracking-wide text-slate-600">Preview</p>
           <div className="mt-2 max-h-[560px] overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm">
+            {photoUrl && (
+              <img src={photoUrl} alt="" className="mb-3 h-24 w-24 rounded border-4 border-emerald-400 object-cover" />
+            )}
             <p className="text-lg font-black text-slate-900">{cv.fullName || 'Your name'}</p>
             {cv.jobTitle && <p className="text-slate-600">{cv.jobTitle}</p>}
             <p className="mt-1 text-xs text-slate-500">
