@@ -10,6 +10,7 @@ import {
   workReadinessResources,
 } from '../data/workReadinessSessions';
 import WorkReadinessCertificate from '../components/WorkReadinessCertificate';
+import CvBuilder, { CV_UPLOAD_CHAPTER_ID } from '../components/CvBuilder';
 
 const QUIZ_KEY = 'work-readiness-quiz-scores';
 const PASS_PCT = 67; // 2 of 3 questions correct
@@ -530,11 +531,25 @@ export default function WorkReadinessCourse() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
   const [quizScores, setQuizScores] = useState({});
+  const [cvSubmission, setCvSubmission] = useState(null);
 
   useEffect(() => {
     if (!user) return;
     setQuizScores(loadLocal(QUIZ_KEY, user.id));
   }, [user]);
+
+  const loadCvSubmission = useCallback(async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from('assignment_submissions')
+      .select('file_url, submitted_at, status')
+      .eq('user_id', user.id)
+      .eq('chapter_id', CV_UPLOAD_CHAPTER_ID)
+      .maybeSingle();
+    setCvSubmission(data ?? null);
+  }, [user]);
+
+  useEffect(() => { void loadCvSubmission(); }, [loadCvSubmission]);
 
   const saveQuizScore = useCallback((quizKey, score, total) => {
     const pct = Math.round((score / total) * 100);
@@ -565,7 +580,10 @@ export default function WorkReadinessCourse() {
     () => REQUIRED_WORK_READINESS_QUIZ_KEYS.filter((k) => (quizScores[k]?.pct ?? 0) >= PASS_PCT).length,
     [quizScores]
   );
-  const allPassed = passedCount === REQUIRED_WORK_READINESS_QUIZ_KEYS.length;
+  const allQuizzesPassed = passedCount === REQUIRED_WORK_READINESS_QUIZ_KEYS.length;
+  const cvSubmitted = Boolean(cvSubmission?.file_url);
+  // The CV upload is the final activity, so it gates the certificate too.
+  const allPassed = allQuizzesPassed && cvSubmitted;
   const percent = Math.round((passedCount / REQUIRED_WORK_READINESS_QUIZ_KEYS.length) * 100);
 
   const active = sessionId ? workReadinessSessions.find((s) => String(s.id) === String(sessionId)) : null;
@@ -676,12 +694,24 @@ export default function WorkReadinessCourse() {
             </div>
           </section>
 
+          <section className="mt-12">
+            <p className="text-xs font-bold uppercase tracking-widest text-sea-teal">Final activity</p>
+            <h2 className="mt-1 text-2xl font-bold text-slate-900">Build your CV</h2>
+            <p className="mt-2 text-sm text-slate-600">
+              Put Session 4 into practice. Fill this in, download your CV as a PDF, then upload it
+              below to complete the course and unlock your certificate.
+            </p>
+            <div className="mt-4">
+              <CvBuilder user={user} profile={profile} submission={cvSubmission} onSubmitted={loadCvSubmission} />
+            </div>
+          </section>
+
           <div className="mt-12">
             {allPassed ? (
               <div>
                 <h2 className="text-2xl font-bold text-slate-900">Certificate of Completion</h2>
                 <p className="mt-1 text-sm text-slate-600">
-                  Congratulations{profile?.first_name ? `, ${profile.first_name}` : ''}! You have passed all {REQUIRED_WORK_READINESS_QUIZ_KEYS.length} quizzes.
+                  Congratulations{profile?.first_name ? `, ${profile.first_name}` : ''}! You have passed all {REQUIRED_WORK_READINESS_QUIZ_KEYS.length} quizzes and submitted your CV.
                 </p>
                 <WorkReadinessCertificate
                   name={profile ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() : 'Learner'}
@@ -691,7 +721,9 @@ export default function WorkReadinessCourse() {
             ) : (
               <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center">
                 <p className="text-sm text-slate-600">
-                  Pass all {REQUIRED_WORK_READINESS_QUIZ_KEYS.length} session quizzes to unlock your Certificate of Completion.
+                  To unlock your Certificate of Completion: pass all {REQUIRED_WORK_READINESS_QUIZ_KEYS.length} session quizzes
+                  ({passedCount}/{REQUIRED_WORK_READINESS_QUIZ_KEYS.length} done) and upload your CV in the final activity
+                  ({cvSubmitted ? 'done' : 'not yet submitted'}).
                 </p>
               </div>
             )}

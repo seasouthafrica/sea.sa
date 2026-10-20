@@ -5,6 +5,7 @@ import { useAuth } from '../lib/useAuth';
 import { upliftSessions } from '../data/courseChapters';
 import { getCourseProgress } from '../lib/courseProgress';
 import IdUpdateBanner from '../components/IdUpdateBanner';
+import { downloadLearnerPortfolio } from '../lib/learnerPortfolio';
 
 const REQUIRED_QUIZ_KEYS = [
   'Market Research Knowledge Check',
@@ -23,6 +24,9 @@ export default function LearnerDashboard() {
   const [hasLogo, setHasLogo] = useState(false);
   const [hasQuiz, setHasQuiz] = useState(false);
   const [hasYoutube, setHasYoutube] = useState(false);
+  const [portfolioSubmissions, setPortfolioSubmissions] = useState([]);
+  const [portfolioEvents, setPortfolioEvents] = useState([]);
+  const [portfolioBusy, setPortfolioBusy] = useState(false);
 
   const upliftPercent = hasLogo ? 100 : (hasQuiz ? 25 : 0) + (hasYoutube ? 25 : 0);
 
@@ -30,13 +34,14 @@ export default function LearnerDashboard() {
     if (!user) return;
     supabase
       .from('assignment_submissions')
-      .select('chapter_id, status, explanation, file_url')
+      .select('chapter_id, status, explanation, file_url, youtube_url, submitted_at')
       .eq('user_id', user.id)
       .then(({ data }) => {
         if (!data) return;
         let logo = false;
         let quiz = false;
         let youtube = false;
+        setPortfolioSubmissions(data);
         data.forEach((s) => {
           if (s.status !== 'submitted') return;
           if (s.chapter_id === 3 && s.file_url) logo = true;
@@ -67,7 +72,7 @@ export default function LearnerDashboard() {
         .order('created_at', { ascending: true }),
       supabase
         .from('activity_events')
-        .select('lesson_id')
+        .select('lesson_id, event_type, occurred_at')
         .eq('user_id', user.id)
         .eq('event_type', 'completed'),
     ]).then(([coursesResult, eventsResult]) => {
@@ -78,6 +83,7 @@ export default function LearnerDashboard() {
       }
       setCourses(coursesResult.data ?? []);
       setCompletedIds(new Set((eventsResult.data ?? []).map((event) => event.lesson_id)));
+      setPortfolioEvents(eventsResult.data ?? []);
     });
     return () => { cancelled = true; };
   }, [user]);
@@ -99,6 +105,17 @@ export default function LearnerDashboard() {
       </div>
       <p className="text-gray-500 mb-8">Here's your learning progress on SEA Learn.</p>
       {error && <p className="mb-5 rounded-lg bg-red-50 p-4 text-red-700" role="alert">{error}</p>}
+
+      {hasLogo && profile && (
+        <div className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div><h2 className="font-bold text-emerald-900">Your completed learning portfolio</h2><p className="mt-1 text-sm text-emerald-800">Download your submitted activities and completed lesson record.</p></div>
+            <button type="button" disabled={portfolioBusy} onClick={async () => { setPortfolioBusy(true); try { await downloadLearnerPortfolio({ profile, submissions: portfolioSubmissions, events: portfolioEvents }); } finally { setPortfolioBusy(false); } }} className="rounded-lg bg-sea-teal px-4 py-2.5 text-sm font-bold text-white disabled:opacity-60">
+              {portfolioBusy ? 'Preparing portfolio…' : 'Download portfolio'}
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-4">
         {/* Uplift Course Card */}

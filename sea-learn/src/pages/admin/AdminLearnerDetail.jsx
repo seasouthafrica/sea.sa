@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import AssignmentFile, { getAssignmentObjectPath } from '../../components/AssignmentFile';
+import { downloadLearnerPortfolio } from '../../lib/learnerPortfolio';
 
 const SIM_LABELS = { 21: 'Prompt Engineering', 31: 'Logo Maker', 41: 'Facebook Ad Simulator', 51: 'Code Playground', 52: 'Website Prompt Generator' };
 const SESSION_LABELS = { 1: 'Introduction to Entrepreneurship', 2: 'Market Research', 3: 'Branding & Identity', 4: 'Digital Advertising', 5: 'Web Development with AI' };
@@ -36,6 +37,7 @@ export default function AdminLearnerDetail() {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [portfolioBusy, setPortfolioBusy] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -118,6 +120,11 @@ export default function AdminLearnerDetail() {
           <p className="text-gray-500">
             {[profile.province || profile.location, profile.country].filter(Boolean).join(', ') || 'Location not provided'}
           </p>
+          {progressPct === 100 && (
+            <button type="button" disabled={portfolioBusy} onClick={async () => { setPortfolioBusy(true); try { await downloadLearnerPortfolio({ profile, submissions, events }); } finally { setPortfolioBusy(false); } }} className="mt-3 rounded-lg bg-sea-teal px-4 py-2.5 text-sm font-bold text-white disabled:opacity-60">
+              {portfolioBusy ? 'Preparing portfolio…' : 'Download learner portfolio'}
+            </button>
+          )}
         </div>
         <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center">
           <p className="text-xs font-semibold text-emerald-600">Overall Progress</p>
