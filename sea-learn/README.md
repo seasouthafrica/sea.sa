@@ -70,3 +70,19 @@ Run every file in `supabase/migrations/` that has not yet been applied, in
 filename order. In particular, apply `20260810_security_hardening.sql` before
 the next deployment; the frontend assumes its private storage and RLS policies
 are active.
+
+### Quick script: extract 10 completed students demographics
+
+There is a small Node script to fetch 10 latest completed enrollments and
+generate a one-page PDF summary at `output/demographics_report.pdf`.
+
+Usage:
+
+```bash
+cd sea-learn
+npm install
+npm run extract-demographics
+```
+
+The script reads `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` from
+`.env` (copy from `.env.example`).

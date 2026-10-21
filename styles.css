@@ -1313,3 +1313,53 @@ footer { background: #1a1a2e; color: rgba(255,255,255,.72); padding: 3rem 2rem 1
   .prog-grid, .findout-grid, .news-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Home page UI refinements ──────────────────────────────── */
+
+/* "Our Programmes" was the only section heading left-aligned and small;
+   match it to the other home-page section headings. */
+.programmes-inner > h2 {
+  text-align: center;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--darker);
+  margin-bottom: .9rem;
+}
+
+/* Card thumbnails: the anchor between the frame and the <img> has no height
+   of its own, so the image's height:100% resolved to auto and the picture
+   spilled over the card body. Give the anchor the frame's height and clip. */
+.news-card-img { overflow: hidden; }
+.prog-img > a,
+.news-card-img > a { display: block; width: 100%; height: 100%; }
+.prog-img > a > img,
+.news-card-img > a > img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Line the calls-to-action up across a row, whatever the copy length. */
+.prog-card, .news-card { display: flex; flex-direction: column; }
+.prog-body, .news-card-body { flex: 1; display: flex; flex-direction: column; }
+.prog-links { margin-top: auto; padding-top: .5rem; align-self: stretch; }
+.news-card-body a.read-more { margin-top: auto; padding-top: .5rem; align-self: flex-start; }
+
+/* Keyboard users could not see where they were on the page. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Respect a visitor's reduced-motion setting. The hero keeps its gradient. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  html { scroll-behavior: auto; }
+  .hero-video-bg { display: none; }
+}

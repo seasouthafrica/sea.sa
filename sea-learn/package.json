@@ -9,10 +9,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "extract-demographics": "node ./scripts/extract_demographics.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",
+    "dotenv": "^16.1.4",
+    "pdfkit": "^0.13.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-pdf": "^9.1.0",
