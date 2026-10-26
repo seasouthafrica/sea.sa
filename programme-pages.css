@@ -350,3 +350,48 @@
 @media (max-width: 860px) {
   .canva-programme-page .programme-hero--stack .programme-hero__image { aspect-ratio: auto; }
 }
+
+/* ── Participant voices (Building Your Social Enterprise) ────────────
+   Quote cards carrying the design's oversized opening quotation mark.
+   The mark is decorative, so it is drawn with ::before rather than put
+   in the text, where a screen reader would announce it. */
+.sob-voices {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6rem;
+  margin-top: 2.5rem;
+}
+.sob-voice {
+  position: relative;
+  margin: 0;
+  background: #fff;
+  border-radius: 12px;
+  padding: 3.2rem 1.6rem 1.6rem;
+  box-shadow: 0 10px 28px rgba(18, 20, 29, .08);
+  display: flex;
+  flex-direction: column;
+}
+.sob-voice::before {
+  content: "\201C";
+  position: absolute;
+  top: .35rem;
+  left: 1.3rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 4.6rem;
+  line-height: 1;
+  color: var(--teal, #00a99d);
+}
+.sob-voice blockquote {
+  margin: 0;
+  font-size: .95rem;
+  line-height: 1.7;
+  color: #555;
+  flex: 1;
+}
+.sob-voice figcaption {
+  margin-top: 1.25rem;
+  font-weight: 800;
+  color: #393939;
+  font-size: 1.05rem;
+}
+@media (max-width: 900px) { .sob-voices { grid-template-columns: 1fr; } }

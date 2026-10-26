@@ -1363,3 +1363,55 @@ select:focus-visible {
   html { scroll-behavior: auto; }
   .hero-video-bg { display: none; }
 }
+
+/* ── Partner benefits strip (below Why Partner With Us) ──────────────
+   Six headline benefits as icon chips: a yellow disc carrying a teal
+   glyph, with the label beneath. Wraps 6 → 3 → 2 as the screen narrows
+   so the row never scrolls sideways. */
+.partner-benefits {
+  background: var(--white);
+  padding: 3rem 1.5rem 3.5rem;
+}
+.partner-benefits-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.6rem 1rem;
+}
+.benefit-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.9rem;
+}
+.benefit-chip__disc {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.benefit-chip__disc svg { display: block; }
+.benefit-chip__label {
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--brand-ink);
+  margin: 0;
+  max-width: 13ch;
+}
+@media (max-width: 900px) {
+  .partner-benefits-inner { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 520px) {
+  .partner-benefits { padding: 2.5rem 1rem 2.75rem; }
+  .partner-benefits-inner { grid-template-columns: repeat(2, 1fr); gap: 1.4rem .8rem; }
+  .benefit-chip__disc { width: 64px; height: 64px; }
+  .benefit-chip__disc svg { width: 32px; height: 32px; }
+  .benefit-chip__label { font-size: .85rem; }
+}
