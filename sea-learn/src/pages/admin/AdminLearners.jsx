@@ -47,7 +47,15 @@ function formatText(value) {
   return raw || 'Not specified';
 }
 
-function exportCsv(rows, progressByUser) {
+// The Uplift course is branded "Uplift Digital Accelerator" on the certificate,
+// so the download is named for what the SEA team calls it.
+const COHORT_LABELS = {
+  all: 'all-learners',
+  completed: 'uplift-digital-accelerator-completed',
+  in_progress: 'uplift-digital-accelerator-in-progress',
+};
+
+function exportCsv(rows, progressByUser, cohort = 'all') {
   if (!rows.length) return;
   const headers = ['Learner name', 'Email', 'Phone', 'Gender', 'Ethnicity', 'Disability', 'Employment status', 'ID / passport number', 'Age range', 'Province', 'Country', 'Access status', 'Uplift status', 'Uplift completion', 'Registered'];
   const reportRows = rows.map((learner) => {
@@ -86,7 +94,7 @@ function exportCsv(rows, progressByUser) {
   a.href = url;
   // Date *and* time: two downloads on one day used to collide, so the browser
   // saved the second as "…(1).csv" and it was easy to reopen the stale first one.
-  a.download = `sea-learn-learners-${new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', 'h')}.csv`;
+  a.download = `sea-learn-${COHORT_LABELS[cohort] || COHORT_LABELS.all}-${new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', 'h')}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -95,6 +103,9 @@ export default function AdminLearners() {
   const [learners, setLearners] = useState([]);
   const [progressByUser, setProgressByUser] = useState({});
   const [search, setSearch] = useState('');
+  // all | completed | in_progress — scopes both the table and the download to
+  // the Uplift Digital Accelerator cohort the SEA team is reporting on.
+  const [cohort, setCohort] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -140,11 +151,13 @@ export default function AdminLearners() {
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query) return learners;
-    return learners.filter((l) =>
-      `${l.first_name} ${l.last_name}`.toLowerCase().includes(query)
-    );
-  }, [learners, search]);
+    return learners.filter((l) => {
+      if (query && !`${l.first_name} ${l.last_name}`.toLowerCase().includes(query)) return false;
+      if (cohort === 'all') return true;
+      const done = (progressByUser[l.id] || 0) === 100;
+      return cohort === 'completed' ? done : !done;
+    });
+  }, [learners, search, cohort, progressByUser]);
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10">
@@ -156,7 +169,7 @@ export default function AdminLearners() {
         <div className="flex items-center gap-3">
           <Link to="/admin" className="font-semibold text-sea-teal text-sm">Back to overview</Link>
           <button
-          onClick={() => exportCsv(filtered, progressByUser)}
+          onClick={() => exportCsv(filtered, progressByUser, cohort)}
           disabled={!filtered.length}
           className="rounded-lg bg-sea-teal px-4 py-2 text-sm font-medium text-white transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
@@ -165,12 +178,29 @@ export default function AdminLearners() {
         </div>
       </div>
 
-      <input
-        placeholder="Search by name…"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="border rounded-lg px-3 py-2 mb-4 w-full max-w-sm"
-      />
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <input
+          placeholder="Search by name…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border rounded-lg px-3 py-2 w-full max-w-sm"
+        />
+        <select
+          value={cohort}
+          onChange={(e) => setCohort(e.target.value)}
+          className="rounded-lg border px-3 py-2 text-sm"
+          aria-label="Filter by Uplift Digital Accelerator progress"
+        >
+          <option value="all">All learners</option>
+          <option value="completed">Uplift Digital Accelerator — completed</option>
+          <option value="in_progress">Uplift Digital Accelerator — in progress</option>
+        </select>
+        {!loading && (
+          <span className="text-sm text-slate-500">
+            {filtered.length} of {learners.length} learner{learners.length === 1 ? '' : 's'}
+          </span>
+        )}
+      </div>
 
       {loading && <p className="mb-4 text-gray-500">Loading learners…</p>}
       {error && <p className="mb-4 rounded-xl bg-red-50 p-4 text-red-700" role="alert">{error}</p>}
@@ -216,7 +246,9 @@ export default function AdminLearners() {
           {!loading && filtered.length === 0 && (
             <tr>
               <td colSpan="6" className="border-t p-8 text-center text-slate-500">
-                {search ? 'No learners match your search.' : 'No learner profiles are available yet.'}
+                {search || cohort !== 'all'
+                  ? 'No learners match the current search and filter.'
+                  : 'No learner profiles are available yet.'}
               </td>
             </tr>
           )}
