@@ -32,10 +32,14 @@
     }
   }
   </script>
+  <!-- Fonts are self-hosted: every face and family is declared once, in fonts/typography.css -->
+  <link rel="preload" href="fonts/OpenSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/OpenSans-Semibold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/OpenSans-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/OpenSans-ExtraBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Sequel-Neue.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" href="fonts/typography.css">
   <link rel="stylesheet" href="styles.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@700&family=Montserrat:wght@400;500;800&family=Open+Sans:wght@300;400;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     /* ── Manifesto page — SEA About Us design ─────────────────── */
     :root {
@@ -63,7 +67,7 @@
     .mf-hero .breadcrumb { font-size: .8rem; opacity: .85; margin-bottom: 1rem; letter-spacing: .04em; }
     .mf-hero .breadcrumb a { color: #fff; text-decoration: underline; }
     .mf-hero h1 {
-      font-family: "Open Sans", var(--font);
+      font-family:var(--font-heading); font-variant-ligatures: none;
       font-size: clamp(2.4rem, 6vw, 4.4rem);
       font-weight: 700;
       text-transform: uppercase;
@@ -90,7 +94,7 @@
       padding: 4.5rem 2rem 5rem;
     }
     .mf-manifesto h2 {
-      font-family: "Barlow Condensed", "Open Sans", var(--font);
+      font-family:var(--font-heading); font-variant-ligatures: none;
       font-weight: 700;
       text-transform: uppercase;
       color: var(--mf-plum);
@@ -110,6 +114,7 @@
     .mf-stanza + .mf-stanza { margin-top: 1.9rem; }
     .mf-stanza strong { font-weight: 700; }
     .mf-closer {
+      font-family: var(--font-heading); font-variant-ligatures: none;
       font-weight: 700;
       font-size: clamp(1.15rem, 1.8vw, 1.45rem);
       color: var(--mf-plum);
@@ -143,7 +148,7 @@
     .mf-media figure { border-radius: 10px; overflow: hidden; aspect-ratio: 3 / 2; background: #dcdcdc; }
     .mf-media figure img { width: 100%; height: 100%; object-fit: cover; }
     .mf-media .copy h2 {
-      font-family: "Archivo Black", "Open Sans", var(--font);
+      font-family:var(--font-heading); font-variant-ligatures: none;
       font-size: clamp(1.9rem, 3.2vw, 2.45rem);
       text-transform: uppercase;
       line-height: 1;
@@ -159,7 +164,7 @@
     }
     .mf-media .copy p,
     .mf-media .copy li {
-      font-family: "Poppins", var(--font);
+      font-family:var(--font-body);
       font-size: .96rem;
       line-height: 1.85;
       color: var(--mf-ink);
@@ -177,7 +182,7 @@
     .mf-section { background: #fff; padding: 4.5rem 2rem; }
     .mf-section-head { max-width: 900px; margin: 0 auto 2.8rem; text-align: center; }
     .mf-section-head h2 {
-      font-family: "Open Sans", var(--font);
+      font-family:var(--font-heading); font-variant-ligatures: none;
       font-weight: 800;
       text-transform: uppercase;
       color: var(--mf-mute);
@@ -192,7 +197,7 @@
       margin-top: .7rem;
     }
     .mf-section-head .lede {
-      font-family: "Montserrat", var(--font);
+      font-family:var(--font-body);
       color: var(--mf-ink);
       font-size: 1rem;
       line-height: 1.8;
@@ -229,13 +234,13 @@
     .mf-team-card:hover .mf-team-photo { transform: translateY(-5px); }
     .mf-team-photo img { width: 100%; height: 100%; object-fit: cover; }
     .mf-team-name {
-      font-family: "Montserrat", var(--font);
+      font-family:var(--font-heading); font-variant-ligatures: none;
       font-weight: 800;
       font-size: 1.1rem;
       color: var(--mf-ink);
     }
     .mf-team-role {
-      font-family: "Montserrat", var(--font);
+      font-family:var(--font-body);
       font-weight: 500;
       font-size: .9rem;
       color: var(--mf-role);
@@ -246,7 +251,7 @@
       display: inline-block;
       margin-top: auto;
       padding-top: .8rem;
-      font-family: "Montserrat", var(--font);
+      font-family:var(--font-body);
       font-weight: 500;
       font-size: .85rem;
       text-transform: uppercase;

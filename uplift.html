@@ -7,9 +7,6 @@
   <link rel="icon" href="graphics/favicon-512.png" sizes="512x512" type="image/png">
   <link rel="apple-touch-icon" href="graphics/favicon-180.png">
 <title>Digital Income Youth Accelerator Programme</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --magenta:#C2185B;
@@ -31,15 +28,15 @@
   html{scroll-behavior:smooth;}
   body{
     margin:0;
-    font-family:"Open Sans", Arial, sans-serif;
+    font-family:var(--font-body,'Open Sans',Arial,sans-serif);
     color:var(--ink);
     background:var(--paper);
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
     line-height:1.5;
   }
-  h1,h2,h3,h4{
-    font-family:"Poppins", "Open Sans", Arial, sans-serif;
+  h1,h2,h3,h4,h5,h6{
+    font-family:var(--font-heading,'Sequel Neue','Open Sans',Arial,sans-serif); font-variant-ligatures: none;
     margin:0;
     letter-spacing:-0.01em;
   }
@@ -51,7 +48,7 @@
   .wrap{max-width:var(--wrap);margin:0 auto;padding:0 28px;}
   section[id]{scroll-margin-top:92px;}
   .eyebrow{
-    font-family:"Barlow", "Open Sans", Arial, sans-serif;
+    font-family:var(--font-body);
     font-weight:700;
     font-size:13px;
     letter-spacing:0.12em;
@@ -148,7 +145,7 @@
     gap:24px;max-width:500px;
   }
   .stat{min-width:0;}
-  .stat b{display:block;font-family:"Poppins",sans-serif;font-size:26px;color:var(--gold);}
+  .stat b{display:block;font-family:var(--font-heading); font-variant-ligatures: none;font-size:26px;color:var(--gold);}
   .stat span{display:block;font-size:13px;color:#D5E2DD;line-height:1.4;}
 
   /* Hero cover image */
@@ -203,7 +200,7 @@
     border-top:6px solid var(--magenta);
   }
   .intro-card .num{
-    font-family:"Poppins",sans-serif;font-weight:800;font-size:44px;color:var(--gold-deep);
+    font-family:var(--font-heading); font-variant-ligatures: none;font-weight:800;font-size:44px;color:var(--gold-deep);
   }
   .intro-card h3{font-size:20px;margin-top:6px;}
   .intro-card p{color:var(--muted);margin-top:10px;line-height:1.6;font-size:15px;}
@@ -244,7 +241,7 @@
     width:68px;height:68px;border-radius:50%;margin:0 auto 20px;
     background:var(--green-soft);color:var(--gold);
     display:flex;align-items:center;justify-content:center;
-    font-family:"Poppins",sans-serif;font-weight:800;font-size:24px;
+    font-family:var(--font-heading); font-variant-ligatures: none;font-weight:800;font-size:24px;
     border:3px solid var(--gold);position:relative;z-index:1;
   }
   .step h4{font-size:16px;margin-bottom:8px;color:var(--paper);}
@@ -272,7 +269,7 @@
   .facil-copy .eyebrow{color:var(--gold);}
   .facil-copy h2{color:var(--paper);font-size:clamp(32px,4vw,44px);margin:12px 0 4px;line-height:1.1;}
   .facil-role{
-    color:var(--gold);font-family:"Poppins",sans-serif;font-size:clamp(14px,1.6vw,18px);
+    color:var(--gold);font-family:var(--font-body);font-size:clamp(14px,1.6vw,18px);
     font-weight:600;line-height:1.5;margin:0 0 22px;
   }
   .facil-copy p{color:#C7D5CF;line-height:1.7;font-size:16px;}
@@ -291,7 +288,7 @@
   .faq-q{
     width:100%;text-align:left;background:none;border:0;padding:22px 24px;
     display:flex;justify-content:space-between;align-items:center;cursor:pointer;
-    font-family:"Poppins",sans-serif;font-weight:700;font-size:16px;color:var(--ink);
+    font-family:var(--font-body);font-weight:700;font-size:16px;color:var(--ink);
   }
   .faq-q .plus{
     flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--cream);
@@ -330,7 +327,7 @@
   /* ---------- FOOTER ---------- */
   footer{background:var(--green);color:#AFC0B8;padding:56px 0 30px;}
   .foot-grid{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;}
-  .foot-brand{color:var(--paper);font-family:"Poppins",sans-serif;font-weight:800;font-size:18px;max-width:280px;}
+  .foot-brand{color:var(--paper);font-family:var(--font-heading); font-variant-ligatures: none;font-weight:800;font-size:18px;max-width:280px;}
   .foot-brand p{color:#8FA39B;font-weight:400;font-size:13.5px;margin-top:10px;line-height:1.6;}
   .foot-cols{display:flex;gap:60px;flex-wrap:wrap;}
   .foot-col h5{color:var(--paper);font-size:13px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
@@ -385,6 +382,13 @@
     *,*::before,*::after{transition:none!important;animation:none!important;}
   }
 </style>
+  <!-- Fonts are self-hosted: every face and family is declared once, in fonts/typography.css -->
+  <link rel="preload" href="fonts/OpenSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/OpenSans-Semibold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/OpenSans-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/OpenSans-ExtraBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Sequel-Neue.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" href="fonts/typography.css">
 </head>
 <body>
 

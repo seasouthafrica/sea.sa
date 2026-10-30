@@ -376,7 +376,7 @@
   position: absolute;
   top: .35rem;
   left: 1.3rem;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-body);
   font-size: 4.6rem;
   line-height: 1;
   color: var(--teal, #00a99d);

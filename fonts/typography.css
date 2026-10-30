@@ -1,0 +1,64 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   SEA Africa — typography
+   The only place @font-face is declared. Linked from every page's <head>
+   (before styles.css where a page has one), never @imported, so the fonts
+   are discovered in parallel with the stylesheet rather than after it.
+
+   Body, navigation, buttons, forms, labels  →  Open Sans
+   Headings and prominent titles             →  Sequel Neue
+
+   Weights present on disk
+   ───────────────────────
+   Open Sans   300 · 400 · 600 · 700 · 800, each with an italic.
+               Served as WOFF2 (about 60 KB a face, down from 215 KB) with the
+               supplied TTF kept as a fallback. The two decode to pixel-identical
+               text; the conversion only drops the obsolete DSIG signature table.
+               There is no 500 file, so font-weight:500 resolves to 400,
+               and 900 resolves to 800. Neither is synthesised.
+   Sequel      Light (300) and Neue (400) with italics. There is no bold.
+               Neue is therefore declared for 400–900, so a heading that
+               asks for 700 or 800 gets the real Neue outlines rather than a
+               browser-smeared fake bold.
+
+   Sequel Neue quirks — read before using it somewhere new
+   ───────────────────────────────────────────────────────
+   1. It is an all-caps design: lowercase letters are drawn as capitals, so
+      headings read as capitals with or without text-transform.
+   2. "on" and "at" fuse into small decorative ligature glyphs (so "Contact"
+      would read C[ON]TACT). Every rule that sets the heading font therefore also
+      sets  font-variant-ligatures: none.  Keep that pairing on any new rule.
+   3. The opening curly quotes “ and ‘ are drawn low, like „. Do not use this
+      font for quotation text or decorative quote marks — use Open Sans.
+   Glyph coverage is 355 characters; → is missing (the browser substitutes).
+
+   Only the faces a page actually uses are downloaded.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --font-body:    'Open Sans', 'Segoe UI', Arial, sans-serif;
+  /* Open Sans is the fallback, not Arial: if Sequel ever fails to load, the
+     headings degrade to a bold humanist sans that matches the old look. */
+  --font-heading: 'Sequel Neue', 'Open Sans', 'Segoe UI', Arial, sans-serif;
+  /* Pre-existing alias, still referenced across the stylesheets. */
+  --font:         var(--font-body);
+}
+
+/* ── Open Sans ──────────────────────────────────────────────────────── */
+@font-face { font-family: 'Open Sans'; font-weight: 300; font-style: normal; font-display: swap; src: url('OpenSans-Light.woff2') format('woff2'), url('OpenSans-Light.ttf') format('truetype'); }
+@font-face { font-family: 'Open Sans'; font-weight: 300; font-style: italic; font-display: swap; src: url('OpenSans-LightItalic.woff2') format('woff2'), url('OpenSans-LightItalic.ttf') format('truetype'); }
+@font-face { font-family: 'Open Sans'; font-weight: 400; font-style: normal; font-display: swap; src: url('OpenSans-Regular.woff2') format('woff2'), url('OpenSans-Regular.ttf') format('truetype'); }
+@font-face { font-family: 'Open Sans'; font-weight: 400; font-style: italic; font-display: swap; src: url('OpenSans-Italic.woff2') format('woff2'), url('OpenSans-Italic.ttf') format('truetype'); }
+@font-face { font-family: 'Open Sans'; font-weight: 600; font-style: normal; font-display: swap; src: url('OpenSans-Semibold.woff2') format('woff2'), url('OpenSans-Semibold.ttf') format('truetype'); }
+@font-face { font-family: 'Open Sans'; font-weight: 600; font-style: italic; font-display: swap; src: url('OpenSans-SemiboldItalic.woff2') format('woff2'), url('OpenSans-SemiboldItalic.ttf') format('truetype'); }
+@font-face { font-family: 'Open Sans'; font-weight: 700; font-style: normal; font-display: swap; src: url('OpenSans-Bold.woff2') format('woff2'), url('OpenSans-Bold.ttf') format('truetype'); }
+@font-face { font-family: 'Open Sans'; font-weight: 700; font-style: italic; font-display: swap; src: url('OpenSans-BoldItalic.woff2') format('woff2'), url('OpenSans-BoldItalic.ttf') format('truetype'); }
+@font-face { font-family: 'Open Sans'; font-weight: 800; font-style: normal; font-display: swap; src: url('OpenSans-ExtraBold.woff2') format('woff2'), url('OpenSans-ExtraBold.ttf') format('truetype'); }
+@font-face { font-family: 'Open Sans'; font-weight: 800; font-style: italic; font-display: swap; src: url('OpenSans-ExtraBoldItalic.woff2') format('woff2'), url('OpenSans-ExtraBoldItalic.ttf') format('truetype'); }
+
+/* ── Sequel Neue ────────────────────────────────────────────────────── */
+/* The .otf carries the same 355 glyphs as the .ttf at under a third of the
+   size (34 KB against 113 KB), so it is the one served. */
+@font-face { font-family: 'Sequel Neue'; font-weight: 300;     font-style: normal; font-display: swap; src: url('Sequel-Light.ttf') format('truetype'); }
+@font-face { font-family: 'Sequel Neue'; font-weight: 300;     font-style: italic; font-display: swap; src: url('Sequel-LightItalic.ttf') format('truetype'); }
+@font-face { font-family: 'Sequel Neue'; font-weight: 400 900; font-style: normal; font-display: swap; src: url('Sequel-Neue.otf') format('opentype'); }
+@font-face { font-family: 'Sequel Neue'; font-weight: 400 900; font-style: italic; font-display: swap; src: url('Sequel-NeueItalic.ttf') format('truetype'); }
