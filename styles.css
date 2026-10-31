@@ -894,27 +894,34 @@ ul   { list-style: none; }
 }
 .findout-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  /* Cards stay close to the photo's own width so the pictures are not blown up. */
+  grid-template-columns: repeat(3, minmax(0, 290px));
+  justify-content: center;
+  gap: 2.5rem 3rem;
   max-width: 1100px;
   margin: 0 auto;
 }
 .findout-card {
-  border-radius: 18px;
-  overflow: hidden;
   position: relative;
   cursor: pointer;
-  transition: transform .25s, box-shadow .25s;
-  box-shadow: 0 12px 25px rgba(17,17,17,.08);
+  transition: transform .25s;
 }
-.findout-card:hover { transform: translateY(-4px); box-shadow: 0 18px 30px rgba(17,17,17,.12); }
-.findout-card img { width: 100%; height: 340px; object-fit: cover; display: block; }
+.findout-card:hover { transform: translateY(-4px); }
+.findout-card img { width: 100%; height: 272px; object-fit: cover; display: block; border-radius: 10px 10px 0 0; }
 .findout-img-placeholder { width: 100%; height: 340px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; }
+/* The label is a little wider than the photo and rounded, as in the reference design. */
 .findout-label {
-  padding: 1.1rem;
+  position: relative;
+  margin: 0 -6px;
+  padding: 1rem .5rem;
+  border-radius: 10px;
   font-weight: 800;
-  font-size: .95rem;
-  letter-spacing: .08em;
+  /* Sequel is narrower than Open Sans, so the longest label fits on one line. */
+  font-family: var(--font-heading);
+  font-variant-ligatures: none;
+  font-size: 1.4rem;
+  letter-spacing: .01em;
+  text-wrap: balance;
   text-transform: uppercase;
   color: white;
   text-align: center;
@@ -922,7 +929,8 @@ ul   { list-style: none; }
 .findout-label.magenta { background: var(--magenta); }
 .findout-label.teal    { background: var(--teal); }
 .findout-label.red     { background: var(--red); }
-.findout-label a { color: white; text-decoration: underline; }
+.findout-label a { color: white; text-decoration: none; }
+.findout-label a:hover, .findout-label a:focus-visible { text-decoration: underline; }
 
 /* ── Section 9: Latest News ─────────────────────────────────── */
 .news-section {
@@ -1423,4 +1431,70 @@ select:focus-visible {
   .benefit-chip__disc { width: 64px; height: 64px; }
   .benefit-chip__disc svg { width: 32px; height: 32px; }
   .benefit-chip__label { font-size: .85rem; }
+}
+
+/* ── Home page: Digital Income Accelerator, partner logos, Find Out More ───── */
+
+/* Digital Income Accelerator Youth Programme (sits under Community of Practice) */
+.dia-section {
+  background: white;
+  padding: 1rem 2rem 4rem;
+}
+.dia-section h2 {
+  text-align: center;
+  font-size: clamp(1.4rem, 3vw, 2.1rem);
+  letter-spacing: .04em;
+  color: var(--brand-ink);
+  max-width: 1100px;
+  margin: 0 auto 2.5rem;
+}
+.dia-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.dia-lead {
+  font-size: 1.25rem;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--gray);
+  margin-bottom: 2.5rem;
+}
+
+/* Partners & Sponsors: four columns of individual logos, widths set per logo with --w */
+.partner-logos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+.partner-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.8rem;
+}
+.partner-col img {
+  width: var(--w, 200px);
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 960px) {
+  .dia-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .dia-text { text-align: center; }
+  .dia-section .community-btns { justify-content: center; }
+  .findout-grid { grid-template-columns: repeat(2, minmax(0, 290px)); }
+}
+@media (max-width: 700px) {
+  .partner-logos { grid-template-columns: repeat(2, 1fr); gap: 2rem 1rem; }
+}
+@media (max-width: 600px) {
+  .findout-grid { grid-template-columns: minmax(0, 300px); }
 }
