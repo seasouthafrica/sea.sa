@@ -381,6 +381,11 @@
     html{scroll-behavior:auto;}
     *,*::before,*::after{transition:none!important;animation:none!important;}
   }
+.contact-band{background:#179EA1;color:#fff;text-align:center;padding:3.5rem 2rem}
+.contact-band h2{margin:0 0 .6rem;font-family:var(--font-heading,'Sequel Neue','Open Sans',sans-serif);font-variant-ligatures:none;font-size:1.9rem;font-weight:800;color:#fff}
+.contact-band__label{margin:0 0 1.2rem;font-size:.85rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.92}
+.contact-band__email{display:inline-block;background:#FECE0A;color:#182920;font-weight:800;font-size:1rem;padding:.85rem 1.8rem;border-radius:4px;text-decoration:none;overflow-wrap:anywhere}
+.contact-band__email:hover,.contact-band__email:focus-visible{filter:brightness(.92)}
 </style>
   <!-- Fonts are self-hosted: every face and family is declared once, in fonts/typography.css -->
   <link rel="preload" href="fonts/OpenSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
@@ -606,6 +611,13 @@
       <a href="https://socialenterprise-academy.zoom.us/meeting/register/ZWxm2CBASRqbfopZN6ZO3Q" class="btn btn-dark" target="_blank" rel="noopener">Submit My Application</a>
     </div>
   </div>
+</section>
+
+<!-- contact-us-band -->
+<section class="contact-band" id="contact-us" aria-labelledby="contact-band-title">
+  <h2 id="contact-band-title">Contact us</h2>
+  <p class="contact-band__label">Programme enquiries</p>
+  <a class="contact-band__email" href="mailto:jamy@socialenterprise.academy">jamy@socialenterprise.academy</a>
 </section>
 
 <footer>

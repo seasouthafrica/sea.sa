@@ -1498,3 +1498,9 @@ select:focus-visible {
 @media (max-width: 600px) {
   .findout-grid { grid-template-columns: minmax(0, 300px); }
 }
+/* ── Contact us band (bottom of every page) ───────────────── */
+.contact-band{background:var(--teal);color:#fff;text-align:center;padding:3.5rem 2rem}
+.contact-band h2{margin:0 0 .6rem;font-family:var(--font-heading,'Sequel Neue','Open Sans',sans-serif);font-variant-ligatures:none;font-size:1.9rem;font-weight:800;color:#fff}
+.contact-band__label{margin:0 0 1.2rem;font-size:.85rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.92}
+.contact-band__email{display:inline-block;background:var(--yellow);color:var(--darker);font-weight:800;font-size:1rem;padding:.85rem 1.8rem;border-radius:4px;text-decoration:none;overflow-wrap:anywhere}
+.contact-band__email:hover,.contact-band__email:focus-visible{filter:brightness(.92)}
