@@ -503,19 +503,10 @@ export const workReadinessSessions = [
       body: 'I am applying for a [Insert Job Title] role. Here is the job description: [Paste Description]. Here are my skills and past experiences: [Type your real experience here, even informal work]. Please rewrite my experience into 5 professional bullet points that highlight how my skills match the keywords in this job description. Keep the tone professional but realistic. Do not invent any experience I haven’t mentioned.',
     },
     video: {
-      id: 'Asl4lMPm8XY',
-      title: 'Modern CV and Beating the ATS System',
-      channel: 'Grind With Mangi',
-      duration: '5:42',
+      id: 'N1Fm4JYae1I',
+      title: 'Write a Killer Résumé in the AI Era: 5 New Rules!',
+      channel: 'Jeff Su',
     },
-    extraVideos: [
-      {
-        id: '708l4QdlGk0',
-        title: 'How to use AI to Improve Your CV',
-        channel: 'Grind With Mangi',
-        duration: '7:44',
-      },
-    ],
     actionItem: 'Create a free account on ChatGPT or Gemini. Paste the prompt above using a job advert from Harambee or LinkedIn, and update your CV with the generated bullet points.',
     takeaways: [
       'An ATS reads your CV before a human does — use the employer’s own words.',
