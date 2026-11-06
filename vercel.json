@@ -3,7 +3,12 @@
   "redirects": [
     {
       "source": "/who-we-are.html",
-      "destination": "/manifesto.html",
+      "destination": "/about-us.html",
+      "permanent": true
+    },
+    {
+      "source": "/manifesto.html",
+      "destination": "/about-us.html",
       "permanent": true
     }
   ]
