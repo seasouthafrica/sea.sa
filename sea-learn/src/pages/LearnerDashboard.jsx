@@ -163,7 +163,7 @@ export default function LearnerDashboard() {
           className="block rounded-2xl border border-sea-teal/30 bg-gradient-to-br from-white to-cyan-50 p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-sea-teal hover:shadow-md"
         >
           <p className="mb-2 text-xs font-bold uppercase tracking-wide text-sea-teal">Quarter 3 · Final course</p>
-          <h2 className="text-xl font-bold text-gray-950">Uplift: E-commerce Basics</h2>
+          <h2 className="text-xl font-bold text-gray-950">Social Enterprise Academy E-commerce Basics</h2>
           <p className="mt-1 text-sm text-gray-500">By Social Enterprise Academy and Africa Forward</p>
           <p className="mt-4 text-sm text-gray-600">
             What e-commerce is and how it works in South Africa, researching demand before you buy

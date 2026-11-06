@@ -3,8 +3,8 @@
 
 export const ecommerceMeta = {
   quarter: 'Quarter 3',
-  title: 'Uplift: E-commerce Basics',
-  fullTitle: 'Uplift: E-commerce Basics',
+  title: 'Social Enterprise Academy E-commerce Basics',
+  fullTitle: 'Social Enterprise Academy E-commerce Basics',
   partners: ['Social Enterprise Academy', 'Africa Forward'],
   introVideo: {
     id: 'VnyZecULPzg',

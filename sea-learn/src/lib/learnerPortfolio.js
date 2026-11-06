@@ -30,7 +30,7 @@ const ECOMMERCE_NAMES = {
 const COURSES = [
   { rank: 1, label: 'Quarter 1 - Uplift Digital Accelerator' },
   { rank: 2, label: 'Quarter 2 - Work Readiness & Professional Skills' },
-  { rank: 3, label: 'Quarter 3 - Uplift: E-commerce Basics' },
+  { rank: 3, label: 'Quarter 3 - Social Enterprise Academy E-commerce Basics' },
 ];
 
 // Sessions follow the +400 / +600 offsets, but simulators were numbered
