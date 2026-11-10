@@ -131,11 +131,12 @@
       aspect-ratio: 2 / 1;
     }
     .mf-collage img { width: 100%; height: 100%; object-fit: cover; }
-    /* One tall photo that runs the full height of the manifesto text beside it. */
-    .mf-manifesto-inner { align-items: stretch; }
-    .mf-collage { grid-template-rows: 1fr; }
-    .mf-collage figure { aspect-ratio: auto; height: 100%; }
-    .mf-collage img { display: block; object-position: center top; }
+    /* One tall photo, shown whole (never cropped). It starts level with the text and
+       stays in view while the manifesto scrolls past it. */
+    .mf-manifesto-inner { grid-template-columns: 1fr 1.2fr; align-items: start; }
+    .mf-collage { position: sticky; top: 5.5rem; }
+    .mf-collage figure { aspect-ratio: auto; }
+    .mf-collage img { display: block; height: auto; }
     .mf-collage figure.contain { background: #fff; }
     .mf-collage figure.contain img { object-fit: contain; }
 
@@ -330,8 +331,7 @@
     @media (max-width: 980px) {
       .mf-manifesto-inner,
       .mf-media-inner { grid-template-columns: 1fr; gap: 2.4rem; }
-      .mf-collage figure { height: auto; }
-      .mf-collage img { height: auto; }
+      .mf-collage { position: static; }
       .mf-media.flip .mf-media-inner > figure { order: 0; }
       .mf-team-grid { grid-template-columns: repeat(2, 1fr); gap: 2.4rem; }
       .mf-benefits  { grid-template-columns: repeat(2, 1fr); }
