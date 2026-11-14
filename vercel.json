@@ -10,6 +10,21 @@
       "source": "/manifesto.html",
       "destination": "/about-us.html",
       "permanent": true
+    },
+    {
+      "source": "/landing.html",
+      "destination": "/diya-programme.html",
+      "permanent": true
+    },
+    {
+      "source": "/uplift.html",
+      "destination": "/diya-programme.html",
+      "permanent": true
+    },
+    {
+      "source": "/youth-programmes.html",
+      "destination": "/diya-programme.html",
+      "permanent": true
     }
   ]
 }
